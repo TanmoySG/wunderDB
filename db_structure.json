@@ -1,0 +1,1225 @@
+{
+    "clusters": [
+        {
+            "_cluster_id": "cluster",
+            "username": "user_name",
+            "password": "password",
+            "access_tokens": [
+                "token2",
+                "token1",
+                "token3"
+            ],
+            "databases": [
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "_uuid": "uid",
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "_cluster_id": "cluster",
+            "user": {
+                "username": "user_name",
+                "password": "password",
+                "access_tokens": [
+                    "token2",
+                    "token1",
+                    "token3"
+                ]
+            },
+            "databases": [
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "collection_name": "name",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "database": {
+                        "_uuid": "uid",
+                        "db_name": "name",
+                        "collections": [
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "collection": {
+                                    "_uid": "uid",
+                                    "schema": {
+                                        "field1": "type",
+                                        "field2": "type",
+                                        "fieldn": "type"
+                                    },
+                                    "data": [
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        },
+                                        {
+                                            "_uuid": "uid",
+                                            "field1": "value",
+                                            "field2": "value",
+                                            "fieldn": "value"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
