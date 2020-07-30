@@ -1,3 +1,23 @@
+
+'''
+#############################  wunderDB  #############################
+
+wunderDB is a JSON-based micro Document DB, inspired by MongoDB.
+It uses Cluster -> Database -> Collection -> Data hierarchy to store data.
+
+version 0.1 Beta
+developed by Tanmoy Sen Gupta
+
+* Get started by downloading the app.py and db.json files.
+* Create a Python Virtual Environment.
+* Install Flask and shortuuid using pip.
+* Run 'flask run' and your DB is ready to use!
+
+When the development server starts access the instructions by going to localhost:5000/get-started
+
+'''
+
+
 import json
 import shortuuid
 import secrets
@@ -9,6 +29,20 @@ def write_json(data, filename="db.json"):
     with open(filename, 'w') as f:
         json.dump(data, f, indent=4)
 
+# GETTING STARTED
+@app.route('/get-started', methods = ['GET'])
+def get_started():
+    with open('db.json') as db:
+        instructions = json.load(db)
+        instruction = instructions['templates']
+        return jsonify({
+            "_00_message" : "Welcome to wunderDB !",
+            "_01_about"   : "wunderDB is a JSON-based micro Document DB inspired by MongoDB.",
+            "_02_version" : "0.1 Beta",
+            "_03_creator" : "Tanmoy Sen Gupta",
+            "_04_instructions" : instruction
+        })
+        
 # CREATE CLUSTER
 @app.route('/create/cluster', methods = ['POST'])
 def create_cluster():
@@ -48,15 +82,13 @@ def create_database(cluster_id , access_token):
                     database_id =shortuuid.uuid()
                     db_data={
                         "_uuid": database_id,
-                        "db_name": db_json['db_name'],
+                        "db_name": db_json['name'],
                         "collections": []
                     }
                     temp = i['databases']
                     temp.append(db_data)
                     write_json(clusters)
-                    return jsonify({ 
-                        "response" : "Database Created with ID "+database_id
-                        })
+                    return "Database Created with ID "+database_id
                 else:
                     return 'Wrong Access token'
         return 'Cluster does not exist.'
@@ -78,16 +110,14 @@ def create_collection(cluster_id , access_token):
                             schema.update({"_id" : "ID"})
                             collection_data={
                                 "_uuid": collection_id,
-                                "collection_name": cluster_json['collection_name'],
+                                "collection_name": cluster_json['name'],
                                 "schema": schema,
                                 "data": []
                             }
                             temp = j['collections']
                             temp.append(collection_data)
                             write_json(clusters)
-                            return jsonify({ 
-                                "response" : "Collection Created with ID "+collection_id
-                                })
+                            return "Collection Created with ID "+collection_id
                     return 'No Database found with this id.'
                 else:
                     return 'Wrong Access token'
@@ -114,11 +144,99 @@ def add_data(cluster_id , access_token):
                                         temp = k['data']
                                         temp.append(data)
                                         write_json(clusters)
-                                        return jsonify({
-                                            "response" : "Data added"
-                                            })
+                                        return "Data added"
                                     else:
                                         return 'Collection Schema and Data Schema does not match'
+                            return 'No Collection found with this ID.'
+                    return 'No Database found with this ID.'
+                else:
+                    return 'Wrong Access token'
+        return 'Cluster does not exist.'
+
+# UPDATE DATA
+@app.route('/<cluster_id>/<access_token>/update/data', methods = ['POST'])
+def update_data(cluster_id , access_token ):
+    with open('db.json') as db:
+        clusters = json.load(db)
+        cluster = clusters['clusters']
+        for i in cluster:
+            if i['_cluster_id'] == cluster_id :
+                if access_token in i['access_tokens']:
+                    update_json = request.get_json(force = True)
+                    marker = update_json['marker'].split(" : ")
+                    marker_key = marker[0]
+                    marker_value = marker[1]
+                    for j in i['databases']:
+                        if j['_uuid'] == update_json['db_id'] :
+                            for k in j['collections']:
+                                if k['_uuid'] == update_json['collection_id']:
+                                    if marker_key in k['schema'].keys():
+                                        for l in k['data']:
+                                            if l[marker_key] == marker_value:
+                                                l.update(update_json['data'])
+                                                break
+                                        write_json(clusters)
+                                        return 'Data Updated!'
+                                    else:
+                                        return 'Marker Invalid'    
+                            return 'No Collection found with this ID.'
+                    return 'No Database found with this ID.'
+                else:
+                    return 'Wrong Access token'
+        return 'Cluster does not exist.'
+
+# DELETE DATA
+@app.route('/<cluster_id>/<access_token>/delete/data', methods = ['POST'])
+def delete_data(cluster_id , access_token ):
+    with open('db.json') as db:
+        clusters = json.load(db)
+        cluster = clusters['clusters']
+        for i in cluster:
+            if i['_cluster_id'] == cluster_id :
+                if access_token in i['access_tokens']:
+                    delete_json = request.get_json(force = True)
+                    marker = delete_json['marker'].split(" : ")
+                    marker_key = marker[0]
+                    marker_value = marker[1]
+                    for j in i['databases']:
+                        if j['_uuid'] == delete_json['db_id'] :
+                            for k in j['collections']:
+                                if k['_uuid'] == delete_json['collection_id']:
+                                    if marker_key in k['schema'].keys():
+                                        for l in range(len(k['data'])):
+                                            if k['data'][l][marker_key] == marker_value:
+                                                del k['data'][l]
+                                                write_json(clusters)
+                                                return 'Data Deleted!'
+                                                break
+                                        return 'Data not found.'
+                                    else:
+                                        return 'Marker Invalid'    
+                            return 'No Collection found with this ID.'
+                    return 'No Database found with this ID.'
+                else:
+                    return 'Wrong Access token'
+        return 'Cluster does not exist.'
+
+# READ DATA
+@app.route('/<cluster_id>/<access_token>/view/data', methods = ['GET'])
+def get_data(cluster_id , access_token ):
+    with open('db.json') as db:
+        clusters = json.load(db)
+        cluster = clusters['clusters']
+        for i in cluster:
+            if i['_cluster_id'] == cluster_id :
+                if access_token in i['access_tokens']:
+                    query_json = request.get_json(force = True)
+                    for j in i['databases']:
+                        if j['_uuid'] == query_json['db_id'] :
+                            for k in j['collections']:
+                                if k['_uuid'] == query_json['collection_id'] :
+                                    return jsonify({ 
+                                        '_name': k['collection_name'],
+                                        'schema' : k['schema'] ,
+                                        'data': k['data'] 
+                                        })
                             return 'No Collection found with this ID.'
                     return 'No Database found with this ID.'
                 else:

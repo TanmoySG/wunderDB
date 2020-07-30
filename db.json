@@ -34,10 +34,136 @@
                                     "_id": "PXQyWAjGCHHw2GfsoCMmsn"
                                 }
                             ]
+                        },
+                        {
+                            "_uuid": "QQLn4dc2JZipYGinDexT7p",
+                            "collection_name": "Teacher",
+                            "schema": {
+                                "name": "String",
+                                "department": "String",
+                                "_id": "ID"
+                            },
+                            "data": [
+                                {
+                                    "name": "Aalok",
+                                    "department": "Physics",
+                                    "_id": "7aYzkbi9okt5TQRNFTjv9Q"
+                                },
+                                {
+                                    "name": "Sanjay",
+                                    "department": "Management",
+                                    "_id": "6aug5mfzshPkTbfc5YtTVf"
+                                },
+                                {
+                                    "name": "Saurav",
+                                    "department": "Fin",
+                                    "_id": "X3SCTPWpZSeKcDfvYahTXo"
+                                }
+                            ]
                         }
                     ]
                 }
             ]
+        }
+    ],
+    "templates": [
+        {
+            "_action": "Get Started",
+            "method" : "GET",
+            "access_path": "{url}/get-started",
+            "received" : "Instruction of how to use wunderDB."
+        },
+        {
+            "_action": "Create Cluster",
+            "method" : "POST",
+            "access_path": "{url}/create/cluster",
+            "payload": {
+                "username": "Place your Username here.",
+                "password": "Place your password here."
+            },
+            "received": {
+                "cluster_id": "ID of your cluster, to be used for authentication.",
+                "access_tokens": "3 Access tokens to be used for authentication."
+            }
+        },
+        {
+            "_action": "Create Database",
+            "method" : "POST",
+            "access_path": "{url}/<cluster_id>/<access_token>/create/database",
+            "payload": {
+                "name": "Place Database name here."
+            },
+            "received": {
+                "db_id": "ID of your database."
+            }
+        },
+        {
+            "_action": "Create Collection",
+            "method" : "POST",
+            "access_path": "{url}/<cluster_id>/<access_token>/create/collection",
+            "payload": {
+                "db_id": "Place your DB ID here.",
+                "name": "Place Collection name here.",
+                "schema":{
+                    "description" : "A dictionary defining the schema of the data, field name and type in the following format.",
+                    "field_name" : "field_type"
+                } 
+            },
+            "received": {
+                "collection_id": "ID of your Collection."
+            }
+        },
+        {
+            "_action": "Add Data",
+            "method" : "POST",
+            "access_path": "{url}/<cluster_id>/<access_token>/add/data",
+            "payload": {
+                "db_id": "Place your DB ID here.",
+                "collection_id": "Place Collection ID here.",
+                "data":{
+                    "description" : "A dictionary of the data to be added in the same format as schema, otherwise data gets rejected.",
+                    "field_name" : "value"
+                } 
+            },
+            "received" : "Confirmation Message"
+        },
+        {
+            "_action": "Update Data",
+            "method" : "POST",
+            "access_path": "{url}/<cluster_id>/<access_token>/update/data",
+            "marker_details" : "Marker is a special field indicating/pointing to the data to be updated. Format marker (exactly) as: 'field : data_value' where key is the field name and value corresponds to a specific data of the field, indicating the data cell to be updated.",
+            "payload": {
+                "db_id": "Place your DB ID here.",
+                "collection_id": "Place Collection ID here.",
+                "marker" : "field : data_value",
+                "data":{
+                    "description" : "A dictionary of the data to be updated in the same format as schema, otherwise data gets rejected.",
+                    "field_name" : "value"
+                } 
+            },
+            "received" : "Confirmation Message"
+        },
+        {
+            "_action": "Delete Data",
+            "method" : "POST",
+            "access_path": "{url}/<cluster_id>/<access_token>/delete/data",
+            "marker_details" : "Marker is a special field indicating/pointing to the data to be deleted. Format marker (exactly) as: 'field : data_value' where key is the field name and value corresponds to a specific data of the field, indicating the data cell to be deleted.",
+            "payload": {
+                "db_id": "Place your DB ID here.",
+                "collection_id": "Place Collection ID here.",
+                "marker" : "field : data_value"
+            },
+            "received" : "Confirmation Message"
+        },
+        {
+            "_action": "View/Get Data",
+            "method" : "GET",
+            "access_path": "{url}/<cluster_id>/<access_token>/view/data",
+            "payload": {
+                "db_id": "Place your DB ID here.",
+                "collection_id": "Place Collection ID here."
+            },
+            "received" : "JSON data of the collection."
         }
     ]
 }
