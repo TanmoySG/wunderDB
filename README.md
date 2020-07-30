@@ -18,4 +18,4 @@ Get started by downloading the **app.py and db.json** files.
 
 When the development server starts access the instructions by going to **localhost:5000/get-started**
 
-To be deployed/hosted at **[www.tanmoysg.com](https://www.tanmoysg.com)**
+To be deployed/hosted at **[www.tanmoysg.com](https://www.tanmoysg.com)** soon.
