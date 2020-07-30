@@ -7,9 +7,9 @@ It uses **Cluster->Database->Collection->Data** hierarchy to store data.
 * ***Databases*** are group of collection.
 * ***Collections***, like Tables in databases, store series of data pertaining to a single domain.
 
-version 0.1 Beta
+version ***0.1 Beta***
 
-developed by Tanmoy Sen Gupta
+developed by ***[Tanmoy Sen Gupta](https://www.tanmoysg.com)***
 
 Get started by downloading the **app.py and db.json** files.
 * Create a **Python Virtual Environment**.
