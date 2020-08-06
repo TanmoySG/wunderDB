@@ -1,0 +1,36 @@
+{
+    "clusters": {
+        "9mkWKnrxECCbbc7neNshAA": {
+            "_cluster_id": "9mkWKnrxECCbbc7neNshAA",
+            "access_tokens": [
+                "ee64d14db84b60b4e29f5e69068b5ee2",
+                "791e194ccf94ce5cd36235efffc82c4f",
+                "3168462b07b0f437241aa2d5fdda203c"
+            ],
+            "databases": {
+                "Tu2zdehDDYTs65PdAW3EZj": {
+                    "_uuid": "Tu2zdehDDYTs65PdAW3EZj",
+                    "db_name": "Test Database",
+                    "collections": {
+                        "AbkTbQxhPoDGTDFLSKRGzN": {
+                            "_uuid": "AbkTbQxhPoDGTDFLSKRGzN",
+                            "collection_name": "Test--0366.",
+                            "schema": {
+                                "description": "num",
+                                "field_name": "field_type",
+                                "_id": "ID"
+                            },
+                            "data": {
+                                "WznAgdbq6TvVViHNJ8uuyG": {
+                                    "description": "sheya",
+                                    "field_name": "tesst--0158",
+                                    "_id": "WznAgdbq6TvVViHNJ8uuyG"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
