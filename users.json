@@ -1,0 +1,14 @@
+{
+    "users": {
+        "john@doe.com": {
+            "_cluster_id": "3eQKQR7F8bGzCM4A7DjYaE",
+            "username": "john@doe.com",
+            "password": "355b7ef61765f46c",
+            "access_tokens": [
+                "d9c45369872",
+                "7f99dcaeeb89f50",
+                "96283d362763322e436dd"
+            ]
+        }
+    }
+}
