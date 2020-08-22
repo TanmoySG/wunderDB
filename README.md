@@ -33,14 +33,15 @@ The operations on this API are facilitated through ```Actions``` .
 
 ### Actions & Payloads
 
-Actions and Payloads together form the backbone of the ```Unified Actions API```. While ```Actions``` facilitate operations, ```Payloads``` are used as specifications to specify data, selectors & configurations. 
-
-```Actions``` are special tokens that help in performing operations on the Database.
-
-```Payloads``` are specifiers that define data and selectors.
+Actions and Payloads together form the backbone of the ```Unified Actions API```. While ```Actions``` facilitate operations on the Database, ```Payloads``` are used as specifications to specify data, selectors & configurations. 
 
 - Create Operations
   * <kbd>create-database</kbd> - Used for creating Databases.
+  
+    Payloads - <kbd>Database Name</kbd>
+    ```
+    
+    ```
   * <kbd>create-collection</kbd> - Used for creating Collections. 
 
 - View Operations
