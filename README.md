@@ -42,6 +42,7 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     Payloads:
     - <kbd>name</kbd> - Select Name for Database to be created.
     
+    Mode - <kbd>POST</kbd>
     
     ```
     {
@@ -60,7 +61,8 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     - <kbd>database</kbd> - Name of Database where Collection is to be created
     - <kbd>name</kbd> - Select Name of Collection to be created<br/>  
     - <kbd>schema</kbd> - The specification of the Structure of the Collection i.e. the Headers/Titles of data and its type<br/> 
-    
+      
+    Mode - <kbd>POST</kbd>
     
     ```
     {
@@ -85,8 +87,9 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     - <kbd>database</kbd> - Name of Database where Collection is to be created
     - <kbd>collection</kbd> - Name of Collection where data is to be added
     - <kbd>data</kbd> - The data that needs to be added to a collection. Headers must match the Schema header, else it generates error.
-    
-    
+        
+    Mode - <kbd>POST</kbd>
+        
     ```
     {
         "action" : "create-collection",
@@ -111,7 +114,8 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     - <kbd>collection</kbd> - Name of Collection where data is to be added
     - <kbd>marker</kbd> - Marker is a special token that specifies a particular data. A marker-key is the field-name/title and marker-value corresponds to the specific data to be updated. The format of specifying a marker is "markey-key : markey-value" keeping the single-spaces intact.
     - <kbd>data</kbd> - The changes to be made i the data. 
-    
+            
+    Mode - <kbd>POST</kbd>
     
     ```
     {
@@ -137,7 +141,8 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     - <kbd>database</kbd> - Name of Database where Collection is to be created
     - <kbd>collection</kbd> - Name of Collection where data is to be added
     - <kbd>marker</kbd> - Marker is a special token that specifies a particular data. A marker-key is the field-name/title and marker-value corresponds to the specific data to be deleted. The format of specifying a marker is "markey-key : markey-value" keeping the single-spaces intact.
-    
+            
+    Mode - <kbd>POST</kbd>
     
     ```
     {
@@ -157,7 +162,8 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     Payloads:
     - <kbd>database</kbd> - Name of Database where Collection is to be created
     - <kbd>collection</kbd> - Name of Collection where data is to be added
-    
+            
+    Mode - <kbd>GET</kbd>
     
     ```
     {
@@ -174,6 +180,8 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     Action - <kbd>get-cluster</kbd> - Used for viewing Databases.
   
     Payloads: None
+                
+    Mode - <kbd>GET</kbd>
     
     ```
     {
@@ -187,6 +195,8 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
   
     Payloads:
     - <kbd>database</kbd> - Value can be 'all', to get all databases or Name of a particular Database to be viewed.
+                
+    Mode - <kbd>GET</kbd>
     
     ```
     {
@@ -204,12 +214,15 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     Payloads:
     - <kbd>database</kbd> - Name of database having 
     - <kbd>collection</kbd> - Value can be 'all', to get all databases or Name of a particular Database to be viewed.
+                
+    Mode - <kbd>GET</kbd>
     
     ```
     {
         "action" : "get-collection",
         "payload" : {
-            "database" : "all" (or specific database name)
+            "database" : <database name>,
+            <collection" : "all" (or specific collection name),
         }
     }
     ```
