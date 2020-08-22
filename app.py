@@ -52,6 +52,9 @@ def register():
         user = json.load(users)
         users_list = user['users']
         if user_data['username'] not in users_list.keys():
+            salt = user_data['username'].encode('utf-8')
+            hashed_password = hashlib.sha512(user_data['password'].encode('utf-8') + salt).hexdigest()
+
             tokens = []
             cluster_id =shortuuid.uuid()
             for i in range(3):
@@ -59,6 +62,7 @@ def register():
             
             user_init = {
                 "_cluster_id" : cluster_id,
+                "name" : user_data['name'],
                 "username" : user_data['username'],
                 "password" : hashed_password,
                 "access_tokens": tokens
@@ -86,7 +90,8 @@ def register():
                 temp[cluster_id] = cluster_data
                 write_json(data, file)
             return jsonify({ 
-                "response" : "Cluster Created with ID "+cluster_id , 
+                "response" : "Cluster Created",
+                "cluster_id" : cluster_id , 
                 "access_tokens" : tokens
                 })
         else:
@@ -101,10 +106,13 @@ def login():
         users = json.load(user_list)
         user = users['users']
         if user_data["username"] in user.keys():
+            salt = user_data['username'].encode('utf-8')
+            hashed_password = hashlib.sha512(user_data['password'].encode('utf-8') + salt).hexdigest()
             if user[user_data["username"]]['username'] == user_data['username'] and user[user_data["username"]]['password'] == hashed_password :
                 return jsonify({
-                    "response" : "Logged in",
-                    "_cluster_id" : user[user_data["username"]]['_cluster_id'],
+                    "response" : "Logged-in",
+                    "name" : user[user_data["username"]]['name'],
+                    "cluster_id" : user[user_data["username"]]['_cluster_id'],
                     "access_token" : random.choice(user[user_data["username"]]['access_tokens'])
                 })
             else:
@@ -278,7 +286,7 @@ def delete_data(cluster_id , access_token ):
 
 # GET COMPLETE CLUSTER
 @app.route('/<cluster_id>/<access_token>/get/cluster', methods = ['GET'])
-def get_data(cluster_id , access_token ):
+def get_cluster(cluster_id , access_token ):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
