@@ -49,15 +49,14 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
         }
     }
     ```
+    
 - **Creating Collections**
   
     Action - <kbd>create-collection</kbd> - Used for creating Collections.
   
     Payloads - <kbd>database</kbd> - Name of Database where Collection is to be created
-    
-               <kbd>name</kbd> - Select Name of Collection to be created
-               
-               <kbd>schema</kbd> - The specification of the Structure of the Collection i.e. the Headers/Titles of data and its type.
+             - <kbd>name</kbd> - Select Name of Collection to be created<br/>  
+             - <kbd>schema</kbd> - The specification of the Structure of the Collection i.e. the Headers/Titles of data and its type<br/> 
     
     ```
     {
@@ -79,10 +78,8 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     Action - <kbd>add-data</kbd> - Used for Adding new data to a Collection.
   
     Payloads - <kbd>database</kbd> - Name of Database where Collection is to be created
-    
-               <kbd>collection</kbd> - Name of Collection where data is to be added
-               
-               <kbd>data</kbd> - The data that needs to be added to a collection. Headers must match the Schema header, else it generates error.
+             - <kbd>collection</kbd> - Name of Collection where data is to be added
+             - <kbd>data</kbd> - The data that needs to be added to a collection. Headers must match the Schema header, else it generates error.
     
     ```
     {
