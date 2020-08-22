@@ -1,21 +1,20 @@
 # wunderDB
 wunderDB is a JSON-based micro Document DB, inspired by MongoDB.
+version ***1.0 Beta***
 
-It uses **Cluster->Database->Collection->Data** hierarchy to store data.
+New in this Beta Release - ***Unified Endpoint access for all actions***
 
-* ***Cluster*** is an group of databases pertaining to one user.
-* ***Databases*** are group of collection.
-* ***Collections***, like Tables in databases, store series of data pertaining to a single domain.
+---
+## Documentation
 
-version ***0.1 Beta***
+wunderDB is a JSON-based micro Document DB hosted at [wdb.tanmoysg.com](https://wdb.tanmoysg.com). 
 
-developed by ***[Tanmoy Sen Gupta](https://www.tanmoysg.com)***
+The database can be accessed using a <kbd>Common Unified Endpoint</kbd> using the **Cluster ID** of the cluster created for the user and an **Access Token**.
 
-Get started by downloading the **app.py and db.json** files.
-* Create a **Python Virtual Environment**.
-* Install **Flask** and **shortuuid** using pip.
-* Run '***flask run***' and your DB is ready to use!
+The Cluster ID and Access Token are generated when the user registers at wdb.tanmoysg.com . A cluster can also be created by Posting a request to the API from a REST Client like [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/)
 
-When the development server starts access the instructions by going to **localhost:5000/get-started**
+---
+
+Developed by ***[Tanmoy Sen Gupta](https://www.tanmoysg.com)***
 
 To be deployed/hosted at **[www.tanmoysg.com](https://www.tanmoysg.com)** soon.
