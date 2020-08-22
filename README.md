@@ -119,6 +119,7 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
         "payload: {
             "database" : <name of Database>,
             "collection": <name of Collection>,
+            "marker": "key : value",
             "data": {
                 "title" : "value",
                 ...
@@ -128,14 +129,92 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     }
     ```
 
-- <kbd>get-cluster</kbd> - Used for creating Databases.
-- <kbd>get-database</kbd> - Used for creating Databases.
-- <kbd>get-collection</kbd> - Used for creating Databases.
+- **Deleting Data from a Collection**
   
-- <kbd>add-data</kbd> - Used for Adding new data to a Collection.
-- <kbd>update-data</kbd> - Used for Updating existing data in a Collection.
-- <kbd>delete-data</kbd> - Used for Deleting existing data in a Collection.
-- <kbd>get-data</kbd> - Used for Fetching existing data from a Collection.
+    Action - <kbd>delete-data</kbd> - Used for Deleting existing data in a Collection.
+  
+    Payloads:
+    - <kbd>database</kbd> - Name of Database where Collection is to be created
+    - <kbd>collection</kbd> - Name of Collection where data is to be added
+    - <kbd>marker</kbd> - Marker is a special token that specifies a particular data. A marker-key is the field-name/title and marker-value corresponds to the specific data to be deleted. The format of specifying a marker is "markey-key : markey-value" keeping the single-spaces intact.
+    
+    
+    ```
+    {
+        "action" : "update-data",
+        "payload: {
+            "database" : <name of Database>,
+            "collection": <name of Collection>,
+            "marker": "key : value"
+        }
+    }
+    ```
+    
+- **Viewing Data of a Collection**
+  
+    Action - <kbd>get-data</kbd> - Used for Fetching existing data from a Collection.
+  
+    Payloads:
+    - <kbd>database</kbd> - Name of Database where Collection is to be created
+    - <kbd>collection</kbd> - Name of Collection where data is to be added
+    
+    
+    ```
+    {
+        "action" : "get-data",
+        "payload: {
+            "database" : <name of Database>,
+            "collection": <name of Collection>
+        }
+    }
+    ```
+    
+- **View the complete Cluster**
+  
+    Action - <kbd>get-cluster</kbd> - Used for viewing Databases.
+  
+    Payloads: None
+    
+    ```
+    {
+        "action" : "get-cluster"
+    }
+    ```
+    
+- **View databases in the Cluster**
+  
+    Action - <kbd>get-database</kbd> - Used for viewing databases in the Cluster.
+  
+    Payloads:
+    - <kbd>database</kbd> - Value can be 'all', to get all databases or Name of a particular Database to be viewed.
+    
+    ```
+    {
+        "action" : "get-database",
+        "payload" : {
+            "database" : "all" (or specific database name)
+        }
+    }
+    ```
+    
+- **View Collections in the Database**
+  
+    Action - <kbd>get-collection</kbd> - Used for viewing collections in the Database.
+  
+    Payloads:
+    - <kbd>database</kbd> - Name of database having 
+    - <kbd>collection</kbd> - Value can be 'all', to get all databases or Name of a particular Database to be viewed.
+    
+    ```
+    {
+        "action" : "get-collection",
+        "payload" : {
+            "database" : "all" (or specific database name)
+        }
+    }
+    ```
+    
+ 
      
 
 
