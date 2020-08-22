@@ -13,8 +13,4 @@ The database can be accessed using a <kbd>Common Unified Endpoint</kbd> using th
 
 The Cluster ID and Access Token are generated when the user registers at wdb.tanmoysg.com . A cluster can also be created by Posting a request to the API from a REST Client like [Insomnia](https://insomnia.rest/) or [Postman](https://www.postman.com/)
 
----
-
 Developed by ***[Tanmoy Sen Gupta](https://www.tanmoysg.com)***
-
-To be deployed/hosted at **[www.tanmoysg.com](https://www.tanmoysg.com)** soon.
