@@ -7,7 +7,7 @@ New in this Beta Release - ***Unified Endpoint access for all actions***
 
 ## Documentation
 
-wunderDB is a JSON-based micro Document DB hosted at [wdb.tanmoysg.com](https://wdb.tanmoysg.com). 
+wunderDB is a JSON-based micro Document DB hosted at [wdb.tanmoysg.com](https://wdb.tanmoysg.com). ``` ***Unified Actions API*** ``` is used for accessing the remote API.
 
 ### Creating a Cluster
 
@@ -33,7 +33,7 @@ The operations on this API are facilitated through ```Actions``` .
 
 ### Actions & Payloads
 
-Actions and Payloads together form the backbone of the ```Unified Actions API```. While ```Actions``` facilitate operations on the Database, ```Payloads``` are used as specifications to specify data, selectors & configurations. 
+Actions and Payloads together form the backbone of the ``` ***Unified Actions API*** ```. While ```Actions``` facilitate operations on the Database, ```Payloads``` are used as specifications to specify data, selectors & configurations. 
 
 - **Creating Databases**
   
