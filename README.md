@@ -16,7 +16,7 @@ On registration, a cluster is created. A cluster can also be created by Posting 
 ```
 {  
     "name" : "name of the user",
-    "email" : "email of the user",
+    "username" : "email of the user",
     "password" : "password of user" 
 }
 ```
