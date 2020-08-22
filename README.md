@@ -47,7 +47,7 @@ Actions and Payloads together form the backbone of the ``` ***Unified Actions AP
     ```
     {
         "action" : "create-database",
-        "payload: {
+        "payload": {
             "name" : <name of Database>
         }
     }
@@ -185,7 +185,8 @@ Actions and Payloads together form the backbone of the ``` ***Unified Actions AP
     
     ```
     {
-        "action" : "get-cluster"
+        "action" : "get-cluster",
+        "payload" : {}
     }
     ```
     
@@ -222,7 +223,7 @@ Actions and Payloads together form the backbone of the ``` ***Unified Actions AP
         "action" : "get-collection",
         "payload" : {
             "database" : <database name>,
-            <collection" : "all" (or specific collection name),
+            "collection" : "all" (or specific collection name),
         }
     }
     ```
