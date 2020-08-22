@@ -24,6 +24,8 @@ import secrets
 import random
 import hashlib
 from flask import Flask, request, jsonify, send_from_directory
+import os.path
+from os import path
 
 app = Flask(__name__)
 
@@ -125,271 +127,252 @@ def login():
             })
 
 # CREATE DATABASE
-@app.route('/<cluster_id>/<access_token>/create/database', methods = ['POST'])
-def create_database(cluster_id , access_token):
+def create_database(cluster_id , payload):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        db_json = request.get_json(force = True)
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                database_id =shortuuid.uuid()
-                db_data={
-                    "_uuid": database_id,
-                    "db_name": db_json['name'],
-                    "collections": {}
-                }
-                temp = cluster[cluster_id]['databases']
-                temp[database_id] = db_data
-                write_json(clusters, file)
-                return "Database Created with ID "+database_id
-            else:
-                return 'Wrong Access token'
-        else:
-            return 'Cluster does not exist.'
+        db_json = payload
+
+        database_id =shortuuid.uuid()
+        db_data={
+            "_uuid": database_id,
+            "db_name": db_json['name'],
+            "collections": {}
+        }
+        temp = cluster[cluster_id]['databases']
+        temp[db_json['name']] = db_data
+        write_json(clusters, file)
+        return "Database Created with ID "+database_id
+
 
 # CREATE COLLECTION
-@app.route('/<cluster_id>/<access_token>/create/collection', methods = ['POST'])
-def create_collection(cluster_id , access_token):
+def create_collection(cluster_id , payload):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        cluster_json = request.get_json(force = True)
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
-                    collection_id =shortuuid.uuid()
-                    schema = cluster_json['schema']
-                    schema.update({"_id" : "ID"})
-                    collection_data={
-                        "_uuid": collection_id,
-                        "collection_name": cluster_json['name'],
-                        "schema": schema,
-                        "data": {}
-                        }
-                    temp = cluster[cluster_id]['databases'][cluster_json['database']]['collections']
-                    temp[collection_id] = collection_data
-                    write_json(clusters, file)
-                    return "Collection created with ID "+ collection_id
-                else:
-                    return "Database doesn't exist."
-            else:
-                return 'Wrong Access token'
+        cluster_json = payload
+        if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
+            collection_id =shortuuid.uuid()
+            schema = cluster_json['schema']
+            schema.update({"_id" : "ID"})
+            collection_data={
+                "_uuid": collection_id,
+                "collection_name": cluster_json['name'],
+                "schema": schema,
+                "data": {}
+                }
+            temp = cluster[cluster_id]['databases'][cluster_json['database']]['collections']
+            temp[cluster_json['name']] = collection_data
+            write_json(clusters, file)
+            return "Collection created with ID "+ collection_id
         else:
-            return 'Cluster does not exist.'
+            return "Database doesn't exist."
+
 
 # ADD DATA TO COLLECTION
-@app.route('/<cluster_id>/<access_token>/add/data', methods = ['POST'])
-def add_data(cluster_id , access_token):
+def add_data(cluster_id , payload):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        cluster_json = request.get_json(force = True)
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
-                    if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
-                        schema = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['schema']
-                        _id = shortuuid.uuid()
-                        data= cluster_json['data']
-                        data.update({'_id': _id})
-                        if set(data.keys()) == set(schema.keys()):
-                            temp = cluster[cluster_id]['databases'][cluster_json['database']]['collections'][cluster_json['collection']]['data']
-                            temp[_id] = data
-                            write_json(clusters, file)
-                            return "Data Entered"
-                        else:
-                           return 'Collection Schema and Data Schema does not match'
-                    else:
-                        return "Collection doesn't exit."
+        cluster_json = payload
+        if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
+            if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
+                schema = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['schema']
+                _id = shortuuid.uuid()
+                data= cluster_json['data']
+                data.update({'_id': _id})
+                if set(data.keys()) == set(schema.keys()):
+                    temp = cluster[cluster_id]['databases'][cluster_json['database']]['collections'][cluster_json['collection']]['data']
+                    temp[_id] = data
+                    write_json(clusters, file)
+                    return "Data Entered"
                 else:
-                    return "Database doesn't exist."
+                    return 'Collection Schema and Data Schema does not match'
             else:
-                return 'Wrong Access token'
+                return "Collection doesn't exit."
         else:
-            return 'Cluster does not exist.'
+            return "Database doesn't exist."
+
 
 # UPDATE DATA
-@app.route('/<cluster_id>/<access_token>/update/data', methods = ['POST'])
-def update_data(cluster_id , access_token ):
+def update_data(cluster_id , payload ):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        cluster_json = request.get_json(force = True)
+        cluster_json = payload
         marker = cluster_json['marker'].split(" : ")
         marker_key = marker[0]
         marker_value = marker[1]
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
-                    if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
-                        schema = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['schema']
-                        collection = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]
-                        if marker_key in collection['schema'].keys():
-                            for _id in collection['data'].keys():
-                                if collection['data'][_id][marker_key] == marker_value:
-                                    collection['data'][_id].update(cluster_json['data'])
-                                    write_json(clusters, file)
-                                    return 'Data Updated!'
-                                    break
-                            return 'Data Not Found' 
-                        else:
-                           return 'Marker Invalid'
-                    else:
-                        return "Collection doesn't exit."
+        if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
+            if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
+                schema = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['schema']
+                collection = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]
+                if marker_key in collection['schema'].keys():
+                    for _id in collection['data'].keys():
+                        if collection['data'][_id][marker_key] == marker_value:
+                            collection['data'][_id].update(cluster_json['data'])
+                            write_json(clusters, file)
+                            return 'Data Updated!'
+                            break
+                    return 'Data Not Found' 
                 else:
-                    return "Database doesn't exist."
+                    return 'Marker Invalid'
             else:
-                return 'Wrong Access token'
+                return "Collection doesn't exit."
         else:
-            return 'Cluster does not exist.'
+            return "Database doesn't exist."
+
 
 # DELETE DATA
-@app.route('/<cluster_id>/<access_token>/delete/data', methods = ['POST'])
-def delete_data(cluster_id , access_token ):
+def delete_data(cluster_id , payload ):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        cluster_json = request.get_json(force = True)
+        cluster_json = payload
         marker = cluster_json['marker'].split(" : ")
         marker_key = marker[0]
         marker_value = marker[1]
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
-                    if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
-                        schema = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['schema']
-                        collection = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]
-                        if marker_key in collection['schema'].keys():
-                            for _id in collection['data'].keys():
-                                if collection['data'][_id][marker_key] == marker_value:
-                                    collection['data'].pop(_id)
-                                    write_json(clusters, file)
-                                    return 'Data Deleted!'
-                                    break
-                            return 'Data Not Found' 
-                        else:
-                           return 'Marker Invalid'
-                    else:
-                        return "Collection doesn't exit."
+        if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
+            if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
+                schema = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['schema']
+                collection = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]
+                if marker_key in collection['schema'].keys():
+                    for _id in collection['data'].keys():
+                        if collection['data'][_id][marker_key] == marker_value:
+                            collection['data'].pop(_id)
+                            write_json(clusters, file)
+                            return 'Data Deleted!'
+                            break
+                    return 'Data Not Found' 
                 else:
-                    return "Database doesn't exist."
+                    return 'Marker Invalid'
             else:
-                return 'Wrong Access token'
+                return "Collection doesn't exit."
         else:
-            return 'Cluster does not exist.'
+            return "Database doesn't exist."
 
 # GET COMPLETE CLUSTER
-@app.route('/<cluster_id>/<access_token>/get/cluster', methods = ['GET'])
-def get_cluster(cluster_id , access_token ):
+def get_cluster(cluster_id , payload ):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        cluster_json = request.get_json(force = True)
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                return jsonify({ "cluster" : cluster })
-            else:
-                return 'Wrong Access token'
-        else:
-            return 'Cluster does not exist.'
+        cluster_json = payload
+        return jsonify({ "cluster" : cluster })
+
             
 # GET DATABASES
-@app.route('/<cluster_id>/<access_token>/get/databases', methods = ['GET'])
-def get_databases(cluster_id , access_token ):
+def get_databases(cluster_id , payload ):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        cluster_json = request.get_json(force = True)
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                if cluster_json['database'] == 'all' :
-                    result = []
-                    for i in cluster[cluster_id]["databases"].keys():  
-                        result.append({
-                            "database_name" : cluster[cluster_id]["databases"][i]['db_name'],
-                            "_uuid" : i,
-                            "collections_count": len(cluster[cluster_id]["databases"][i]['collections'])
-                        })
-                    return jsonify({ "response" : result})
-                else:
-                    if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
-                        return jsonify({
-                            "database_name" : cluster[cluster_id]["databases"][cluster_json['database']]['db_name'],
+        cluster_json = payload
+        if cluster_json['database'] == 'all' :
+            result = []
+            for i in cluster[cluster_id]["databases"].keys():  
+                result.append({
+                    "database_name" : cluster[cluster_id]["databases"][i]['db_name'],
+                    "_uuid" : i,
+                    "collections_count": len(cluster[cluster_id]["databases"][i]['collections'])
+                })
+            return jsonify({ "response" : result})
+        else:
+            if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
+                return jsonify({
+                    "database_name" : cluster[cluster_id]["databases"][cluster_json['database']]['db_name'],
                             "_uuid" : cluster_json['database'],
                             "collections_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'])
-                        })
-                    else:
-                        return 'No Database found with this ID.'
+                })
             else:
-                return 'Wrong Access token'
-        else:
-            return 'Cluster does not exist.'
+                return 'No Database found with this ID.'
+
 
 # GET COLLECTIONS
-@app.route('/<cluster_id>/<access_token>/get/collections', methods = ['GET'])
-def get_collections(cluster_id , access_token ):
+def get_collections(cluster_id , payload ):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        cluster_json = request.get_json(force = True)
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
-                    if cluster_json['collection'] == 'all' :
-                        result = []
-                        for i in cluster[cluster_id]["databases"][cluster_json['database']]['collections'].keys():  
-                            result.append({
-                                "collection_name" : cluster[cluster_id]["databases"][cluster_json['database']]['collections'][i]['collection_name'],
-                                "_uuid" : i,
-                                "data_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'][i]['data'])
-                            })
-                        return jsonify({ "response" : result})
-                    else:
-                        if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]['collections'].keys():
-                            return jsonify({
-                                "collection_name" : cluster[cluster_id]["databases"][cluster_json['database']]['collections'][cluster_json['collection']]['collection_name'],
-                                "_uuid" : cluster_json['collection'],
-                                "data_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'][cluster_json['collection']]['data'])
-                            })
-                        else:
-                            return 'No Collection found with this ID.'
-                else:
-                    return 'No database with this ID Found.'
+        cluster_json = payload
+        if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
+            if cluster_json['collection'] == 'all' :
+                result = []
+                for i in cluster[cluster_id]["databases"][cluster_json['database']]['collections'].keys():  
+                    result.append({
+                        "collection_name" : cluster[cluster_id]["databases"][cluster_json['database']]['collections'][i]['collection_name'],
+                        "_uuid" : i,
+                        "data_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'][i]['data'])
+                    })
+                return jsonify({ "response" : result})
             else:
-                return 'Wrong Access token'
+                if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]['collections'].keys():
+                    return jsonify({
+                        "collection_name" : cluster[cluster_id]["databases"][cluster_json['database']]['collections'][cluster_json['collection']]['collection_name'],
+                        "_uuid" : cluster_json['collection'],
+                        "data_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'][cluster_json['collection']]['data'])
+                    })
+                else:
+                    return 'No Collection found with this ID.'
         else:
-            return 'Cluster does not exist.'
+            return 'No database with this ID Found.'
+
 
 # GET DATA
-@app.route('/<cluster_id>/<access_token>/get/data', methods = ['GET'])
-def get_data(cluster_id , access_token ):
+def get_data(cluster_id , payload ):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
         cluster = clusters['clusters']
-        cluster_json = request.get_json(force = True)
-        if cluster_id in cluster.keys():
-            if access_token in cluster[cluster_id]['access_tokens']:
-                if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
-                    if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
-                        data = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['data']
-                        return jsonify({
-                            "data" : data
-                        })
-                    else:
-                        return "Collection doesn't exit."
-                else:
-                    return "Database doesn't exist."
+        cluster_json = payload
+        if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
+            if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
+                data = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['data']
+                return jsonify({
+                    "data" : data
+                })
             else:
-                return 'Wrong Access token'
+                return "Collection doesn't exit."
         else:
-            return 'Cluster does not exist.'
+                return "Database doesn't exist."
+           
+# CONNECT - SINGLE ENDPOINT
+@app.route('/connect', methods = ['GET' , 'POST'])
+def connect():
+    cluster_id = request.args.get('cluster')
+    token = request.args.get('token')
+    file = "./clusters/"+cluster_id+".json"
+    if path.exists(file):
+        with open(file) as db:
+            body = json.load(db)
+            cluster = body['clusters']
+            if token in cluster[cluster_id]['access_tokens']:
+                action_json = request.get_json(force = True)
+                payload = action_json['payload']
+                if action_json['action'].lower() == "create-database" :
+                    return create_database(cluster_id, payload)
+                elif action_json['action'].lower() == "create-collection" :
+                    return create_collection(cluster_id, payload)
+                elif action_json['action'].lower() == "add-data" :
+                    return add_data(cluster_id, payload)
+                elif action_json['action'].lower() == "update-data" :
+                    return update_data(cluster_id, payload)
+                elif action_json['action'].lower() == "delete-data" :
+                    return delete_data(cluster_id, payload)
+                elif action_json['action'].lower() == "get-cluster" :
+                    return get_cluster(cluster_id, payload)
+                elif action_json['action'].lower() == "get-collection" :
+                    return get_collections(cluster_id, payload)
+                elif action_json['action'].lower() == "get-database" :
+                    return get_databases(cluster_id, payload)
+                elif action_json['action'].lower() == "get-data" :
+                    return get_data(cluster_id, payload)
+            else:
+                return  jsonify({ "response" : 'Wrong Access token'})
+    else:
+        return jsonify({ "response" : 'Cluster does not exist.' }) 
