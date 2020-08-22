@@ -35,30 +35,70 @@ The operations on this API are facilitated through ```Actions``` .
 
 Actions and Payloads together form the backbone of the ```Unified Actions API```. While ```Actions``` facilitate operations on the Database, ```Payloads``` are used as specifications to specify data, selectors & configurations. 
 
-- Create Operations
-  * **Creating Databases**
+- **Creating Databases**
   
     Action - <kbd>create-database</kbd> - Used for creating Databases.
   
-    Payloads - <kbd>name</kbd> - Name of Database.
+    Payloads - <kbd>name</kbd> - Select Name for Database to be created.
     
     ```
     {
-        "action" : "create-database"
+        "action" : "create-database",
+        "payload: {
+            "name" : <name of Database>
+        }
     }
     ```
+- **Creating Collections**
+  
+    Action - <kbd>create-collection</kbd> - Used for creating Collections.
+  
+    Payloads - <kbd>database</kbd> - Name of Database where Collection is to be created
+               <kbd>name</kbd> - Select Name of Collection to be created
+               <kbd>schema</kbd> - The specification of the Structure of the Collection i.e. the Headers/Titles of data and its type.
+    
+    ```
+    {
+        "action" : "create-collection",
+        "payload: {
+            "database" : <name of Database>,
+            "name": <name of Collection>,
+            "schema": {
+                "title" : "type/details",
+                ...
+                "title" : "type/details"
+            }
+        }
+    }
+    ```
+
+- **Adding Data to Collection**
+  
+    Action - <kbd>add-data</kbd> - Used for Adding new data to a Collection.
+  
+    Payloads - <kbd>database</kbd> - Name of Database where Collection is to be created
+               <kbd>collection</kbd> - Name of Collection where data is to be added
+    
+    ```
+    {
+        "action" : "create-collection",
+        "payload: {
+            "database" : <name of Database>,
+            "name": <name of Collection>
+        }
+    }
+    ```
+    
   * <kbd>create-collection</kbd> - Used for creating Collections. 
 
-- View Operations
-  * <kbd>get-cluster</kbd> - Used for creating Databases.
-  * <kbd>get-database</kbd> - Used for creating Databases.
-  * <kbd>get-collection</kbd> - Used for creating Databases.
+- <kbd>get-cluster</kbd> - Used for creating Databases.
+- <kbd>get-database</kbd> - Used for creating Databases.
+- <kbd>get-collection</kbd> - Used for creating Databases.
   
-- Data Operations
-  * <kbd>add-data</kbd> - Used for Adding new data to a Collection.
-  * <kbd>update-data</kbd> - Used for Updating existing data in a Collection.
-  * <kbd>delete-data</kbd> - Used for Deleting existing data in a Collection.
-  * <kbd>get-data</kbd> - Used for Fetching existing data from a Collection.
+- <kbd>add-data</kbd> - Used for Adding new data to a Collection.
+- <kbd>update-data</kbd> - Used for Updating existing data in a Collection.
+- <kbd>delete-data</kbd> - Used for Deleting existing data in a Collection.
+- <kbd>get-data</kbd> - Used for Fetching existing data from a Collection.
      
 
 
