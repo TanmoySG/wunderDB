@@ -39,7 +39,9 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
   
     Action - <kbd>create-database</kbd> - Used for creating Databases.
   
-    Payloads - <kbd>name</kbd> - Select Name for Database to be created.
+    Payloads:
+    - <kbd>name</kbd> - Select Name for Database to be created.
+    
     
     ```
     {
@@ -54,9 +56,11 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
   
     Action - <kbd>create-collection</kbd> - Used for creating Collections.
   
-    Payloads - <kbd>database</kbd> - Name of Database where Collection is to be created
-             - <kbd>name</kbd> - Select Name of Collection to be created<br/>  
-             - <kbd>schema</kbd> - The specification of the Structure of the Collection i.e. the Headers/Titles of data and its type<br/> 
+    Payloads:
+    - <kbd>database</kbd> - Name of Database where Collection is to be created
+    - <kbd>name</kbd> - Select Name of Collection to be created<br/>  
+    - <kbd>schema</kbd> - The specification of the Structure of the Collection i.e. the Headers/Titles of data and its type<br/> 
+    
     
     ```
     {
@@ -77,9 +81,11 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
   
     Action - <kbd>add-data</kbd> - Used for Adding new data to a Collection.
   
-    Payloads - <kbd>database</kbd> - Name of Database where Collection is to be created
-             - <kbd>collection</kbd> - Name of Collection where data is to be added
-             - <kbd>data</kbd> - The data that needs to be added to a collection. Headers must match the Schema header, else it generates error.
+    Payloads:
+    - <kbd>database</kbd> - Name of Database where Collection is to be created
+    - <kbd>collection</kbd> - Name of Collection where data is to be added
+    - <kbd>data</kbd> - The data that needs to be added to a collection. Headers must match the Schema header, else it generates error.
+    
     
     ```
     {
@@ -96,7 +102,31 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     }
     ```
     
-
+- **Updating Data in a Collection**
+  
+    Action - <kbd>update-data</kbd> - Used for Updating existing data in a Collection.
+  
+    Payloads:
+    - <kbd>database</kbd> - Name of Database where Collection is to be created
+    - <kbd>collection</kbd> - Name of Collection where data is to be added
+    - <kbd>marker</kbd> - Marker is a special token that specifies a particular data. A marker-key is the field-name/title and marker-value corresponds to the specific data to be updated. The format of specifying a marker is "markey-key : markey-value" keeping the single-spaces intact.
+    - <kbd>data</kbd> - The changes to be made i the data. 
+    
+    
+    ```
+    {
+        "action" : "update-data",
+        "payload: {
+            "database" : <name of Database>,
+            "collection": <name of Collection>,
+            "data": {
+                "title" : "value",
+                ...
+                "title" : "value"
+            }
+        }
+    }
+    ```
 
 - <kbd>get-cluster</kbd> - Used for creating Databases.
 - <kbd>get-database</kbd> - Used for creating Databases.
