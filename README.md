@@ -4,7 +4,7 @@ version ***1.0 Beta***
 
 New in this Beta Release - ***Unified Endpoint access for all actions***
 
----
+
 ## Documentation
 
 wunderDB is a JSON-based micro Document DB hosted at [wdb.tanmoysg.com](https://wdb.tanmoysg.com). 
