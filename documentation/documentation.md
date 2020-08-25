@@ -85,7 +85,7 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
         
     ```
     {
-        "action" : "create-collection",
+        "action" : "add-data",
         "payload: {
             "database" : <name of Database>,
             "collection": <name of Collection>,
@@ -139,7 +139,7 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     
     ```
     {
-        "action" : "update-data",
+        "action" : "delete-data",
         "payload: {
             "database" : <name of Database>,
             "collection": <name of Collection>,
