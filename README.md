@@ -9,10 +9,6 @@ New in this Beta Release - ***Unified Endpoint access for all actions***
 
 #### Deployed at [wdb.tanmoysg.com](http://wdb.tanmoysg.com)
 
-<p align="center">
-   <img width="100%" src="https://github.com/TanmoySG/wunderDB/blob/master/showcase/smartmockups_kea5z4zm.jpg">
-</p>
-
 ## Documentation
 
 Create a cluster and get started with wunderDB at [wdb.tanmoysg.com](http://wdb.tanmoysg.com).
