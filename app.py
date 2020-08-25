@@ -1,4 +1,3 @@
-
 '''
 #############################  wunderDB  #############################
 
@@ -26,8 +25,15 @@ import hashlib
 from flask import Flask, request, jsonify, send_from_directory
 import os.path
 from os import path
+from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__ , static_folder="../", static_url_path='/')
+
+CORS(app)
+
+@app.route('/')
+def index():
+    return app.send_static_file('../index.html')
 
 def write_json(data, filename):
     with open(filename, 'w') as f:
@@ -92,12 +98,17 @@ def register():
                 temp[cluster_id] = cluster_data
                 write_json(data, file)
             return jsonify({ 
+                "status_code" : '1',
                 "response" : "Cluster Created",
                 "cluster_id" : cluster_id , 
                 "access_tokens" : tokens
                 })
         else:
-            return jsonify({ "response" : "User already exists." })
+            return jsonify({ 
+                "status_code" : '0',
+                "response" : "User already exists." 
+                
+            })
 
 # LOGIN
 @app.route('/login', methods = ['POST'])
@@ -112,6 +123,7 @@ def login():
             hashed_password = hashlib.sha512(user_data['password'].encode('utf-8') + salt).hexdigest()
             if user[user_data["username"]]['username'] == user_data['username'] and user[user_data["username"]]['password'] == hashed_password :
                 return jsonify({
+                    "status_code" : '1',
                     "response" : "Logged-in",
                     "name" : user[user_data["username"]]['name'],
                     "cluster_id" : user[user_data["username"]]['_cluster_id'],
@@ -119,10 +131,12 @@ def login():
                 })
             else:
                 return jsonify({
-                "response" : "Password is wrong."
+                    "status_code" : '0',
+                    "response" : "Password is wrong."
             })
         else:
             return jsonify({
+                "status_code" : '1',
                 "response" : "User doesn't exist"
             })
 
@@ -143,7 +157,10 @@ def create_database(cluster_id , payload):
         temp = cluster[cluster_id]['databases']
         temp[db_json['name']] = db_data
         write_json(clusters, file)
-        return "Database Created with ID "+database_id
+        return jsonify({
+                "status_code" : '1',
+                "response" : "Database Created with ID "+database_id
+            })
 
 
 # CREATE COLLECTION
@@ -168,7 +185,10 @@ def create_collection(cluster_id , payload):
             write_json(clusters, file)
             return "Collection created with ID "+ collection_id
         else:
-            return "Database doesn't exist."
+            return jsonify({
+                    "status_code" : '0',
+                    "response" : "Database doesn't exist."
+                })
 
 
 # ADD DATA TO COLLECTION
@@ -188,13 +208,25 @@ def add_data(cluster_id , payload):
                     temp = cluster[cluster_id]['databases'][cluster_json['database']]['collections'][cluster_json['collection']]['data']
                     temp[_id] = data
                     write_json(clusters, file)
-                    return "Data Entered"
+                    return jsonify({
+                            "status_code" : '1',
+                            "response" :"Data Entered"
+                        })
                 else:
-                    return 'Collection Schema and Data Schema does not match'
+                    return jsonify({
+                            "status_code" : '0',
+                            "response" : 'Collection Schema and Data Schema does not match'
+                        })
             else:
-                return "Collection doesn't exit."
+                return jsonify({
+                        "status_code" : '0',
+                        "response" : "Collection doesn't exit."
+                    })
         else:
-            return "Database doesn't exist."
+            return jsonify({
+                    "status_code" : '0',
+                    "response" :"Database doesn't exist."
+                })
 
 
 # UPDATE DATA
@@ -216,15 +248,30 @@ def update_data(cluster_id , payload ):
                         if collection['data'][_id][marker_key] == marker_value:
                             collection['data'][_id].update(cluster_json['data'])
                             write_json(clusters, file)
-                            return 'Data Updated!'
+                            return jsonify({
+                                    "status_code" : '1',
+                                    "response" :'Data Updated!'
+                                })
                             break
-                    return 'Data Not Found' 
+                    return jsonify({
+                            "status_code" : '0',
+                            "response" :'Data Not Found' 
+                        })
                 else:
-                    return 'Marker Invalid'
+                    return jsonify({
+                            "status_code" : '0',
+                            "response" :'Marker Invalid'
+                        })
             else:
-                return "Collection doesn't exit."
+                return jsonify({
+                        "status_code" : '0',
+                        "response" :"Collection doesn't exit."
+                    })
         else:
-            return "Database doesn't exist."
+            return jsonify({
+                    "status_code" : '0',
+                    "response" :"Database doesn't exist."
+                })
 
 
 # DELETE DATA
@@ -246,15 +293,30 @@ def delete_data(cluster_id , payload ):
                         if collection['data'][_id][marker_key] == marker_value:
                             collection['data'].pop(_id)
                             write_json(clusters, file)
-                            return 'Data Deleted!'
+                            return jsonify({
+                                    "status_code" : '1',
+                                    "response" : 'Data Deleted!'
+                                })
                             break
-                    return 'Data Not Found' 
+                    return jsonify({
+                            "status_code" : '0',
+                            "response" : 'Data Not Found' 
+                        })
                 else:
-                    return 'Marker Invalid'
+                    return jsonify({
+                            "status_code" : '0',
+                            "response" : 'Marker Invalid'
+                        })
             else:
-                return "Collection doesn't exit."
+                return jsonify({
+                        "status_code" : '0',
+                        "response" :"Collection doesn't exit."
+                    })
         else:
-            return "Database doesn't exist."
+            return jsonify({
+                    "status_code" : '0',
+                    "response" :"Database doesn't exist."
+                })
 
 # GET COMPLETE CLUSTER
 def get_cluster(cluster_id , payload ):
@@ -286,11 +348,14 @@ def get_databases(cluster_id , payload ):
             if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
                 return jsonify({
                     "database_name" : cluster[cluster_id]["databases"][cluster_json['database']]['db_name'],
-                            "_uuid" : cluster_json['database'],
-                            "collections_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'])
+                    "_uuid" : cluster_json['database'],
+                    "collections_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'])
                 })
             else:
-                return 'No Database found with this ID.'
+                return jsonify({
+                    "status_code" : '0',
+                    "response" :"Database doesn't exist."
+                })
 
 
 # GET COLLECTIONS
@@ -318,9 +383,15 @@ def get_collections(cluster_id , payload ):
                         "data_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'][cluster_json['collection']]['data'])
                     })
                 else:
-                    return 'No Collection found with this ID.'
+                    return jsonify({
+                        "status_code" : '0',
+                        "response" :"Collection doesn't exit."
+                    })
         else:
-            return 'No database with this ID Found.'
+            return jsonify({
+                    "status_code" : '0',
+                    "response" :"Database doesn't exist."
+                })
 
 
 # GET DATA
@@ -337,9 +408,15 @@ def get_data(cluster_id , payload ):
                     "data" : data
                 })
             else:
-                return "Collection doesn't exit."
+                return jsonify({
+                        "status_code" : '0',
+                        "response" :"Collection doesn't exit."
+                    })
         else:
-                return "Database doesn't exist."
+            return jsonify({
+                    "status_code" : '0',
+                    "response" :"Database doesn't exist."
+                })
            
 # CONNECT - SINGLE ENDPOINT
 @app.route('/connect', methods = ['GET' , 'POST'])
@@ -376,3 +453,7 @@ def connect():
                 return  jsonify({ "response" : 'Wrong Access token'})
     else:
         return jsonify({ "response" : 'Cluster does not exist.' }) 
+        
+        
+if __name__ == '__main__':
+    app.run()
