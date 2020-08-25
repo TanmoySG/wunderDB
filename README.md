@@ -5,8 +5,6 @@
 # wunderDB
 wunderDB is a JSON-based micro Document DB, inspired by MongoDB.
 
-New in this Beta Release - ***Unified Endpoint access for all actions***
-
 #### Deployed at [wdb.tanmoysg.com](http://wdb.tanmoysg.com)
 
 ## Documentation
