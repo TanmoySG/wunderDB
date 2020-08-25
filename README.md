@@ -28,7 +28,7 @@ The operations on this API are facilitated through ```Actions```
 
 ## Features
 
-- Unified API access Endpoint.
+- Unified API Endpoint.
 - ***Unified Actions API*** enables performing multiple operation through a similar structured API Call.
 - **Remotely Hosted**, enabling on-the-go access of data.
 - Reduces need of self-hosted servers/databases.
@@ -42,13 +42,13 @@ The operations on this API are facilitated through ```Actions```
 
 ## Progress
 
-- [x] Schema Integrity Protection
-- [x] Summarised Reporting
-- [x] Unified Actions API
 - [ ] Query Language
 - [ ] Mass Data Actions
 - [ ] Advanced data Security & Protection
 - [ ] Media Access Support
+- [x] Schema Integrity Protection
+- [x] Summarised Reporting
+- [x] Unified Actions API
 
 #### Suggest/Request a feature that you want to see in wunderDB [here](mailto:tanmoysps@gmail.com)
 
