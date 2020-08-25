@@ -24,6 +24,7 @@ The operations on this API are facilitated through ```Actions```
 ## Features
 
 - Unified API Endpoint.
+- Registration Portal for creating Cluster.
 - ***Unified Actions API*** enables performing multiple operation through a similar structured API Call.
 - **Remotely Hosted**, enabling on-the-go access of data.
 - Reduces need of self-hosted servers/databases.
@@ -37,10 +38,12 @@ The operations on this API are facilitated through ```Actions```
 
 ## Progress
 
+- [ ] wunderCP, Dashboard for wunderDB
 - [ ] Query Language
 - [ ] Mass Data Actions
 - [ ] Advanced data Security & Protection
 - [ ] Media Access Support
+- [x] Registration Portal for creating Cluster.
 - [x] Schema Integrity Protection
 - [x] Summarised Reporting
 - [x] Unified Actions API
