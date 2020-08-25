@@ -2,6 +2,8 @@
    <img width="50%" src="https://github.com/TanmoySG/wunderDB/blob/master/showcase/wdb-complete.png">
 </p>
 
+# wunderDB - a Document Database
+
 ***wunderDB*** is a JSON-based micro Document DB, inspired by MongoDB.
 
 #### Deployed at [wdb.tanmoysg.com](http://wdb.tanmoysg.com)
