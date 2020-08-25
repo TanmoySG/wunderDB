@@ -23,7 +23,7 @@ wdb.tanmoysg.com/connect?cluster=<cluster-id>&token=<one-of-the-three-tokens-gen
 ```
 The operations on this API are facilitated through ```Actions``` 
 
-Detailed documentation for wunderDB available [here](https://github.com/TanmoySG/wunderDB/blob/master/documentation/documentation.md)
+**Detailed documentation for wunderDB available [here](https://github.com/TanmoySG/wunderDB/blob/master/documentation/documentation.md)**
 
 Project by ***[Tanmoy Sen Gupta](https://www.tanmoysg.com)***
 
