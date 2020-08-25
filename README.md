@@ -3,7 +3,7 @@
 </p>
 
 # wunderDB
-wunderDB is a JSON-based micro Document DB, inspired by MongoDB. Version ***1.0 Beta***
+wunderDB is a JSON-based micro Document DB, inspired by MongoDB.
 
 New in this Beta Release - ***Unified Endpoint access for all actions***
 
@@ -24,6 +24,35 @@ wdb.tanmoysg.com/connect?cluster=<cluster-id>&token=<one-of-the-three-tokens-gen
 The operations on this API are facilitated through ```Actions``` 
 
 **Detailed documentation for wunderDB available [here](https://github.com/TanmoySG/wunderDB/blob/master/documentation/documentation.md)**
+
+
+## Features
+
+- Unified API access Endpoint.
+- ***Unified Actions API*** enables performing multiple operation through a similar structured API Call.
+- **Remotely Hosted**, enabling on-the-go access of data.
+- Reduces need of self-hosted servers/databases.
+- Micro structure & Lightweight Database.
+- Supports **multiple Databases** for a single cluster.
+- Supports **multiple Collections** for each Database.
+- **C**reate, **R**ead, **U**pdate, **D**elete operations on Data.
+- **Schema Integrity Protection** for Data Creation & Updation reducing data-schema mismatch issues.
+- **Markers** ensure easy pointing to specific data.
+- **Summarised Reporting** of Databases & Collection.
+
+## Progress
+
+- [x] Schema Integrity Protection
+- [x] Summarised Reporting
+- [x] Unified Actions API
+- [ ] Query Language
+- [ ] Mass Data Actions
+- [ ] Advanced data Security & Protection
+- [ ] Media Access Support
+
+#### Suggest/Request a feature that you want to see in wunderDB [here](mailto:tanmoysps@gmail.com)
+
+
 
 Project by ***[Tanmoy Sen Gupta](https://www.tanmoysg.com)***
 
