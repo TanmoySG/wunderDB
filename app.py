@@ -136,7 +136,7 @@ def login():
             })
         else:
             return jsonify({
-                "status_code" : '1',
+                "status_code" : '0',
                 "response" : "User doesn't exist"
             })
 
@@ -183,7 +183,10 @@ def create_collection(cluster_id , payload):
             temp = cluster[cluster_id]['databases'][cluster_json['database']]['collections']
             temp[cluster_json['name']] = collection_data
             write_json(clusters, file)
-            return "Collection created with ID "+ collection_id
+            return jsonify({
+                        "status_code" : '1',
+                        "response" : "Collection created with ID "+ collection_id
+                    })
         else:
             return jsonify({
                     "status_code" : '0',
@@ -325,7 +328,7 @@ def get_cluster(cluster_id , payload ):
         clusters = json.load(db)
         cluster = clusters['clusters']
         cluster_json = payload
-        return jsonify({ "cluster" : cluster })
+        return jsonify({ "status_code" : "1" , "cluster" : cluster })
 
             
 # GET DATABASES
@@ -339,6 +342,7 @@ def get_databases(cluster_id , payload ):
             result = []
             for i in cluster[cluster_id]["databases"].keys():  
                 result.append({
+                    "status_code" : "1",
                     "database_name" : cluster[cluster_id]["databases"][i]['db_name'],
                     "_uuid" : i,
                     "collections_count": len(cluster[cluster_id]["databases"][i]['collections'])
@@ -347,6 +351,7 @@ def get_databases(cluster_id , payload ):
         else:
             if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
                 return jsonify({
+                    "status_code" : "1",
                     "database_name" : cluster[cluster_id]["databases"][cluster_json['database']]['db_name'],
                     "_uuid" : cluster_json['database'],
                     "collections_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'])
@@ -374,7 +379,7 @@ def get_collections(cluster_id , payload ):
                         "_uuid" : i,
                         "data_count": len(cluster[cluster_id]["databases"][cluster_json['database']]['collections'][i]['data'])
                     })
-                return jsonify({ "response" : result})
+                return jsonify({"status_code" : "1", "response" : result})
             else:
                 if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]['collections'].keys():
                     return jsonify({
@@ -404,8 +409,11 @@ def get_data(cluster_id , payload ):
         if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
             if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
                 data = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['data']
+                schema = cluster[cluster_id]["databases"][cluster_json['database']]["collections"][cluster_json['collection']]['schema']
                 return jsonify({
-                    "data" : data
+                    "status_code" : "1",
+                    "data" : data,
+                    "schema" : schema
                 })
             else:
                 return jsonify({
@@ -450,9 +458,9 @@ def connect():
                 elif action_json['action'].lower() == "get-data" :
                     return get_data(cluster_id, payload)
             else:
-                return  jsonify({ "response" : 'Wrong Access token'})
+                return  jsonify({ "status_code" : "0", "response" : 'Wrong Access token'})
     else:
-        return jsonify({ "response" : 'Cluster does not exist.' }) 
+        return jsonify({"status_code" : "0",  "response" : 'Cluster does not exist.' }) 
         
         
 if __name__ == '__main__':
