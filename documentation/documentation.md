@@ -53,13 +53,13 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     Payloads:
     - <kbd>targetDatabase</kbd> - Select Name of the Database to be deleted.
     - <kbd>migrateCollections</kbd> - A Flag field. Indicates if the Collections in the Target Database need to be migrated. Allowed values:
-     * `true` if collections migration is required.
-     * `false` if collections migration is not required.
+          * `true` if collections migration is required.
+          * `false` if collections migration is not required.
     - <kbd>destinationDatabase</kbd> - If migrateCollections is `true` then, select name of the Database where collections from targetDatabase should be migrated to.
     - <kbd>ifCollectionExists</kbd> - Flag Field. Indicates action to be taken if collection with same name exists in destination collection while migration. Allowed Values
-     * `rename` - If collection exists, the incoming collection from source database is renamed by the system with system.
-     * `replace` - If collection exists, the destination collection is replaced by the incoming collection.
-     * `skip` - If collection exists, the incoming collection is skipped while other collections are migrated.
+          * `rename` - If collection exists, the incoming collection from source database is renamed by the system with system.
+          * `replace` - If collection exists, the destination collection is replaced by the incoming collection.
+          * `skip` - If collection exists, the incoming collection is skipped while other collections are migrated.
     
     Mode - <kbd>POST</kbd>
     
@@ -110,9 +110,9 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     - <kbd>collection</kbd> -  Name of Collection to be copied.  
     - <kbd>destinationDatabase</kbd> - Name of Database to where Collection is to be copied. 
     - <kbd>actionIfExists</kbd> - Flag field. Action to be taken if copied collection exists in destination database.
-     * `rename` - If collection exists, the incoming collection from source database is renamed as specified by user.
-     * `replace` - If collection exists, the destination collection is replaced by the incoming collection.
-     * `abort` - If collection exists, the incoming collection is skipped while other collections are migrated.
+          * `rename` - If collection exists, the incoming collection from source database is renamed as specified by user.
+          * `replace` - If collection exists, the destination collection is replaced by the incoming collection.
+          * `abort` - If collection exists, the incoming collection is skipped while other collections are migrated.
     - <kbd>newName</kbd> - New Name for Collection to be renamed. 
       
     Mode - <kbd>POST</kbd>
@@ -140,9 +140,9 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     - <kbd>collection</kbd> - Name of Collection to be Migrated. If `migrate-all` is passed insted of specific Collection name, then the system migrates all collections in the source database. In case of `migrate-all` the next three fields are not required.
     - <kbd>destinationDatabase</kbd> - Name of Database to where Collection is to be migrated. 
     - <kbd>actionIfExists</kbd> - Flag field. Action to be taken if migrated collection exists in destination database.
-     * `rename` - If collection exists, the incoming collection from source database is renamed as specified by user.
-     * `replace` - If collection exists, the destination collection is replaced by the incoming collection.
-     * `abort` - If collection exists, the incoming collection is skipped while other collections are migrated.
+          * `rename` - If collection exists, the incoming collection from source database is renamed as specified by user.
+          * `replace` - If collection exists, the destination collection is replaced by the incoming collection.
+          * `abort` - If collection exists, the incoming collection is skipped while other collections are migrated.
     - <kbd>newName</kbd> - New Name for Collection to be renamed. 
       
     Mode - <kbd>POST</kbd>
