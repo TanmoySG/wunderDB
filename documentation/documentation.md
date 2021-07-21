@@ -46,6 +46,35 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     }
     ```
     
+- **Deleting Databases**
+  
+    Action - <kbd>delete-database</kbd> - Used for creating Databases.
+  
+    Payloads:
+    - <kbd>targetDatabase</kbd> - Select Name of the Database to be deleted.
+    - <kbd>migrateCollections</kbd> - A Flag field. Indicates if the Collections in the Target Database need to be migrated. Allowed values:
+         * `true` if collections migration is required.
+         * `false` if collections migration is not required.
+    - <kbd>destinationDatabase</kbd> - If migrateCollections is `true` then, select name of the Database where collections from targetDatabase should be migrated to.
+    - <kbd>ifCollectionExists</kbd> - Flag Field. Indicates action to be taken if collection with same name exists in destination collection while migration. Allowed Values
+         * `rename` - If collection exists, the incoming collection from source database is renamed by the system with system.
+         * `replace` - If collection exists, the destination collection is replaced by the incoming collection.
+         * `skip` - If collection exists, the incoming collection is skipped while other collections are migrated.
+    
+    Mode - <kbd>POST</kbd>
+    
+    ```
+    {
+        "action" : "create-database",
+        "payload": {
+            "targetDatabase" : <name of Source Database>,
+            "migrateCollection" : < `true` / `false` >,
+            "targetDatabase" : <name of Destination Database>,
+            "targetDatabase" : < `replace` / `rename` / `skip` >
+        }
+    }
+    ```    
+    
 - **Creating Collections**
   
     Action - <kbd>create-collection</kbd> - Used for creating Collections.
