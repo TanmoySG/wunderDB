@@ -101,9 +101,9 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     }
     ```
 
-- **Copy Collections**
+- **Clone Collections**
   
-    Action - <kbd>copy-collection</kbd> - Used for Copy Collection from one database to another without deleting the collection at source.
+    Action - <kbd>clone-collection</kbd> - Used for Copy Collection from one database to another without deleting the collection at source.
   
     Payloads:
     - <kbd>sourceDatabase</kbd> - Name of Database from where Collection is to be copied.
@@ -119,7 +119,7 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     
     ```
     {
-        "action" : "copy-collection",
+        "action" : "clone-collection",
         "payload: {
             "sourceDatabase" : <name of source Database>,
             "collection": <name of Collection to be copied>,
