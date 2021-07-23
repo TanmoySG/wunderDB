@@ -223,8 +223,8 @@ def delete_collection(cluster_id , payload):
                 })
 
 
-# COPY COLLECTION
-def copy_collection(cluster_id , payload):
+# CLONE COLLECTION
+def clone_collection(cluster_id , payload):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
@@ -238,14 +238,22 @@ def copy_collection(cluster_id , payload):
                     if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json["destinationDatabase"]]["collections"].keys():
                         if cluster_json['actionIfExists'] == "replace":
                             destinationDatabase["collections"].pop(cluster_json["collection"])
-                            destinationDatabase["collections"][cluster_json['collection']] = sourceDatabase["collections"][cluster_json['collection']]
+                            destinationDatabase["collections"][cluster_json['collection']] = {}
+                            destinationDatabase["collections"][cluster_json['collection']]['_uuid'] = shortuuid.uuid()
+                            destinationDatabase["collections"][cluster_json['collection']]['collection_name'] = sourceDatabase["collections"][cluster_json['collection']].get('collection_name')
+                            destinationDatabase["collections"][cluster_json['collection']]['schema'] = sourceDatabase["collections"][cluster_json['collection']].get('schema')
+                            destinationDatabase["collections"][cluster_json['collection']]['data'] = sourceDatabase["collections"][cluster_json['collection']].get('data')
                             write_json(clusters, file)
                             return jsonify({
                                         "status_code" : '1',
                                         "response" : "Collection Copied!"
                                     })
                         elif cluster_json['actionIfExists'] == "rename":
-                            destinationDatabase["collections"][cluster_json['newName']] = sourceDatabase["collections"][cluster_json['collection']]
+                            destinationDatabase["collections"][cluster_json['newName']] = {}
+                            destinationDatabase["collections"][cluster_json['newName']]['_uuid'] = shortuuid.uuid()
+                            destinationDatabase["collections"][cluster_json['newName']]['collection_name'] = cluster_json['newName']
+                            destinationDatabase["collections"][cluster_json['newName']]['schema'] = sourceDatabase["collections"][cluster_json['collection']].get('schema')
+                            destinationDatabase["collections"][cluster_json['newName']]['data'] = sourceDatabase["collections"][cluster_json['collection']].get('data')
                             write_json(clusters, file)
                             return jsonify({
                                         "status_code" : '1',
@@ -257,7 +265,11 @@ def copy_collection(cluster_id , payload):
                                         "response" : "Process aborted as collection with same name exists in destination database."
                                     })
                     else:
-                        destinationDatabase["collections"][cluster_json['collection']] = sourceDatabase["collections"][cluster_json['collection']]
+                        destinationDatabase["collections"][cluster_json['collection']] = {}
+                        destinationDatabase["collections"][cluster_json['collection']]['_uuid'] = shortuuid.uuid()
+                        destinationDatabase["collections"][cluster_json['collection']]['collection_name'] = sourceDatabase["collections"][cluster_json['collection']].get('collection_name')
+                        destinationDatabase["collections"][cluster_json['collection']]['schema'] = sourceDatabase["collections"][cluster_json['collection']].get('schema')
+                        destinationDatabase["collections"][cluster_json['collection']]['data'] = sourceDatabase["collections"][cluster_json['collection']].get('data')
                         write_json(clusters, file)
                         return jsonify({
                                     "status_code" : '1',
@@ -281,7 +293,7 @@ def copy_collection(cluster_id , payload):
 
 
 # MIGRATE ALL
-def migrate_all(cluster_id , payload):
+def migrate_all_collections(cluster_id , payload):
     file = "./clusters/"+cluster_id+".json"
     with open(file) as db:
         clusters = json.load(db)
@@ -292,7 +304,12 @@ def migrate_all(cluster_id , payload):
                 destinationDatabase = cluster[cluster_id]["databases"][cluster_json['destinationDatabase']]
                 sourceDatabase = cluster[cluster_id]["databases"][cluster_json['sourceDatabase']]
                 for collectionName in cluster[cluster_id]["databases"][cluster_json['sourceDatabase']]["collections"].keys():
-                    destinationDatabase["collections"]["migrated-"+collectionName+"@"+cluster_json['sourceDatabase']] = sourceDatabase["collections"][collectionName]
+                    tempColName = "migrated-"+collectionName+"@"+cluster_json['sourceDatabase']
+                    destinationDatabase["collections"][tempColName] = {}
+                    destinationDatabase["collections"][tempColName]['_uuid'] = shortuuid.uuid()
+                    destinationDatabase["collections"][tempColName]['collection_name'] = tempColName
+                    destinationDatabase["collections"][tempColName]['schema'] =  sourceDatabase["collections"][collectionName].get('schema')
+                    destinationDatabase["collections"][tempColName]['data'] =  sourceDatabase["collections"][collectionName].get('data')
                     write_json(clusters, file)
                 sourceDatabase["collections"] = {}
                 write_json(clusters, file)
@@ -320,7 +337,7 @@ def migrate_collection(cluster_id , payload):
         cluster = clusters['clusters']
         cluster_json = payload
         if cluster_json['collection'] == "migrate-all":
-            return migrate_all(cluster_id, payload)
+            return migrate_all_collections(cluster_id, payload)
         if cluster_json['sourceDatabase'] in cluster[cluster_id]["databases"].keys():
             if cluster_json['destinationDatabase'] in cluster[cluster_id]["databases"].keys():
                 sourceDatabase = cluster[cluster_id]["databases"][cluster_json['sourceDatabase']]
@@ -329,7 +346,11 @@ def migrate_collection(cluster_id , payload):
                     if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json["destinationDatabase"]]["collections"].keys():
                         if cluster_json['actionIfExists'] == "replace":
                             destinationDatabase["collections"].pop(cluster_json["collection"])
-                            destinationDatabase["collections"][cluster_json['collection']] = sourceDatabase["collections"][cluster_json['collection']]
+                            destinationDatabase["collections"][cluster_json['collection']] = {}
+                            destinationDatabase["collections"][cluster_json['collection']]['_uuid'] = shortuuid.uuid()
+                            destinationDatabase["collections"][cluster_json['collection']]['collection_name'] = sourceDatabase["collections"][cluster_json['collection']].get('collection_name')
+                            destinationDatabase["collections"][cluster_json['collection']]['schema'] = sourceDatabase["collections"][cluster_json['collection']].get('schema')
+                            destinationDatabase["collections"][cluster_json['collection']]['data'] = sourceDatabase["collections"][cluster_json['collection']].get('data')
                             sourceDatabase["collections"].pop(cluster_json["collection"])
                             write_json(clusters, file)
                             return jsonify({
@@ -337,7 +358,11 @@ def migrate_collection(cluster_id , payload):
                                         "response" : "Collection Moved!"
                                     })
                         elif cluster_json['actionIfExists'] == "rename":
-                            destinationDatabase["collections"][cluster_json['newName']] = sourceDatabase["collections"][cluster_json['collection']]
+                            destinationDatabase["collections"][cluster_json['newName']] = {}
+                            destinationDatabase["collections"][cluster_json['newName']]['_uuid'] = shortuuid.uuid()
+                            destinationDatabase["collections"][cluster_json['newName']]['collection_name'] = cluster_json['newName']
+                            destinationDatabase["collections"][cluster_json['newName']]['schema'] = sourceDatabase["collections"][cluster_json['collection']].get('schema')
+                            destinationDatabase["collections"][cluster_json['newName']]['data'] = sourceDatabase["collections"][cluster_json['collection']].get('data')
                             sourceDatabase["collections"].pop(cluster_json["collection"])
                             write_json(clusters, file)
                             return jsonify({
@@ -350,7 +375,11 @@ def migrate_collection(cluster_id , payload):
                                         "response" : "Process aborted as collection with same name exists in destination database."
                                     })
                     else:
-                        destinationDatabase["collections"][cluster_json['collection']] = sourceDatabase["collections"][cluster_json['collection']]
+                        destinationDatabase["collections"][cluster_json['collection']] = {}
+                        destinationDatabase["collections"][cluster_json['collection']]['_uuid'] = shortuuid.uuid()
+                        destinationDatabase["collections"][cluster_json['collection']]['collection_name'] = sourceDatabase["collections"][cluster_json['collection']].get('collection_name')
+                        destinationDatabase["collections"][cluster_json['collection']]['schema'] = sourceDatabase["collections"][cluster_json['collection']].get('schema')
+                        destinationDatabase["collections"][cluster_json['collection']]['data'] = sourceDatabase["collections"][cluster_json['collection']].get('data')
                         sourceDatabase["collections"].pop(cluster_json["collection"])
                         write_json(clusters, file)
                         return jsonify({
@@ -382,16 +411,16 @@ def delete_database(cluster_id , payload):
         cluster = clusters['clusters']
         cluster_json = payload
         if cluster_json['targetDatabase'] in cluster[cluster_id]["databases"].keys():
-            migrationFlags = cluster_json["migrationFlags"]
-            if migrationFlags['migrateCollections'] == 'true':
-                destinationDatabase = cluster[cluster_id]["databases"][migrationFlags['destinationDatabase']]
+            if cluster_json['migrateCollections'] == 'true':
+                destinationDatabase = cluster[cluster_id]["databases"][cluster_json['destinationDatabase']]
                 sourceDatabase = cluster[cluster_id]["databases"][cluster_json['targetDatabase']]
-                if migrationFlags['destinationDatabase'] in cluster[cluster_id]["databases"].keys():
-                    if migrationFlags['ifCollectionExists'] == "replace":
+                if cluster_json['destinationDatabase'] in cluster[cluster_id]["databases"].keys():
+                    if cluster_json['ifCollectionExists'] == "replace":
                         for collectionName in cluster[cluster_id]["databases"][cluster_json['targetDatabase']]["collections"].keys():
-                            if collectionName in cluster[cluster_id]["databases"][migrationFlags["destinationDatabase"]]["collections"].keys():
+                            if collectionName in cluster[cluster_id]["databases"][cluster_json["destinationDatabase"]]["collections"].keys():
                                 destinationDatabase["collections"].pop(collectionName)
-                                destinationDatabase["collections"][collectionName] = sourceDatabase["collections"][collectionName]
+                                destinationDatabase["collections"][collectionName] = sourceDatabase["collections"].get(collectionName)
+                                destinationDatabase["collections"][collectionName]["collection_name"] = sourceDatabase["collections"][collectionName].get("collection_name")
                                 write_json(clusters, file)
                             else:
                                 destinationDatabase["collections"][collectionName] = sourceDatabase["collections"][collectionName]
@@ -402,10 +431,11 @@ def delete_database(cluster_id , payload):
                                     "status_code" : '1',
                                     "response" : "Database deleted after migrating collections"
                                 })
-                    elif migrationFlags['ifCollectionExists'] == "rename":
+                    elif cluster_json['ifCollectionExists'] == "rename":
                         for collectionName in cluster[cluster_id]["databases"][cluster_json['targetDatabase']]["collections"].keys():
-                            if collectionName in cluster[cluster_id]["databases"][migrationFlags["destinationDatabase"]]["collections"].keys():
-                                destinationDatabase["collections"]["migrated-"+collectionName+"@"+cluster_json['targetDatabase']] = sourceDatabase["collections"][collectionName]
+                            if collectionName in cluster[cluster_id]["databases"][cluster_json["destinationDatabase"]]["collections"].keys():
+                                destinationDatabase["collections"]["migrated-"+collectionName+"@"+cluster_json['targetDatabase']] = sourceDatabase["collections"].get(collectionName)
+                                destinationDatabase["collections"]["migrated-"+collectionName+"@"+cluster_json['targetDatabase']]['collection_name'] = "migrated-"+collectionName+"@"+cluster_json['targetDatabase']
                                 write_json(clusters, file)
                             else:
                                 destinationDatabase["collections"][collectionName] = sourceDatabase["collections"][collectionName]
@@ -416,9 +446,9 @@ def delete_database(cluster_id , payload):
                                     "status_code" : '1',
                                     "response" : "Database deleted after migrating collections"
                                 })
-                    elif migrationFlags['ifCollectionExists'] == "skip":
+                    elif cluster_json['ifCollectionExists'] == "skip":
                         for collectionName in cluster[cluster_id]["databases"][cluster_json['targetDatabase']]["collections"].keys():
-                            if collectionName in cluster[cluster_id]["databases"][migrationFlags["destinationDatabase"]]["collections"].keys():
+                            if collectionName in cluster[cluster_id]["databases"][cluster_json["destinationDatabase"]]["collections"].keys():
                                 pass
                             else:
                                 destinationDatabase["collections"][collectionName] = sourceDatabase["collections"][collectionName]
@@ -434,7 +464,7 @@ def delete_database(cluster_id , payload):
                         "status_code" : '0',
                         "response" : "Destination Database doesn't exist"
                     })
-            elif migrationFlags['migrateCollections'] == 'false':
+            elif cluster_json['migrateCollections'] == 'false':
                 cluster[cluster_id]["databases"].pop(cluster_json['targetDatabase'])
                 write_json(clusters, file)
                 return jsonify({
@@ -712,8 +742,8 @@ def connect():
                     return get_data(cluster_id, payload)
                 elif action_json["action"].lower() == "delete-collection":
                     return delete_collection(cluster_id, payload)
-                elif action_json["action"].lower() == "copy-collection":
-                    return copy_collection(cluster_id, payload)
+                elif action_json["action"].lower() == "clone-collection":
+                    return clone_collection(cluster_id, payload)
                 elif action_json["action"].lower() == "migrate-collection":
                     return migrate_collection(cluster_id, payload)
                 elif action_json["action"].lower() == "delete-database":
