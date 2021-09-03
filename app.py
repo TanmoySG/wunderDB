@@ -29,19 +29,6 @@ app = Flask(__name__)
 
 CORS(app)
 
-'''@app.route('/')
-def index():
-    #return app.send_static_file('../index.html')
-    #return send_from_directory('./index.html')
-    return "Hellow"
-    
-@app.route('/wdash')
-def wdash():
-    # return redirect('https://wdb.tanmoysg.com/wdash/index.html')
-    return send_from_directory('../wdash/index.html')
-    # return app.send_static_file('../wdash/index.html')'''
-
-
 server_credentials = json.load(open('server-config.json'))
 
 port = server_credentials['port']
