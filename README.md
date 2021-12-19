@@ -38,7 +38,7 @@ The operations on this API are facilitated through ```Actions```
 
 ## Progress
 
-- [ ] wunderCP, Dashboard for wunderDB
+- [x] wunderCP, Dashboard for wunderDB -named wunderDash
 - [ ] Query Language
 - [ ] Mass Data Actions
 - [ ] Advanced data Security & Protection
