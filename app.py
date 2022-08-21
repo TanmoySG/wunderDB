@@ -765,6 +765,51 @@ def delete_data(cluster_id , payload ):
                     "response" :"Database doesn't exist."
                 })
 
+
+def view_data(cluster_id, payload):
+    file = "./clusters/"+cluster_id+".json"
+    with open(file) as db:
+        clusters = json.load(db)
+        cluster = clusters['clusters']
+        cluster_json = payload
+        marker = cluster_json['marker'].split(" : ")
+        marker_key = marker[0]
+        marker_value = marker[1]
+        if cluster_json['database'] in cluster[cluster_id]["databases"].keys():
+            if cluster_json['collection'] in cluster[cluster_id]["databases"][cluster_json['database']]["collections"].keys():
+                schema = cluster[cluster_id]["databases"][cluster_json['database']
+                                                          ]["collections"][cluster_json['collection']]['schema']
+                collection = cluster[cluster_id]["databases"][cluster_json['database']
+                                                              ]["collections"][cluster_json['collection']]
+                if marker_key in collection['schema'].keys():
+                    for _id in collection['data'].keys():
+                        if collection['data'][_id][marker_key] == marker_value:
+                            targetData = collection['data'][_id]
+                            return jsonify({
+                                "status_code": '1',
+                                "response": targetData
+                            })
+                    return jsonify({
+                        "status_code": '0',
+                        "response": 'Data Not Found'
+                    })
+                else:
+                    return jsonify({
+                        "status_code": '0',
+                        "response": 'Marker Invalid'
+                    })
+            else:
+                return jsonify({
+                    "status_code": '0',
+                    "response": "Collection doesn't exit."
+                })
+        else:
+            return jsonify({
+                "status_code": '0',
+                "response": "Database doesn't exist."
+            })
+
+
 # GET COMPLETE CLUSTER
 def get_cluster(cluster_id , payload ):
     file = "./clusters/"+cluster_id+".json"
@@ -901,6 +946,8 @@ def connect():
                     return get_databases(cluster_id, payload)
                 elif action_json['action'].lower() == "get-data" :
                     return get_data(cluster_id, payload)
+                elif action_json['action'].lower() == "view-data":
+                    return view_data(cluster_id, payload)
                 elif action_json["action"].lower() == "delete-collection":
                     return delete_collection(cluster_id, payload)
                 elif action_json["action"].lower() == "clone-collection":
