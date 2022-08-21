@@ -278,7 +278,7 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
 
 - **Viewing Particular Data of a Collection**
   
-    Action - <kbd>get-data</kbd> - Used for Fetching particular data from a Collection.
+    Action - <kbd>view-data</kbd> - Used for Fetching particular data from a Collection.
   
     Payloads:
     - <kbd>database</kbd> - Name of Database where Collection is to be created
@@ -289,7 +289,7 @@ Actions and Payloads together form the backbone of the ```Unified Actions API```
     
     ```
     {
-        "action" : "get-data",
+        "action" : "view-data",
         "payload: {
             "database" : <name of Database>,
             "collection": <name of Collection>,
