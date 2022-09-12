@@ -1,5 +1,5 @@
 <p align="center">
-   <img width="50%" src="https://github.com/TanmoySG/wunderDB/blob/master/showcase/wdb-complete.png">
+   <img width="50%" src="https://github.com/TanmoySG/wunderDB/blob/main/showcase/wdb-complete.png">
 </p>
 
 # wunderDB - a Document Database
