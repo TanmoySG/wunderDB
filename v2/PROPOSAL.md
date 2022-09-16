@@ -16,4 +16,10 @@ Tracked in Issue [#6](https://github.com/TanmoySG/wunderDB/issues/6)
     - Example - `POST v2/data/` to add data , `PATCH v2/data/` to update data, and more.
 
 
+## Code Modularity
 
+- Break and Modularize Existing Code into Smaller chunks.
+- Club similar or of same "origin" into same "packages". Eg. Code for cluster actions should be clubbed in a "clusters" package.
+- Packages should be separated into files for modularity.
+- Common Reusable code - "helper" code should be put in separate packages accessible to any components.
+- Utility Functions/Code should also be part of helpers
