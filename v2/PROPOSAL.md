@@ -23,3 +23,11 @@ Tracked in Issue [#6](https://github.com/TanmoySG/wunderDB/issues/6)
 - Packages should be separated into files for modularity.
 - Common Reusable code - "helper" code should be put in separate packages accessible to any components.
 - Utility Functions/Code should also be part of helpers
+
+
+## Code Maturity 
+
+- Use Design Patterns that hide implementation and can facilitate usage without worrying much about the underlying flow.
+- One such design pattern is - [Composite Design Pattern](https://refactoring.guru/design-patterns/composite) that can help in designing independent code blocks that can have zero (or little to none) dependancy on other components. These smaller chunks then come together in a "flow" performing their own actions and forming the end-to-end flow for a broader task, instead of a monolithic single code block to perform every task itself.
+- The Facade design pattern can be used to hide implementation of any task and only focus on taking a set of arguments and processing it and providing the output without the user worrying about the implementation internally. 
+- Code Reusability is another factor to be taken care of. 
