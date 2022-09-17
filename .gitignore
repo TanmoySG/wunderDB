@@ -162,3 +162,5 @@ cython_debug/
 server-config.json
 
 bin/
+.vscode
+secrets
