@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  wunderdb:
+    image: ghcr.io/tanmoysg/wunderdb:latest
+    container_name: wunderdb
+    ports:
+      - 5002:5002
+    volumes:
+      - ${PWD}/secrets/server-config.json:/app/server-config.json

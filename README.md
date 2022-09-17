@@ -1,5 +1,5 @@
 <p align="center">
-   <img width="50%" src="https://github.com/TanmoySG/wunderDB/blob/master/showcase/wdb-complete.png">
+   <img width="50%" src="https://github.com/TanmoySG/wunderDB/blob/main/showcase/wdb-complete.png">
 </p>
 
 # wunderDB - a Document Database
@@ -19,6 +19,13 @@ wdb.tanmoysg.com/connect?cluster=<cluster-id>&token=<one-of-the-three-tokens-gen
 The operations on this API are facilitated through ```Actions``` 
 
 **Detailed documentation for wunderDB available [here](https://github.com/TanmoySG/wunderDB/blob/master/documentation/documentation.md)**
+
+## Running WDB Using Docker
+
+Download the docker-compose file and run Docker Compose Up to run wdb locally. But before that create a secrets folder and create `server-config.json`
+```
+docker-compose up
+```
 
 
 ## Features
