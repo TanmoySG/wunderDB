@@ -24,3 +24,8 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 README.md
+**/documentation
+**/showcase
+**/webpage
+**/.github
+**/.include
