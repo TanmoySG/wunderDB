@@ -20,6 +20,13 @@ The operations on this API are facilitated through ```Actions```
 
 **Detailed documentation for wunderDB available [here](https://github.com/TanmoySG/wunderDB/blob/master/documentation/documentation.md)**
 
+## Running WDB Using Docker
+
+Download the docker-compose file and run Docker Compose Up to run wdb locally. But before that create a secrets folder and create `server-config.json`
+```
+docker-compose up
+```
+
 
 ## Features
 
