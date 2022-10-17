@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   wunderdb:
-    image: ghcr.io/tanmoysg/wunderdb:v1.0.2-test
+    image: ghcr.io/tanmoysg/wunderdb:latest
     container_name: wunderdb
     ports:
       - 5002:5002
