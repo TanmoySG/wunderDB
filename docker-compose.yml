@@ -7,10 +7,10 @@ services:
     ports:
       - 5002:5002
     environment:
-      - PORT=465
-      - SERVER=mail.tanmoysg.com
-      - PASSWORD=wDB#admin@2021
-      - SENDER=wunderdb@tanmoysg.com
+      - PORT=123
+      - SERVER=smtp.server.com
+      - PASSWORD=password
+      - SENDER=sender
     volumes:
       - ./clusters:/app/clusters
     networks:

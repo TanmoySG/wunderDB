@@ -7,13 +7,19 @@ version: '3.4'
 
 services:
   wunderdb:
-    image: ghcr.io/tanmoysg/wunderdb:latest
+    image: ghcr.io/tanmoysg/wunderdb:v1.0.2-test
     container_name: wunderdb
     ports:
       - 5002:5002
+    environment:
+      - PORT=123
+      - SERVER=smtp.server.com
+      - PASSWORD=password
+      - SENDER=sender
     volumes:
-      - ./secrets/server-config.json:/app/server-config.json
       - ./clusters:/app/clusters
+    networks:
+      - wundernetwork
 ```
 
 For Secrets, setup a `server-config.json` file in `secrets` directory with following format
@@ -52,6 +58,14 @@ curl --location --request POST 'http://localhost:5002/register/verify' \
     "password": "password@123",
     "otp": "OTP123"
 }'
+```
+
+## Running with WunderDash
+
+WunderDash is the official client of WunderDB. To run wDash refer to the [wDash documentation](https://github.com/TanmoySG/wunderDash). Also, you can run wDB and wDash using docker-compose in this repo.
+
+```shell
+docker-compose up
 ```
 
 ### Using WDB
