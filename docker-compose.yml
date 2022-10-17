@@ -6,5 +6,28 @@ services:
     container_name: wunderdb
     ports:
       - 5002:5002
+    environment:
+      - PORT=123
+      - SERVER=smtp.server.com
+      - PASSWORD=password
+      - SENDER=sender
     volumes:
-      - ${PWD}/secrets/server-config.json:/app/server-config.json
+      - ./clusters:/app/clusters
+    networks:
+      - wundernetwork
+    
+
+  wunderdash:
+    image: ghcr.io/tanmoysg/wunderdash:latest
+    container_name: wunderdash
+    environment:
+      NODE_ENV: production
+      WDB_URL: http://localhost:5002
+    ports:
+      - 3000:3000
+    networks:
+      - wundernetwork
+
+networks:
+  wundernetwork:
+    driver: bridge

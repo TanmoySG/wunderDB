@@ -27,6 +27,7 @@ Download the docker-compose file and run Docker Compose Up to run wdb locally. B
 docker-compose up
 ```
 
+Refer to [this](./documentation/docker-doc.md) doc for more.
 
 ## Features
 
