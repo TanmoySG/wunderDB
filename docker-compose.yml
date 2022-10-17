@@ -2,11 +2,7 @@ version: '3.4'
 
 services:
   wunderdb:
-    image: ghcr.io/tanmoysg/wunderdb:latest
-    # image: wunderdb
-    # build:
-    #   context: .
-    #   dockerfile: ./Dockerfile
+    image: ghcr.io/tanmoysg/wunderdb:v1.0.2-test
     container_name: wunderdb
     ports:
       - 5002:5002
@@ -17,14 +13,21 @@ services:
       - SENDER=wunderdb@tanmoysg.com
     volumes:
       - ./clusters:/app/clusters
+    networks:
+      - wundernetwork
+    
 
-  # wunderdash:
-  #   image: ghcr.io/tanmoysg/wunderdash:latest
-  #   container_name: wunderdash
-  #   build:
-  #     args: 
-  #       WDB_URL: "wunderdb:5002"
-  #   environment:
-  #     NODE_ENV: production
-  #   ports:
-  #     - 3000:3000
+  wunderdash:
+    image: ghcr.io/tanmoysg/wunderdash:latest
+    container_name: wunderdash
+    environment:
+      NODE_ENV: production
+      WDB_URL: http://localhost:5002
+    ports:
+      - 3000:3000
+    networks:
+      - wundernetwork
+
+networks:
+  wundernetwork:
+    driver: bridge
