@@ -29,7 +29,7 @@ app = Flask(__name__)
 
 CORS(app)
 
-server_credentials = json.load(open('server-config.json'))
+server_credentials = json.load(open('./server-config.json'))
 
 port = server_credentials['port']
 serverAddress = server_credentials['mail-server']

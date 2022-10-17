@@ -3,10 +3,28 @@ version: '3.4'
 services:
   wunderdb:
     image: ghcr.io/tanmoysg/wunderdb:latest
+    # image: wunderdb
+    # build:
+    #   context: .
+    #   dockerfile: ./Dockerfile
     container_name: wunderdb
     ports:
       - 5002:5002
+    environment:
+      - PORT=465
+      - SERVER=mail.tanmoysg.com
+      - PASSWORD=wDB#admin@2021
+      - SENDER=wunderdb@tanmoysg.com
     volumes:
-      - ./secrets/server-config.json:/app/server-config.json
       - ./clusters:/app/clusters
- 
+
+  # wunderdash:
+  #   image: ghcr.io/tanmoysg/wunderdash:latest
+  #   container_name: wunderdash
+  #   build:
+  #     args: 
+  #       WDB_URL: "wunderdb:5002"
+  #   environment:
+  #     NODE_ENV: production
+  #   ports:
+  #     - 3000:3000

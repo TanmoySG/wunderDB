@@ -16,5 +16,5 @@ WORKDIR /app
 COPY . /app
 
 # Entrypoint to the App
-ENTRYPOINT ["python"]
-CMD ["app.py"]
+ENTRYPOINT ["sh", "/app/scripts/entrypoint.sh"]
+# CMD ["app.py"]
