@@ -1,0 +1,23 @@
+{
+	"namespaces": {
+		"gns": {
+			"databases": {
+				"db-one": {
+					"collections": {
+						"coll-one": {
+							"data": {},
+							"metadata": {},
+							"schema": {},
+							"path": {}
+						}
+					},
+					"metadata": {},
+					"path": {}
+				}
+			},
+			"metadata": {},
+			"path": {}
+		}
+	},
+	"users": {}
+}
