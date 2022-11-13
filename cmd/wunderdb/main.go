@@ -4,36 +4,22 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/TanmoySG/wunderDB/internal/wfs"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
 func main() {
 
-	db := model.WDBFileSystem{
-		Namespaces: map[model.Identifier]model.Namespace{
-			"gns": {
-				Metadata: model.Metadata{},
-				Path: model.Paths{},
-				Databases: map[model.Identifier]model.Database{
-					"db-one": {
-						Metadata: model.Metadata{},
-						Path:     model.Paths{},
-						Collections: map[model.Identifier]model.Collection{
-							"coll-one": {
-								Path:     model.Paths{},
-								Metadata: model.Metadata{},
-								Data:     model.Data{},
-								Schema:   model.Schema{},
-							},
-						},
-					},
-				},
-			},
-		},
-		Users: map[model.Identifier]model.User{},
+	w := wfs.NewWFileSystem("wfs/")
+	namespaces, err := w.LoadNamespaces()
+	if err != nil {
+		fmt.Print(err)
 	}
 
-	// jsonString, err := json.Marshal(db.Namespaces["gns"].Databases["db-one"].Collections["coll-one"])
+	db := model.WDBFileSystem{
+		Namespaces: namespaces,
+	}
+
 	jsonString, err := json.Marshal(db)
 
 	if err != nil {
