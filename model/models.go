@@ -44,7 +44,7 @@ type Data map[Identifier]interface{}
 type Schema map[string]interface{}
 
 // Need to Decide exact requirements for Access
-// Access Control List
+// Access Control List - currently only implemented at Namespace Level
 type Access struct {
 	UserID         string
 	AllowedActions []string
