@@ -8,10 +8,10 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
-func (w WFileSystem) LoadNamespaces() (map[model.Identifier]model.Namespace, error) {
+func (w WFileSystem) LoadNamespaces() (map[model.Identifier]*model.Namespace, error) {
 	wfsNamespacesPath := w.namespacesBasePath
 
-	namespaces := map[model.Identifier]model.Namespace{}
+	namespaces := map[model.Identifier]*model.Namespace{}
 
 	persitedNamespaceDirectories, err := ioutil.ReadDir(wfsNamespacesPath)
 	if err != nil {
@@ -30,13 +30,13 @@ func (w WFileSystem) LoadNamespaces() (map[model.Identifier]model.Namespace, err
 			}
 
 			var persitedNamespaceParsed model.Namespace
-			
+
 			err = json.Unmarshal(persitedNamespaceBytes, &persitedNamespaceParsed)
 			if err != nil {
 				return nil, fmt.Errorf("error reading namespace file: %s", err)
 			}
 
-			namespaces[namespaceIdentifier] = persitedNamespaceParsed
+			namespaces[namespaceIdentifier] = &persitedNamespaceParsed
 		}
 	}
 
