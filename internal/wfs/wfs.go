@@ -10,17 +10,12 @@ type WFileSystem struct {
 }
 
 const (
-	wfsNamespacesPathFormat = "%s/namespaces/"
-	namespaceFilePathFormat = "%s/%s/%s_persisted.json"
+	namespacesBasePathFormat = "%s/namespaces/namespaces_persisted.json"
 )
 
 func NewWFileSystem(basePath string) WFileSystem {
 	return WFileSystem{
 		wfsBasePath:        basePath,
-		namespacesBasePath: fmt.Sprintf(wfsNamespacesPathFormat, basePath),
+		namespacesBasePath: fmt.Sprintf(namespacesBasePathFormat, basePath),
 	}
-}
-
-func (w WFileSystem) getPersistedNamespaceFilePath(identifier string) string {
-	return fmt.Sprintf(namespaceFilePathFormat, w.namespacesBasePath, identifier, identifier)
 }
