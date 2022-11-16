@@ -46,6 +46,6 @@ type Schema map[string]interface{}
 // Need to Decide exact requirements for Access
 // Access Control List - currently only implemented at Namespace Level
 type Access struct {
-	UserID         string
-	AllowedActions []string
+	UserID         string   `json:"userId"`
+	AllowedActions []string `json:"allowedActions"`
 }
