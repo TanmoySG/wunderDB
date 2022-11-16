@@ -6,37 +6,22 @@ import (
 	"io/ioutil"
 
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/pkg/fs"
 )
 
 func (w WFileSystem) LoadNamespaces() (map[model.Identifier]*model.Namespace, error) {
-	wfsNamespacesPath := w.namespacesBasePath
 
-	namespaces := map[model.Identifier]*model.Namespace{}
+	var namespaces map[model.Identifier]*model.Namespace
 
-	persitedNamespaceDirectories, err := ioutil.ReadDir(wfsNamespacesPath)
-	if err != nil {
-		return nil, fmt.Errorf("error reading namespace file: %s", err)
-	}
+	if fs.CheckFileExists(w.namespacesBasePath) {
+		persitedNamespacesBytes, err := ioutil.ReadFile(w.namespacesBasePath)
+		if err != nil {
+			return nil, fmt.Errorf("error reading namespace file: %s", err)
+		}
 
-	for _, persitedNamespace := range persitedNamespaceDirectories {
-		if persitedNamespace.IsDir() {
-
-			namespaceIdentifier := model.Identifier(persitedNamespace.Name())
-			persitedNamespaceFilePath := w.getPersistedNamespaceFilePath(namespaceIdentifier.String())
-
-			persitedNamespaceBytes, err := ioutil.ReadFile(persitedNamespaceFilePath)
-			if err != nil {
-				return nil, fmt.Errorf("error reading namespace file: %s", err)
-			}
-
-			var persitedNamespaceParsed model.Namespace
-
-			err = json.Unmarshal(persitedNamespaceBytes, &persitedNamespaceParsed)
-			if err != nil {
-				return nil, fmt.Errorf("error reading namespace file: %s", err)
-			}
-
-			namespaces[namespaceIdentifier] = &persitedNamespaceParsed
+		err = json.Unmarshal(persitedNamespacesBytes, &namespaces)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling namespace file: %s", err)
 		}
 	}
 
