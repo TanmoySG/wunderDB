@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-
+	ns "github.com/TanmoySG/wunderDB/internal/namespaces"
 	"github.com/TanmoySG/wunderDB/internal/wfs"
 	"github.com/TanmoySG/wunderDB/model"
 )
@@ -15,14 +15,19 @@ func main() {
 		fmt.Print(err)
 	}
 
-	db := model.WDBFileSystem{
+	db := model.WDB{
 		Namespaces: namespaces,
 	}
 
-	data := db.Namespaces["ns1"].Databases["db-one"].Collections["coll-one"].Data
-	data["field0"] = "val2w"
-
-	db.Namespaces["ns1"].Databases["db-one"].Collections["coll-one"].Data = data
+	nss := ns.Namespaces(db.Namespaces)
+	err = nss.DeleteNamespace("fso")
+	if err != nil {
+		fmt.Println(err)
+	}
+	err = nss.CreateNewNamespace("fs0o", model.Metadata{}, model.Access{})
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	err = w.UnloadNamespaces(db.Namespaces)
 	if err != nil {
