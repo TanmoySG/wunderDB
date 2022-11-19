@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-	w := wfs.NewWFileSystem("wfs")
+	w := wfs.NewWFileSystem("wfs/")
 	namespaces, err := w.LoadNamespaces()
 	if err != nil {
 		fmt.Print(err)
