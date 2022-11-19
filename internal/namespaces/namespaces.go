@@ -18,6 +18,13 @@ func (ns Namespaces) CheckIfNamespaceExists(namespaceID model.Identifier) bool {
 	}
 }
 
+func (ns Namespaces) GetNamespace(namespaceID model.Identifier) (*model.Namespace, error) {
+	if !ns.CheckIfNamespaceExists(namespaceID) {
+		return nil, fmt.Errorf(NamespaceErrorFormat, er.NamespaceAlreadyExistsError.ErrCode, "error creating namespace", er.NamespaceAlreadyExistsError.ErrMessage)
+	}
+	return ns[namespaceID], nil
+}
+
 func (ns Namespaces) CreateNewNamespace(namespaceID model.Identifier, metadata model.Metadata, access model.Access) error {
 	if ns.CheckIfNamespaceExists(namespaceID) {
 		return fmt.Errorf(NamespaceErrorFormat, er.NamespaceAlreadyExistsError.ErrCode, "error creating namespace", er.NamespaceAlreadyExistsError.ErrMessage)

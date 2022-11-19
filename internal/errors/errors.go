@@ -3,7 +3,6 @@ package wdbErrors
 type WdbError struct {
 	ErrCode    string
 	ErrMessage string
-
 }
 
 var (
