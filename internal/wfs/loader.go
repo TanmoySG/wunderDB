@@ -27,3 +27,22 @@ func (w WFileSystem) LoadNamespaces() (map[model.Identifier]*model.Namespace, er
 
 	return namespaces, nil
 }
+
+func (w WFileSystem) LoadDatabases() (map[model.Identifier]*model.Database, error) {
+
+	var databases map[model.Identifier]*model.Database
+
+	if fs.CheckFileExists(w.databasesBasePath) {
+		persitedDatabasesBytes, err := ioutil.ReadFile(w.databasesBasePath)
+		if err != nil {
+			return nil, fmt.Errorf("error reading database file: %s", err)
+		}
+
+		err = json.Unmarshal(persitedDatabasesBytes, &databases)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling database file: %s", err)
+		}
+	}
+
+	return databases, nil
+}

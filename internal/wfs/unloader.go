@@ -24,3 +24,20 @@ func (w WFileSystem) UnloadNamespaces(namespaces map[model.Identifier]*model.Nam
 	}
 	return nil
 }
+
+func (w WFileSystem) UnloadDatabases(databases map[model.Identifier]*model.Database) error {
+	databasesJson, err := json.Marshal(databases)
+	if err != nil {
+		return err
+	}
+
+	if !fs.CheckFileExists(w.databasesBasePath) {
+		os.Create(w.databasesBasePath)
+	}
+
+	err = os.WriteFile(w.databasesBasePath, databasesJson, 0740)
+	if err != nil {
+		return err
+	}
+	return nil
+}
