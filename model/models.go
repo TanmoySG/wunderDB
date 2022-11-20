@@ -2,31 +2,20 @@ package model
 
 type Identifier string
 
-// type Metadata struct {
-// 	Alias string     `json:"alias"`
-// 	ID    Identifier `json:"id"`
-// }
-
-type ExtraFields map[string]interface{}
-
 type Metadata map[string]interface{}
+type ExtraFields map[string]interface{}
 type Authentication map[string]interface{}
-
-type User struct {
-	UserID         Identifier
-	Authentication Authentication
-	Metadata       Metadata
-}
 
 type WDB struct {
 	Namespaces map[Identifier]*Namespace `json:"namespaces"`
+	Databases  map[Identifier]*Database  `json:"databases"`
 	Users      map[Identifier]*User      `json:"users"`
 }
 
 type Namespace struct {
-	Databases map[Identifier]*Database `json:"databases"`
-	Metadata  Metadata                 `json:"metadata"`
-	Access    map[Identifier]*Access   `json:"access,omitempty"` // Use only namespace level access control for Initial build v2
+	Databases []Identifier           `json:"databases"`
+	Metadata  Metadata               `json:"metadata"`
+	Access    map[Identifier]*Access `json:"access,omitempty"` // Use only namespace level access control for Initial build v2
 }
 
 type Database struct {
@@ -50,4 +39,10 @@ type Schema map[string]interface{}
 type Access struct {
 	UserID         string   `json:"userId"`
 	AllowedActions []string `json:"allowedActions"`
+}
+
+type User struct {
+	UserID         Identifier
+	Authentication Authentication
+	Metadata       Metadata
 }
