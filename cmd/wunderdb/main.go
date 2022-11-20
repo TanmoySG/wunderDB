@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	dbs "github.com/TanmoySG/wunderDB/internal/databases"
-	ns "github.com/TanmoySG/wunderDB/internal/namespaces"
 	"github.com/TanmoySG/wunderDB/internal/wfs"
 	"github.com/TanmoySG/wunderDB/model"
 )
@@ -12,34 +11,22 @@ import (
 func main() {
 
 	w := wfs.NewWFileSystem("wfs/")
-	namespaces, err := w.LoadNamespaces()
+	databases, err := w.LoadDatabases()
 	if err != nil {
 		fmt.Print(err)
 	}
 
 	db := model.WDB{
-		Namespaces: namespaces,
+		Databases: databases,
 	}
 
-	nss := ns.Namespaces(db.Namespaces)
-	// err = nss.DeleteNamespace("fso")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	// err = nss.CreateNewNamespace("fs0o", model.Metadata{}, model.Access{})
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	ns, _ := nss.GetNamespace("fs0o")
-	d := dbs.UseNamespace(*ns)
-	err = d.CreateNewDatabase("db0", model.Metadata{}, model.Access{})
+	d := dbs.UseDatabases(db)
+	err = d.CreateNewDatabase("whatdb", model.Metadata{}, model.Access{})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = w.UnloadNamespaces(db.Namespaces)
+	err = w.UnloadDatabases(db.Databases)
 	if err != nil {
 		fmt.Println(err)
 	}
