@@ -3,10 +3,10 @@ package databases
 import ()
 
 const (
-	NamespaceErrorFormat = "[%s] %s : %s"
+	DatabaseErrorFormat = "[%s] %s : %s"
 
-	dbExists       = true
-	dbDoesNotExist = false
+	databaseExists       = true
+	databaseDoesNotExist = false
 )
 
 // var (
