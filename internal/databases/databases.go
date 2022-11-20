@@ -9,7 +9,7 @@ import (
 
 type Databases map[model.Identifier]*model.Database
 
-func UseDatabases(wdb model.WDB) Databases {
+func WithWDB(wdb model.WDB) Databases {
 	return wdb.Databases
 }
 

@@ -10,23 +10,23 @@ import (
 
 func main() {
 
-	w := wfs.NewWFileSystem("wfs/")
-	databases, err := w.LoadDatabases()
+	wf := wfs.NewWFileSystem("wfs/")
+	databases, err := wf.LoadDatabases()
 	if err != nil {
 		fmt.Print(err)
 	}
 
-	db := model.WDB{
+	w := model.WDB{
 		Databases: databases,
 	}
 
-	d := dbs.UseDatabases(db)
+	d := dbs.WithWDB(w)
 	err = d.CreateNewDatabase("whatdb", model.Metadata{}, model.Access{})
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = w.UnloadDatabases(db.Databases)
+	err = wf.UnloadDatabases(w.Databases)
 	if err != nil {
 		fmt.Println(err)
 	}
