@@ -5,8 +5,8 @@ import ()
 const (
 	NamespaceErrorFormat = "[%s] %s : %s"
 
-	nsExistsInNamespaces       = true
-	nsDoesNotExistInNamespaces = false
+	namespaceExists       = true
+	namespaceDoesNotExist = false
 )
 
 // var (

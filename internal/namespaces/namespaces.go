@@ -12,10 +12,22 @@ type Namespaces map[model.Identifier]*model.Namespace
 func (ns Namespaces) CheckIfNamespaceExists(namespaceID model.Identifier) bool {
 	_, nsExists := ns[namespaceID]
 	if nsExists {
-		return nsExistsInNamespaces
+		return namespaceExists
 	} else {
-		return nsDoesNotExistInNamespaces
+		return namespaceDoesNotExist
 	}
+}
+
+func (ns Namespaces) CreateNamespace(namespaceID model.Identifier, metadata model.Metadata, access model.Access) error {
+	if ns.CheckIfNamespaceExists(namespaceID) {
+		return fmt.Errorf(NamespaceErrorFormat, er.NamespaceAlreadyExistsError.ErrCode, "error creating namespace", er.NamespaceAlreadyExistsError.ErrMessage)
+	}
+	ns[namespaceID] = &model.Namespace{
+		Databases: []model.Identifier{},
+		Metadata:  metadata,
+		Access:    map[model.Identifier]*model.Access{},
+	}
+	return nil
 }
 
 func (ns Namespaces) GetNamespace(namespaceID model.Identifier) (*model.Namespace, error) {
@@ -23,18 +35,6 @@ func (ns Namespaces) GetNamespace(namespaceID model.Identifier) (*model.Namespac
 		return nil, fmt.Errorf(NamespaceErrorFormat, er.NamespaceAlreadyExistsError.ErrCode, "error creating namespace", er.NamespaceAlreadyExistsError.ErrMessage)
 	}
 	return ns[namespaceID], nil
-}
-
-func (ns Namespaces) CreateNewNamespace(namespaceID model.Identifier, metadata model.Metadata, access model.Access) error {
-	if ns.CheckIfNamespaceExists(namespaceID) {
-		return fmt.Errorf(NamespaceErrorFormat, er.NamespaceAlreadyExistsError.ErrCode, "error creating namespace", er.NamespaceAlreadyExistsError.ErrMessage)
-	}
-	ns[namespaceID] = &model.Namespace{
-		Databases: map[model.Identifier]*model.Database{},
-		Metadata:  metadata,
-		Access:    map[model.Identifier]*model.Access{},
-	}
-	return nil
 }
 
 func (ns Namespaces) DeleteNamespace(namespaceID model.Identifier) error {
