@@ -7,26 +7,26 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
-type Namespace model.Namespace
+type Databases map[model.Identifier]*model.Database
 
-func UseNamespace(namespace model.Namespace) Namespace {
-	return Namespace(namespace)
+func UseDatabases(wdb model.WDB) Databases {
+	return wdb.Databases
 }
 
-func (n Namespace) CheckIfDatabaseExists(databaseID model.Identifier) bool {
-	_, dbExists := n.Databases[databaseID]
+func (d Databases) CheckIfDatabaseExists(databaseID model.Identifier) bool {
+	_, dbExists := d[databaseID]
 	if dbExists {
-		return dbExists
+		return databaseExists
 	} else {
-		return dbDoesNotExist
+		return databaseDoesNotExist
 	}
 }
 
-func (n Namespace) CreateNewDatabase(databaseID model.Identifier, metadata model.Metadata, access model.Access) error {
-	if n.CheckIfDatabaseExists(databaseID) {
-		return fmt.Errorf(NamespaceErrorFormat, er.NamespaceAlreadyExistsError.ErrCode, "error creating namespace", er.NamespaceAlreadyExistsError.ErrMessage)
+func (d Databases) CreateNewDatabase(databaseID model.Identifier, metadata model.Metadata, access model.Access) error {
+	if d.CheckIfDatabaseExists(databaseID) {
+		return fmt.Errorf(DatabaseErrorFormat, er.DatabaseAlreadyExistsError.ErrCode, "error creating database", er.DatabaseAlreadyExistsError.ErrMessage)
 	}
-	n.Databases[databaseID] = &model.Database{
+	d[databaseID] = &model.Database{
 		Collections: map[model.Identifier]*model.Collection{},
 		Metadata:    metadata,
 		Access:      map[model.Identifier]*model.Access{},
@@ -34,10 +34,17 @@ func (n Namespace) CreateNewDatabase(databaseID model.Identifier, metadata model
 	return nil
 }
 
-func (n Namespace) DeleteDatabase(databaseID model.Identifier) error {
-	if n.CheckIfDatabaseExists(databaseID) {
-		delete(n.Databases, databaseID)
+func (d Databases) GetNamespace(databaseID model.Identifier) (*model.Database, error) {
+	if !d.CheckIfDatabaseExists(databaseID) {
+		return nil, fmt.Errorf(DatabaseErrorFormat, er.DatabaseAlreadyExistsError.ErrCode, "error creating namespace", er.DatabaseAlreadyExistsError.ErrMessage)
+	}
+	return d[databaseID], nil
+}
+
+func (d Databases) DeleteDatabase(databaseID model.Identifier) error {
+	if d.CheckIfDatabaseExists(databaseID) {
+		delete(d, databaseID)
 		return nil
 	}
-	return fmt.Errorf(NamespaceErrorFormat, er.NamespaceDoesNotExistsError.ErrCode, "error deleting namespace", er.NamespaceDoesNotExistsError.ErrMessage)
+	return fmt.Errorf(DatabaseErrorFormat, er.DatabaseDoesNotExistsError.ErrCode, "error deleting database", er.DatabaseDoesNotExistsError.ErrMessage)
 }

@@ -14,4 +14,12 @@ var (
 		ErrCode:    "namespaceMissing",
 		ErrMessage: "namespace with ID doesn't exist",
 	}
+	DatabaseAlreadyExistsError = WdbError{
+		ErrCode:    "databaseExists",
+		ErrMessage: "database with ID already exists",
+	}
+	DatabaseDoesNotExistsError = WdbError{
+		ErrCode:    "databaseMissing",
+		ErrMessage: "database with ID doesn't exist",
+	}
 )
