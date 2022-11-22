@@ -22,7 +22,7 @@ func (d Databases) CheckIfDatabaseExists(databaseID model.Identifier) bool {
 	}
 }
 
-func (d Databases) CreateNewDatabase(databaseID model.Identifier, metadata model.Metadata, access model.Access) error {
+func (d Databases) CreateDatabase(databaseID model.Identifier, metadata model.Metadata, access model.Access) error {
 	if d.CheckIfDatabaseExists(databaseID) {
 		return fmt.Errorf(DatabaseErrorFormat, er.DatabaseAlreadyExistsError.ErrCode, "error creating database", er.DatabaseAlreadyExistsError.ErrMessage)
 	}
@@ -34,7 +34,7 @@ func (d Databases) CreateNewDatabase(databaseID model.Identifier, metadata model
 	return nil
 }
 
-func (d Databases) GetNamespace(databaseID model.Identifier) (*model.Database, error) {
+func (d Databases) GetDatabase(databaseID model.Identifier) (*model.Database, error) {
 	if !d.CheckIfDatabaseExists(databaseID) {
 		return nil, fmt.Errorf(DatabaseErrorFormat, er.DatabaseAlreadyExistsError.ErrCode, "error creating namespace", er.DatabaseAlreadyExistsError.ErrMessage)
 	}
