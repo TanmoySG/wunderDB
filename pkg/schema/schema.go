@@ -25,7 +25,7 @@ func UseSchema(schema model.Schema) (*Schema, error) {
 func (s Schema) Validate(data interface{}) (bool, error) {
 	marshaledDataJSON, err := json.Marshal(data)
 	if err != nil {
-		return false, fmt.Errorf("error with schema: %s", err)
+		return false, fmt.Errorf("error with data: %s", err)
 	}
 	loadedData := jsonschema.NewStringLoader(string(marshaledDataJSON))
 
