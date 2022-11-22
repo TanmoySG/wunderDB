@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/TanmoySG/wunderDB/internal/collections"
 	dbs "github.com/TanmoySG/wunderDB/internal/databases"
 	"github.com/TanmoySG/wunderDB/internal/wfs"
 	"github.com/TanmoySG/wunderDB/model"
@@ -21,7 +22,13 @@ func main() {
 	}
 
 	d := dbs.WithWDB(w)
-	err = d.CreateNewDatabase("whatdb", model.Metadata{}, model.Access{})
+	db, err := d.GetDatabase("whatdb")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	c := collections.UseDatabase(*db)
+	err = c.DeleteCollection("v091")
 	if err != nil {
 		fmt.Println(err)
 	}
