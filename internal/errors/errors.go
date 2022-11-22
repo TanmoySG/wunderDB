@@ -22,4 +22,12 @@ var (
 		ErrCode:    "databaseMissing",
 		ErrMessage: "database with ID doesn't exist",
 	}
+	CollectionAlreadyExistsError = WdbError{
+		ErrCode:    "collectionExists",
+		ErrMessage: "collection with ID already exists",
+	}
+	CollectionDoesNotExistsError = WdbError{
+		ErrCode:    "collectionMissing",
+		ErrMessage: "collection with ID doesn't exist",
+	}
 )
