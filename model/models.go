@@ -25,13 +25,17 @@ type Database struct {
 }
 
 type Collection struct {
-	Data     Data                   `json:"data"`
+	Data     map[Identifier]*Datum  `json:"data"`
 	Metadata Metadata               `json:"metadata"`
 	Schema   Schema                 `json:"schema"`
 	Access   map[Identifier]*Access `json:"access,omitempty"` // not in scope for Initial Version of 2.0
 }
 
-type Data map[Identifier]interface{}
+type Datum struct {
+	Data     interface{} `json:"data"`
+	Metadata Metadata    `json:"metadata"`
+}
+
 type Schema map[string]interface{}
 
 // Need to Decide exact requirements for Access
