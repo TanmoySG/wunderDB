@@ -1,23 +1,52 @@
 {
-	"namespaces": {
-		"gns": {
-			"databases": {
-				"db-one": {
-					"collections": {
-						"coll-one": {
-							"data": {},
-							"metadata": {},
-							"schema": {},
-							"path": {}
+	"db-one": {
+		"collections": {
+			"coll-one": {
+				"data": {
+					"some-id": {
+						"data": {
+							"field0": "val2w",
+							"field2": "valw",
+							"field3": "val2w",
+							"field7": "val2w"
+						},
+						"meta": {
+							"firstCreated": "timestamp",
+							"lastModified": "timestamp",
+							"firstCreatedBy": "someone",
+							"lastModifiedBy": "someone else",
+							"otherMetaFields": "just values"
 						}
-					},
-					"metadata": {},
-					"path": {}
-				}
-			},
-			"metadata": {},
-			"path": {}
-		}
+					}
+				},
+				"metadata": {},
+				"schema": {}
+			}
+		},
+		"metadata": {}
 	},
-	"users": {}
+	"db0": {
+		"collections": {},
+		"metadata": {}
+	},
+	"db09": {
+		"collections": {},
+		"metadata": {}
+	},
+	"db090": {
+		"collections": {},
+		"metadata": {}
+	},
+	"db0900": {
+		"collections": {},
+		"metadata": {}
+	},
+	"db2": {
+		"collections": {},
+		"metadata": {}
+	},
+	"whatdb": {
+		"collections": {},
+		"metadata": {}
+	}
 }
