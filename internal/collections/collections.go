@@ -22,12 +22,13 @@ func (c Collections) CheckIfCollectionExists(collectionID model.Identifier) bool
 	}
 }
 
-func (c Collections) CreateCollection(collectionID model.Identifier, metadata model.Metadata, access model.Access) error {
+func (c Collections) CreateCollection(collectionID model.Identifier, schema model.Schema, metadata model.Metadata, access model.Access) error {
 	if c.CheckIfCollectionExists(collectionID) {
 		return fmt.Errorf(CollectionErrorFormat, er.CollectionAlreadyExistsError.ErrCode, "error creating collection", er.CollectionAlreadyExistsError.ErrMessage)
 	}
 	c[collectionID] = &model.Collection{
-		Data:     model.Data{},
+		Data:     map[model.Identifier]*model.Datum{},
+		Schema:   schema,
 		Metadata: metadata,
 		Access:   map[model.Identifier]*model.Access{},
 	}
