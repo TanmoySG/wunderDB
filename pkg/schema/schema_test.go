@@ -16,7 +16,7 @@ func Test_Validate(t *testing.T) {
 
 	assert.NoError(t, err)
 
-	testData := model.Data{
+	testData := map[string]interface{}{
 		"001": "ia",
 	}
 
