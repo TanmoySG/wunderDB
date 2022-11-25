@@ -1,5 +1,9 @@
 package identities
 
+import (
+	"github.com/google/uuid"
+)
+
 func GenerateID() string {
-	return "p"
+	return uuid.New().String()
 }
