@@ -3,5 +3,8 @@ package data
 import ()
 
 const (
-	DatabaseErrorFormat = "[%s] %s : %s"
+	DataErrorFormat = "[%s] %s : %s"
+
+	fieldExist        = true
+	fieldDoesnotExist = false
 )
