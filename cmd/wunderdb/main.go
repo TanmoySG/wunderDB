@@ -46,7 +46,7 @@ func main() {
 	isValid, _ := s.Validate(dte)
 
 	if isValid {
-		dt.AddData(dte)
+		dt.Add(dte)
 	} else {
 		fmt.Print("not valid")
 	}

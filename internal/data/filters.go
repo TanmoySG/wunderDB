@@ -22,19 +22,19 @@ func fieldExists(fieldKey string, dataMap map[string]interface{}) bool {
 
 func UseFilter(filter interface{}) (*Filter, error) {
 
-	var dataMarker Filter
+	var dataFilter Filter
 
 	filterJson, err := json.Marshal(filter)
 	if err != nil {
 		return nil, fmt.Errorf("error marshaling namespace file: %s", err)
 	}
 
-	err = json.Unmarshal(filterJson, &dataMarker)
+	err = json.Unmarshal(filterJson, &dataFilter)
 	if err != nil {
 		return nil, fmt.Errorf("error marshaling namespace file: %s", err)
 	}
 
-	return &dataMarker, nil
+	return &dataFilter, nil
 }
 
 func (f Filter) Filter(data Data) Data {
