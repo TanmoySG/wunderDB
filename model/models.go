@@ -2,6 +2,7 @@ package model
 
 type Identifier string
 
+type DataMap map[string]interface{}
 type Metadata map[string]interface{}
 type ExtraFields map[string]interface{}
 type Authentication map[string]interface{}
@@ -32,8 +33,9 @@ type Collection struct {
 }
 
 type Datum struct {
-	Data     interface{} `json:"data"`
-	Metadata Metadata    `json:"metadata"`
+	Data       interface{} `json:"data"`
+	Metadata   Metadata    `json:"metadata"`
+	Identifier Identifier  `json:"id"`
 }
 
 type Schema map[string]interface{}
