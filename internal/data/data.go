@@ -1,6 +1,8 @@
 package data
 
 import (
+	"fmt"
+
 	"github.com/TanmoySG/wunderDB/internal/identities"
 	"github.com/TanmoySG/wunderDB/model"
 )
@@ -11,7 +13,7 @@ func UseCollection(collection model.Collection) Data {
 	return Data(collection.Data)
 }
 
-func (d Data) AddData(data interface{}) error {
+func (d Data) Add(data interface{}) error {
 	// s, err := schema.UseSchema(c.Schema)
 	// if err != nil {
 	// 	return fmt.Errorf("error adding data: %s", err)
@@ -36,6 +38,15 @@ func (d Data) AddData(data interface{}) error {
 	return nil
 }
 
-func (d Data) GetData(markers *interface{}) (Data, error) {
+func (d Data) Get(filter interface{}) (Data, error) {
+	if filter != nil {
+		f, err := UseFilter(filter)
+		if err != nil {
+			return nil, fmt.Errorf("error reading data : %s", err)
+		}
+
+		filteredDate := f.Filter(d)
+		return filteredDate, nil
+	}
 	return d, nil
 }
