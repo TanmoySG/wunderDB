@@ -29,8 +29,13 @@ func (d Data) AddData(data interface{}) error {
 	dataKey := identities.GenerateID()
 
 	d[model.Identifier(dataKey)] = &model.Datum{
-		Data:     data,
-		Metadata: model.Metadata{},
+		Identifier: model.Identifier(dataKey),
+		Data:       data,
+		Metadata:   model.Metadata{},
 	}
 	return nil
+}
+
+func (d Data) GetData(markers *interface{}) (Data, error) {
+	return d, nil
 }
