@@ -1,7 +1,7 @@
 package model
 
 import (
-	"encoding/json"
+	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
 )
 
 func (i Identifier) String() string {
@@ -17,17 +17,5 @@ func NewWDBInstance(namespaces map[Identifier]*Namespace, databases map[Identifi
 }
 
 func (d Datum) DataMap() map[string]interface{} {
-	var dataMap DataMap
-
-	dataBytes, err := json.Marshal(d.Data)
-	if err != nil {
-		return nil
-	}
-
-	err = json.Unmarshal(dataBytes, &dataMap)
-	if err != nil {
-		return nil
-	}
-
-	return dataMap
+	return maps.Marshal(d.Data)
 }
