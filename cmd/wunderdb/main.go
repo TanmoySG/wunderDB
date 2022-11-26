@@ -8,7 +8,7 @@ import (
 	dbs "github.com/TanmoySG/wunderDB/internal/databases"
 	"github.com/TanmoySG/wunderDB/internal/wfs"
 	"github.com/TanmoySG/wunderDB/model"
-	"github.com/TanmoySG/wunderDB/pkg/schema"
+	// "github.com/TanmoySG/wunderDB/pkg/schema"
 )
 
 func main() {
@@ -40,16 +40,51 @@ func main() {
 	}
 
 	dt := data.UseCollection(*collection)
-	dte := map[string]interface{}{"field": "value"}
+	dte := "valnd"
 
-	s, _ := schema.UseSchema(collection.Schema)
-	isValid, _ := s.Validate(dte)
+	// s, _ := schema.UseSchema(collection.Schema)
+	// isValid, _ := s.Validate(dte)
 
-	if isValid {
-		dt.Add(dte)
-	} else {
-		fmt.Print("not valid")
+	// filter := map[string]interface{}{
+	// 	"key":   "field",
+	// 	"value": "value",
+	// }
+
+	filter2 := map[string]interface{}{
+		"key":   "field",
+		"value": "valnd",
 	}
+
+	// filter3 := map[string]interface{}{
+	// 	"key":   "field",
+	// 	"value": "vag",
+	// }
+
+	// if isValid {
+	// dt.Add(dte)
+	// datab, err := dt.Get(filter3)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	// for id, datan := range datab {
+	// 	fmt.Printf("%s , %v\n", id, datan.DataMap())
+
+	// }
+
+	err = dt.Update(dte, filter2)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// err = dt.Delete(dte, filter)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	// } else {
+	// 	fmt.Print("not valid")
+	// }
 
 	err = wf.UnloadDatabases(w.Databases)
 	if err != nil {
