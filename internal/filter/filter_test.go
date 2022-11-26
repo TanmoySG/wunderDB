@@ -1,4 +1,4 @@
-package data
+package filter
 
 import (
 	"testing"
@@ -21,22 +21,22 @@ func Test_Filter(t *testing.T) {
 	}, f)
 	assert.NoError(t, err)
 
-	testData := Data{
-		"1": &model.Datum{
+	testData := map[model.Identifier]*model.Datum{
+		"1": {
 			Identifier: "1",
 			Data: map[string]interface{}{
 				"filed": "val",
 				"num":   "1",
 			},
 		},
-		"2": &model.Datum{
+		"2": {
 			Identifier: "1",
 			Data: map[string]interface{}{
 				"field": "value",
 				"num":   "2",
 			},
 		},
-		"3": &model.Datum{
+		"3": {
 			Identifier: "1",
 			Data: map[string]interface{}{
 				"field": "value",
@@ -45,15 +45,15 @@ func Test_Filter(t *testing.T) {
 		},
 	}
 
-	expectedData := Data{
-		"2": &model.Datum{
+	expectedData := map[model.Identifier]*model.Datum{
+		"2": {
 			Identifier: "1",
 			Data: map[string]interface{}{
 				"field": "value",
 				"num":   "2",
 			},
 		},
-		"3": &model.Datum{
+		"3": {
 			Identifier: "1",
 			Data: map[string]interface{}{
 				"field": "value",

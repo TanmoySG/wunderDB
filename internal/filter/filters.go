@@ -1,8 +1,17 @@
-package data
+package filter
 
 import (
 	"encoding/json"
 	"fmt"
+
+	"github.com/TanmoySG/wunderDB/model"
+)
+
+const (
+	DataErrorFormat = "[%s] %s : %s"
+
+	fieldExist        = true
+	fieldDoesnotExist = false
 )
 
 type Filter struct {
@@ -37,17 +46,29 @@ func UseFilter(filter interface{}) (*Filter, error) {
 	return &dataFilter, nil
 }
 
-func (f Filter) Filter(data Data) Data {
-	filteredData := make(Data)
-
+func filter(data map[model.Identifier]*model.Datum, filter Filter, iterator func(model.Identifier, model.Datum)) {
 	for identifier, dataRow := range data {
 		dataMap := dataRow.DataMap()
 		// TODO: move key check out of loop, or maybe not
-		if fieldExists(f.Key, dataMap) {
-			if dataMap[f.Key] == f.Value {
-				filteredData[identifier] = dataRow
+		if fieldExists(filter.Key, dataMap) {
+			if dataMap[filter.Key] == filter.Value {
+				iterator(identifier, *dataRow)
 			}
 		}
 	}
+}
+
+func (f Filter) Filter(data map[model.Identifier]*model.Datum) map[model.Identifier]*model.Datum {
+	filteredData := make(map[model.Identifier]*model.Datum)
+
+	filter(data, f, func(id model.Identifier, dataRow model.Datum) {
+		filteredData[id] = &dataRow
+	})
 	return filteredData
+}
+
+func (f Filter) Iterate(data map[model.Identifier]*model.Datum, iterator func(model.Identifier, model.Datum)) {
+	filter(data, f, func(id model.Identifier, dataRow model.Datum) {
+		iterator(id, dataRow)
+	})
 }
