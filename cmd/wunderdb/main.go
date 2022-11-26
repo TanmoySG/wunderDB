@@ -8,6 +8,7 @@ import (
 	dbs "github.com/TanmoySG/wunderDB/internal/databases"
 	"github.com/TanmoySG/wunderDB/internal/wfs"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/pkg/stats"
 	// "github.com/TanmoySG/wunderDB/pkg/schema"
 )
 
@@ -90,5 +91,8 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	memAlloc := stats.GetAllocatedMemory()
+	fmt.Printf("Allocated Memory: %s", memAlloc)
 
 }
