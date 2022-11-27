@@ -41,7 +41,9 @@ func main() {
 	}
 
 	dt := data.UseCollection(*collection)
-	dte := "valnd"
+	// dte := map[string]interface{}{
+	// 	"filed": "value",
+	// }
 
 	// s, _ := schema.UseSchema(collection.Schema)
 	// isValid, _ := s.Validate(dte)
@@ -51,32 +53,32 @@ func main() {
 	// 	"value": "value",
 	// }
 
-	filter2 := map[string]interface{}{
-		"key":   "field",
-		"value": "valnd",
-	}
-
-	// filter3 := map[string]interface{}{
+	// filter2 := map[string]interface{}{
 	// 	"key":   "field",
-	// 	"value": "vag",
+	// 	"value": "valnd",
 	// }
+
+	filter3 := map[string]interface{}{
+		"key":   "id",
+		"value": "b8596071-68ac-4920-bba7-68f5dd3a6b62",
+	}
 
 	// if isValid {
 	// dt.Add(dte)
-	// datab, err := dt.Get(filter3)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	// for id, datan := range datab {
-	// 	fmt.Printf("%s , %v\n", id, datan.DataMap())
-
-	// }
-
-	err = dt.Update(dte, filter2)
+	datab, err := dt.Read(filter3)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	for id, datan := range datab {
+		fmt.Printf("%s , %v\n", id, datan.DataMap())
+
+	}
+
+	// err = dt.Update(dte, filter2)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
 
 	// err = dt.Delete(dte, filter)
 	// if err != nil {
