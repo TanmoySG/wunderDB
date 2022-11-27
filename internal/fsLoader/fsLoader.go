@@ -1,4 +1,4 @@
-package wfs
+package fsLoader
 
 import (
 	"fmt"
