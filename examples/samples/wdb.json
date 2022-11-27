@@ -1,52 +1,22 @@
 {
 	"db-one": {
 		"collections": {
-			"coll-one": {
+			"coll-two": {
 				"data": {
-					"some-id": {
+					"b8596071-68ac-4920-bba7-68f5dd3a6b62": {
 						"data": {
-							"field0": "val2w",
-							"field2": "valw",
-							"field3": "val2w",
-							"field7": "val2w"
+							"field": "value"
 						},
-						"meta": {
-							"firstCreated": "timestamp",
-							"lastModified": "timestamp",
-							"firstCreatedBy": "someone",
-							"lastModifiedBy": "someone else",
-							"otherMetaFields": "just values"
-						}
+						"metadata": {},
+						"id": "b8596071-68ac-4920-bba7-68f5dd3a6b62"
 					}
 				},
 				"metadata": {},
-				"schema": {}
+				"schema": {
+					"type": "object"
+				}
 			}
 		},
-		"metadata": {}
-	},
-	"db0": {
-		"collections": {},
-		"metadata": {}
-	},
-	"db09": {
-		"collections": {},
-		"metadata": {}
-	},
-	"db090": {
-		"collections": {},
-		"metadata": {}
-	},
-	"db0900": {
-		"collections": {},
-		"metadata": {}
-	},
-	"db2": {
-		"collections": {},
-		"metadata": {}
-	},
-	"whatdb": {
-		"collections": {},
 		"metadata": {}
 	}
 }
