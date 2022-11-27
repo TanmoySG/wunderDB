@@ -2,7 +2,7 @@
 
 Hi! Welcome to the wunderDB Repository. 
 
-Currently I am rewriting the whole project in Golang with standard API following development practices. So this branch is still a Work in Progress! 👷🏻 🏗️ Hope to deliver the initial version of v2 soon! 
+Currently I am rewriting the whole project in Golang with standard API following standard development practices. So this branch is still a Work in Progress! 👷🏻 🏗️ Hope to deliver the initial version of v2 soon! 
 
 ## WDB-Retro
 
