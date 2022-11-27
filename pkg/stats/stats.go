@@ -9,5 +9,9 @@ import (
 func GetAllocatedMemory() string {
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
-	return fmt.Sprintf("%d KB\n", m.Alloc/1024)
+	return fmt.Sprintf("%v KB", m.Alloc/1024)
+}
+
+func GetCpuUsage() int {
+	return runtime.NumCPU()
 }
