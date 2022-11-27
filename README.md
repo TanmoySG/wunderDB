@@ -1,57 +1,13 @@
-<p align="center">
-   <img width="50%" src="https://github.com/TanmoySG/wunderDB/blob/main/showcase/wdb-complete.png">
-</p>
+# wunderDB v2
 
-# wunderDB - a Document Database
+Hi! Welcome to the wunderDB Repository.
 
-***wunderDB*** is a JSON-based micro Document DB, inspired by MongoDB.
+Currently I am rewriting the whole project in Golang with standard API following standard development practices. So this branch is still a Work in Progress! 👷🏻 🏗️ Hope to deliver the initial version of v2 soon!
 
-#### Deployed at [wdb.tanmoysg.com](http://wdb.tanmoysg.com)
+## WDB-Retro
 
-## Documentation
+The first version, based on Python Flask will not be phased out any time soon. To keep it accessible and so that the version 1 doesn't get lost in the version list, I have moved the v1 to a new repository here - [wdb-retro](https://github.com/TanmoySG/wdb-retro).
 
-Create a cluster and get started with wunderDB at [wdb.tanmoysg.com](http://wdb.tanmoysg.com).
+The wdb-retro repo has all the version 1 code as well as the Docker Image with the new name - so that when I publish the wunderDB v2 Docker Images are published the v1 Image doesnt get lost and anyone planning to use that still can. The version 1 will not be actively maintained.
 
-The cluster can be accessed using the ```Unified Actions API```. To consume this API, use the following endpoint :
-```
-wdb.tanmoysg.com/connect?cluster=<cluster-id>&token=<one-of-the-three-tokens-generated>
-```
-The operations on this API are facilitated through ```Actions``` 
-
-**Detailed documentation for wunderDB available [here](https://github.com/TanmoySG/wunderDB/blob/master/documentation/documentation.md)**
-
-
-## Features
-
-- Unified API Endpoint.
-- Registration Portal for creating Cluster.
-- ***Unified Actions API*** enables performing multiple operation through a similar structured API Call.
-- **Remotely Hosted**, enabling on-the-go access of data.
-- Reduces need of self-hosted servers/databases.
-- Micro structure & Lightweight Database.
-- Supports **multiple Databases** for a single cluster.
-- Supports **multiple Collections** for each Database.
-- **C**reate, **R**ead, **U**pdate, **D**elete operations on Data.
-- **Schema Integrity Protection** for Data Creation & Updation reducing data-schema mismatch issues.
-- **Markers** ensure easy pointing to specific data.
-- **Summarised Reporting** of Databases & Collection.
-
-## Progress
-
-- [x] wunderCP, Dashboard for wunderDB -named wunderDash
-- [ ] Query Language
-- [ ] Mass Data Actions
-- [ ] Advanced data Security & Protection
-- [ ] Media Access Support
-- [x] Registration Portal for creating Cluster.
-- [x] Schema Integrity Protection
-- [x] Summarised Reporting
-- [x] Unified Actions API
-
-#### Suggest/Request a feature that you want to see in wunderDB [here](mailto:tanmoysps@gmail.com)
-
-
-
-Project by ***[Tanmoy Sen Gupta](https://www.tanmoysg.com)***
-
-
+Check out the final release of v1 <https://github.com/TanmoySG/wdb-retro/releases/tag/v1.1.0>

@@ -1,2 +1,0 @@
-The other file is a sample Cluster.
-Nothing else In here.

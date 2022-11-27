@@ -1,0 +1,22 @@
+{
+	"db-one": {
+		"collections": {
+			"coll-two": {
+				"data": {
+					"b8596071-68ac-4920-bba7-68f5dd3a6b62": {
+						"data": {
+							"field": "value"
+						},
+						"metadata": {},
+						"id": "b8596071-68ac-4920-bba7-68f5dd3a6b62"
+					}
+				},
+				"metadata": {},
+				"schema": {
+					"type": "object"
+				}
+			}
+		},
+		"metadata": {}
+	}
+}
