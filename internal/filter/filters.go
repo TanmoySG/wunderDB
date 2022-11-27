@@ -17,16 +17,14 @@ const (
 type Filter struct {
 	Key   string      `json:"key"`
 	Value interface{} `json:"value"`
-	// Filter operator - < / greater , > / lesser , = / equal , != / unequal
-	// Operator string      `json:"operator"` // Future scope
 }
 
-func fieldExists(fieldKey string, dataMap map[string]interface{}) bool {
-	if _, exists := dataMap[fieldKey]; exists {
-		return fieldExist
+func fieldExists(fieldKey string, dataMap map[string]interface{}) (bool, interface{}) {
+	if data, exists := dataMap[fieldKey]; exists {
+		return fieldExist, data
 	}
 
-	return fieldDoesnotExist
+	return fieldDoesnotExist, nil
 }
 
 func UseFilter(filter interface{}) (*Filter, error) {
@@ -47,12 +45,19 @@ func UseFilter(filter interface{}) (*Filter, error) {
 }
 
 func filter(data map[model.Identifier]*model.Datum, filter Filter, iterator func(model.Identifier, model.Datum)) {
-	for identifier, dataRow := range data {
-		dataMap := dataRow.DataMap()
-		// TODO: move key check out of loop, or maybe not
-		if fieldExists(filter.Key, dataMap) {
-			if dataMap[filter.Key] == filter.Value {
-				iterator(identifier, *dataRow)
+	if filter.Key == "id" {
+		d, exists := data[model.Identifier(filter.Value.(string))]
+		if exists {
+			iterator(d.Identifier, *data[d.Identifier])
+		}
+	} else {
+		for identifier, dataRow := range data {
+			dataMap := dataRow.DataMap()
+			// TODO: move key check out of loop, or maybe not
+			if exists, _ := fieldExists(filter.Key, dataMap); exists {
+				if dataMap[filter.Key] == filter.Value {
+					iterator(identifier, *dataRow)
+				}
 			}
 		}
 	}
