@@ -14,13 +14,13 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 		return fmt.Errorf("error deleting database %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	collection := c.UseDatabase(database)
+	collections := c.UseDatabase(database)
 
-	if exists, _ := collection.CheckIfExists(collectionId); exists {
+	if exists, _ := collections.CheckIfExists(collectionId); exists {
 		return fmt.Errorf("error creating collection: %s", er.CollectionAlreadyExistsError.ErrMessage)
 	}
 
-	collection.CreateCollection(collectionId, schema, model.Metadata{}, model.Access{})
+	collections.CreateCollection(collectionId, schema, model.Metadata{}, model.Access{})
 	return nil
 }
 
@@ -30,13 +30,13 @@ func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*
 		return nil, fmt.Errorf("error fetching collection %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	collection := c.UseDatabase(database)
+	collections := c.UseDatabase(database)
 
-	if exists, _ := collection.CheckIfExists(collectionId); !exists {
+	if exists, _ := collections.CheckIfExists(collectionId); !exists {
 		return nil, fmt.Errorf("error fetching collection %s", er.CollectionAlreadyExistsError.ErrMessage)
 	}
 
-	return collection.GetCollection(collectionId), nil
+	return collections.GetCollection(collectionId), nil
 }
 
 func (wdb wdbClient) DeleteCollection(databaseId, collectionId model.Identifier) error {
@@ -45,12 +45,12 @@ func (wdb wdbClient) DeleteCollection(databaseId, collectionId model.Identifier)
 		return fmt.Errorf("error deleting collection: %s", er.CollectionDoesNotExistsError.ErrMessage)
 	}
 
-	collection := c.UseDatabase(database)
+	collections := c.UseDatabase(database)
 
-	if exists, _ := collection.CheckIfExists(collectionId); !exists {
+	if exists, _ := collections.CheckIfExists(collectionId); !exists {
 		return fmt.Errorf("error deleting collection %s", er.CollectionAlreadyExistsError.ErrMessage)
 	}
 
-	collection.DeleteCollection(collectionId)
+	collections.DeleteCollection(collectionId)
 	return nil
 }
