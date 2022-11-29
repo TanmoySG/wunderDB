@@ -5,7 +5,6 @@ import (
 
 	"github.com/TanmoySG/wunderDB/internal/databases"
 	"github.com/TanmoySG/wunderDB/internal/fsLoader"
-	"github.com/TanmoySG/wunderDB/model"
 	wdbClient "github.com/TanmoySG/wunderDB/wdb"
 )
 
@@ -18,7 +17,7 @@ func main() {
 	db := databases.WithWDB(loadedDatabase)
 	wdbc := wdbClient.NewWdbClient(db)
 
-	err := wdbc.AddDatabase("freaked", model.Metadata{})
+	err := wdbc.AddDatabase("freaked")
 	if err != nil {
 		fmt.Printf("err %s", err)
 	}
