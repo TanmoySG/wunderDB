@@ -1,9 +1,6 @@
 package collections
 
 import (
-	"fmt"
-
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
@@ -31,17 +28,10 @@ func (c Collections) CreateCollection(collectionID model.Identifier, schema mode
 	}
 }
 
-func (c Collections) GetCollection(collectionID model.Identifier) (*model.Collection, error) {
-	if exists, _ := c.CheckIfExists(collectionID); !exists {
-		return nil, fmt.Errorf(CollectionErrorFormat, er.CollectionAlreadyExistsError.ErrCode, "error creating collection", er.CollectionAlreadyExistsError.ErrMessage)
-	}
-	return c[collectionID], nil
+func (c Collections) GetCollection(collectionID model.Identifier) *model.Collection {
+	return c[collectionID]
 }
 
-func (c Collections) DeleteCollection(collectionID model.Identifier) error {
-	if exists, _ := c.CheckIfExists(collectionID); exists {
-		delete(c, collectionID)
-		return nil
-	}
-	return fmt.Errorf(CollectionErrorFormat, er.CollectionDoesNotExistsError.ErrCode, "error deleting collection", er.CollectionDoesNotExistsError.ErrMessage)
+func (c Collections) DeleteCollection(collectionID model.Identifier) {
+	delete(c, collectionID)
 }
