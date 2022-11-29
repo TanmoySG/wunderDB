@@ -7,11 +7,11 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
-func (wdb wdbClient) AddDatabase(databaseId model.Identifier, metadata model.Metadata) error {
+func (wdb wdbClient) AddDatabase(databaseId model.Identifier) error {
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); exists {
 		return fmt.Errorf("error creating database %s", er.DatabaseAlreadyExistsError.ErrMessage)
 	}
-	wdb.Databases.CreateDatabase(databaseId, metadata, model.Access{})
+	wdb.Databases.CreateDatabase(databaseId, model.Metadata{}, model.Access{})
 	return nil
 }
 
@@ -23,9 +23,9 @@ func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, 
 }
 
 func (wdb wdbClient) DeleteDatabase(databaseId model.Identifier) error {
-	if exists, _ := wdb.Databases.CheckIfExists(databaseId); exists {
-		wdb.Databases.DeleteDatabase(databaseId)
-		return nil
+	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
+		return fmt.Errorf("error deleting database %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
-	return fmt.Errorf("error deleting database %s", er.DatabaseDoesNotExistsError.ErrMessage)
+	wdb.Databases.DeleteDatabase(databaseId)
+	return nil
 }
