@@ -1,17 +1,22 @@
 package wdbClient
 
-import "github.com/TanmoySG/wunderDB/model"
+import (
+	d "github.com/TanmoySG/wunderDB/internal/databases"
+	"github.com/TanmoySG/wunderDB/model"
+)
 
-type client struct {
-	Databases map[model.Identifier]*model.Database
+type wdbClient struct {
+	Databases d.Databases `json:"databases"`
 }
 
 type Client interface {
-	AddDatabase()
+	AddDatabase(databaseId string, metadata model.Metadata) error
+	GetDatabase(databaseId string) (*model.Database, error)
+	DeleteDatabase(databaseId string) error
 }
 
-func NewWDBClient(databases map[model.Identifier]*model.Database) Client {
-	return client{
+func NewWdbClient(databases d.Databases) Client {
+	return wdbClient{
 		Databases: databases,
 	}
 }
