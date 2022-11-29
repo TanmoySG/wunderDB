@@ -10,9 +10,13 @@ type wdbClient struct {
 }
 
 type Client interface {
-	AddDatabase(databaseId string, metadata model.Metadata) error
-	GetDatabase(databaseId string) (*model.Database, error)
-	DeleteDatabase(databaseId string) error
+	// Database Methods
+	AddDatabase(databaseId model.Identifier, metadata model.Metadata) error
+	GetDatabase(databaseId model.Identifier) (*model.Database, error)
+	DeleteDatabase(databaseId model.Identifier) error
+
+	// Collection Methods
+	AddCollection(databaseId, collectionId model.Identifier, schema model.Schema, metadata model.Metadata) error
 }
 
 func NewWdbClient(databases d.Databases) Client {
