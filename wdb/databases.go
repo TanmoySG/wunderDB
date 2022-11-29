@@ -7,24 +7,24 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
-func (wdb wdbClient) AddDatabase(databaseId string, metadata model.Metadata) error {
-	if wdb.Databases.CheckIfExists(model.Identifier(databaseId)) {
+func (wdb wdbClient) AddDatabase(databaseId model.Identifier, metadata model.Metadata) error {
+	if exists, _ := wdb.Databases.CheckIfExists(databaseId); exists {
 		return fmt.Errorf("error creating database %s", er.DatabaseAlreadyExistsError.ErrMessage)
 	}
-	wdb.Databases.CreateDatabase(model.Identifier(databaseId), metadata, model.Access{})
+	wdb.Databases.CreateDatabase(databaseId, metadata, model.Access{})
 	return nil
 }
 
-func (wdb wdbClient) GetDatabase(databaseId string) (*model.Database, error) {
-	if !wdb.Databases.CheckIfExists(model.Identifier(databaseId)) {
+func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, error) {
+	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
 		return nil, fmt.Errorf("error creating namespace %s", er.DatabaseAlreadyExistsError.ErrMessage)
 	}
-	return wdb.Databases.GetDatabase(model.Identifier(databaseId)), nil
+	return wdb.Databases.GetDatabase(databaseId), nil
 }
 
-func (wdb wdbClient) DeleteDatabase(databaseId string) error {
-	if wdb.Databases.CheckIfExists(model.Identifier(databaseId)) {
-		wdb.Databases.DeleteDatabase(model.Identifier(databaseId))
+func (wdb wdbClient) DeleteDatabase(databaseId model.Identifier) error {
+	if exists, _ := wdb.Databases.CheckIfExists(databaseId); exists {
+		wdb.Databases.DeleteDatabase(databaseId)
 		return nil
 	}
 	return fmt.Errorf("error deleting database %s", er.DatabaseDoesNotExistsError.ErrMessage)
