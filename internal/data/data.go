@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/TanmoySG/wunderDB/internal/filter"
-	"github.com/TanmoySG/wunderDB/internal/identities"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/TanmoySG/wunderDB/pkg/schema"
 	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
@@ -22,7 +21,7 @@ func UseCollection(collection model.Collection) Data {
 	}
 }
 
-func (d Data) Add(data interface{}) error {
+func (d Data) Add(dataId model.Identifier, data interface{}) error {
 	s, err := schema.UseSchema(d.Schema)
 	if err != nil {
 		return fmt.Errorf("error adding data: %s", err)
@@ -34,9 +33,8 @@ func (d Data) Add(data interface{}) error {
 	}
 
 	if isValid {
-		dataKey := identities.GenerateID()
-		d.Data[model.Identifier(dataKey)] = &model.Datum{
-			Identifier: model.Identifier(dataKey),
+		d.Data[dataId] = &model.Datum{
+			Identifier: model.Identifier(dataId),
 			Data:       data,
 			Metadata:   model.Metadata{},
 		}
@@ -103,7 +101,7 @@ func (d Data) Update(updatedData interface{}, filters interface{}) error {
 	return fmt.Errorf("error updating data : filters missing")
 }
 
-func (d Data) Delete(updatedData interface{}, filters interface{}) error {
+func (d Data) Delete(filters interface{}) error {
 	if filters != nil {
 		f, err := filter.UseFilter(filters)
 		if err != nil {
