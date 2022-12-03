@@ -5,7 +5,7 @@ import (
 
 	"github.com/TanmoySG/wunderDB/internal/databases"
 	"github.com/TanmoySG/wunderDB/internal/fsLoader"
-	wdbClient "github.com/TanmoySG/wunderDB/wdb"
+	wdbClient "github.com/TanmoySG/wunderDB/internal/server/wdb"
 )
 
 func main() {
