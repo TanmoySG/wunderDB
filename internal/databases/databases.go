@@ -10,12 +10,12 @@ func WithWDB(databases Databases) Databases {
 	return databases
 }
 
-func (d Databases) CheckIfExists(databaseID model.Identifier) (bool, model.Database) {
+func (d Databases) CheckIfExists(databaseID model.Identifier) (bool, *model.Database) {
 	database, dbExists := d[databaseID]
 	if dbExists {
-		return databaseExists, *database
+		return databaseExists, database
 	} else {
-		return databaseDoesNotExist, *database
+		return databaseDoesNotExist, database
 	}
 }
 
