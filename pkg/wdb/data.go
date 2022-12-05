@@ -17,7 +17,7 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 		return fmt.Errorf("error deleting database %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	collections := c.UseDatabase(database)
+	collections := c.UseDatabase(*database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
@@ -25,7 +25,7 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 	}
 
 	dataId := identities.GenerateID()
-	data := d.UseCollection(collection)
+	data := d.UseCollection(*collection)
 
 	return data.Add(model.Identifier(dataId), inputData)
 }
@@ -36,14 +36,14 @@ func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters 
 		return nil, fmt.Errorf("error adding data %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	collections := c.UseDatabase(database)
+	collections := c.UseDatabase(*database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return nil, fmt.Errorf("error adding data: %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	data := d.UseCollection(collection)
+	data := d.UseCollection(*collection)
 
 	fetchedData, err := data.Read(filters)
 	if err != nil {
@@ -59,14 +59,14 @@ func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updat
 		return fmt.Errorf("error adding data %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	collections := c.UseDatabase(database)
+	collections := c.UseDatabase(*database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return fmt.Errorf("error adding data: %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	data := d.UseCollection(collection)
+	data := d.UseCollection(*collection)
 
 	err := data.Update(updatedData, filters)
 	if err != nil {
@@ -82,14 +82,14 @@ func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filte
 		return fmt.Errorf("error adding data %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	collections := c.UseDatabase(database)
+	collections := c.UseDatabase(*database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return fmt.Errorf("error adding data: %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	data := d.UseCollection(collection)
+	data := d.UseCollection(*collection)
 
 	err := data.Delete(filters)
 	if err != nil {

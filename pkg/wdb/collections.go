@@ -14,7 +14,7 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 		return fmt.Errorf("error deleting database %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	collections := c.UseDatabase(database)
+	collections := c.UseDatabase(*database)
 
 	if exists, _ := collections.CheckIfExists(collectionId); exists {
 		return fmt.Errorf("error creating collection: %s", er.CollectionAlreadyExistsError.ErrMessage)
@@ -30,7 +30,7 @@ func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*
 		return nil, fmt.Errorf("error fetching collection %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 
-	collections := c.UseDatabase(database)
+	collections := c.UseDatabase(*database)
 
 	if exists, _ := collections.CheckIfExists(collectionId); !exists {
 		return nil, fmt.Errorf("error fetching collection %s", er.CollectionAlreadyExistsError.ErrMessage)
@@ -45,7 +45,7 @@ func (wdb wdbClient) DeleteCollection(databaseId, collectionId model.Identifier)
 		return fmt.Errorf("error deleting collection: %s", er.CollectionDoesNotExistsError.ErrMessage)
 	}
 
-	collections := c.UseDatabase(database)
+	collections := c.UseDatabase(*database)
 
 	if exists, _ := collections.CheckIfExists(collectionId); !exists {
 		return fmt.Errorf("error deleting collection %s", er.CollectionAlreadyExistsError.ErrMessage)
