@@ -17,7 +17,7 @@ func (wdb wdbClient) AddDatabase(databaseId model.Identifier) error {
 
 func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, error) {
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
-		return nil, fmt.Errorf("error creating namespace %s", er.DatabaseAlreadyExistsError.ErrMessage)
+		return nil, fmt.Errorf("error fetching database %s", er.DatabaseDoesNotExistsError.ErrMessage)
 	}
 	return wdb.Databases.GetDatabase(databaseId), nil
 }
