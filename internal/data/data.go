@@ -1,8 +1,7 @@
 package data
 
 import (
-	"fmt"
-
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/internal/filter"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/TanmoySG/wunderDB/pkg/schema"
@@ -21,15 +20,15 @@ func UseCollection(collection model.Collection) Data {
 	}
 }
 
-func (d Data) Add(dataId model.Identifier, data interface{}) error {
+func (d Data) Add(dataId model.Identifier, data interface{}) *er.WdbError {
 	s, err := schema.UseSchema(d.Schema)
 	if err != nil {
-		return fmt.Errorf("error adding data: %s", err)
+		return err
 	}
 
 	isValid, err := s.Validate(data)
 	if err != nil {
-		return fmt.Errorf("error adding data: %s", err)
+		return err
 	}
 
 	if isValid {
@@ -40,15 +39,15 @@ func (d Data) Add(dataId model.Identifier, data interface{}) error {
 		}
 		return nil
 	} else {
-		return fmt.Errorf("error adding data: data failed schema validation")
+		return &er.SchemaValidationFailed
 	}
 }
 
-func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Datum, error) {
+func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Datum, *er.WdbError) {
 	if filters != nil {
 		f, err := filter.UseFilter(filters)
 		if err != nil {
-			return nil, fmt.Errorf("error reading data : %s", err)
+			return nil, err
 		}
 
 		filteredDate := f.Filter(d.Data)
@@ -57,55 +56,57 @@ func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Datum, erro
 	return d.Data, nil
 }
 
-func (d Data) Update(updatedData interface{}, filters interface{}) error {
-	if filters != nil {
-		f, err := filter.UseFilter(filters)
-		if err != nil {
-			return fmt.Errorf("error updating data : %s", err)
+func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError {
+	if filters == nil {
+		return &er.FilterMissingError
+
+	}
+
+	f, err := filter.UseFilter(filters)
+	if err != nil {
+		return err
+	}
+
+	var iterError *er.WdbError
+
+	f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Datum) {
+
+		mergableDataMaps := []map[string]interface{}{
+			maps.Marshal(updatedData),
+			dataRow.DataMap(),
 		}
 
-		var iterError error
+		data, err := maps.Merge(mergableDataMaps...)
+		if err != nil {
+			iterError = &er.DataEncodeDecodeError
+		} else {
+			schema, err := schema.UseSchema(d.Schema)
 
-		f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Datum) {
-
-			mergableDataMaps := []map[string]interface{}{
-				maps.Marshal(updatedData),
-				dataRow.DataMap(),
-			}
-
-			data, err := maps.Merge(mergableDataMaps...)
 			if err != nil {
 				iterError = err
 			} else {
-				schema, err := schema.UseSchema(d.Schema)
-
-				if err != nil {
-					iterError = err
-				} else {
-					isValid, err := schema.Validate(data)
-					if err == nil && isValid {
-						d.Data[identifier] = &model.Datum{
-							Data: data,
-						}
+				isValid, err := schema.Validate(data)
+				if err == nil && isValid {
+					d.Data[identifier] = &model.Datum{
+						Data: data,
 					}
-					iterError = err
 				}
+				iterError = err
 			}
-		})
-
-		if iterError != nil {
-			return fmt.Errorf("error updating data : %s", iterError)
 		}
-		return nil
+	})
+
+	if iterError != nil {
+		return iterError
 	}
-	return fmt.Errorf("error updating data : filters missing")
+	return nil
 }
 
-func (d Data) Delete(filters interface{}) error {
+func (d Data) Delete(filters interface{}) *er.WdbError {
 	if filters != nil {
 		f, err := filter.UseFilter(filters)
 		if err != nil {
-			return fmt.Errorf("error reading data : %s", err)
+			return err
 		}
 
 		f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Datum) {
@@ -113,5 +114,5 @@ func (d Data) Delete(filters interface{}) error {
 		})
 		return nil
 	}
-	return fmt.Errorf("error updating data : filters missing")
+	return &er.FilterMissingError
 }
