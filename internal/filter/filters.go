@@ -2,8 +2,8 @@ package filter
 
 import (
 	"encoding/json"
-	"fmt"
 
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
@@ -27,18 +27,18 @@ func fieldExists(fieldKey string, dataMap map[string]interface{}) (bool, interfa
 	return fieldDoesnotExist, nil
 }
 
-func UseFilter(filter interface{}) (*Filter, error) {
+func UseFilter(filter interface{}) (*Filter, *er.WdbError) {
 
 	var dataFilter Filter
 
 	filterJson, err := json.Marshal(filter)
 	if err != nil {
-		return nil, fmt.Errorf("error marshaling namespace file: %s", err)
+		return nil, &er.FilterEncodeDecodeError
 	}
 
 	err = json.Unmarshal(filterJson, &dataFilter)
 	if err != nil {
-		return nil, fmt.Errorf("error marshaling namespace file: %s", err)
+		return nil, &er.FilterEncodeDecodeError
 	}
 
 	return &dataFilter, nil

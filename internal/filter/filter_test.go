@@ -13,13 +13,12 @@ func Test_Filter(t *testing.T) {
 		"key":   "field",
 		"value": "value",
 	}
-	f, err := UseFilter(filter)
+	f, _ := UseFilter(filter)
 
 	assert.Equal(t, &Filter{
 		Key:   "field",
 		Value: "value",
 	}, f)
-	assert.NoError(t, err)
 
 	testData := map[model.Identifier]*model.Datum{
 		"1": {
