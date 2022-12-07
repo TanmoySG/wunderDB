@@ -2,6 +2,7 @@ package wdbClient
 
 import (
 	d "github.com/TanmoySG/wunderDB/internal/databases"
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
@@ -11,20 +12,20 @@ type wdbClient struct {
 
 type Client interface {
 	// Database Methods
-	AddDatabase(databaseId model.Identifier) error
-	GetDatabase(databaseId model.Identifier) (*model.Database, error)
-	DeleteDatabase(databaseId model.Identifier) error
+	AddDatabase(databaseId model.Identifier) *er.WdbError
+	GetDatabase(databaseId model.Identifier) (*model.Database, *er.WdbError)
+	DeleteDatabase(databaseId model.Identifier) *er.WdbError
 
 	// Collection Methods
-	AddCollection(databaseId, collectionId model.Identifier, schema model.Schema) error
-	GetCollection(databaseId, collectionId model.Identifier) (*model.Collection, error)
-	DeleteCollection(databaseId, collectionId model.Identifier) error
+	AddCollection(databaseId, collectionId model.Identifier, schema model.Schema) *er.WdbError
+	GetCollection(databaseId, collectionId model.Identifier) (*model.Collection, *er.WdbError)
+	DeleteCollection(databaseId, collectionId model.Identifier) *er.WdbError
 
 	// Data Methods
-	AddData(databaseId, collectionId model.Identifier, inputData interface{}) error
-	GetData(databaseId model.Identifier, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Datum, error)
-	UpdateData(databaseId model.Identifier, collectionId model.Identifier, updatedData interface{}, filters interface{}) error
-	DeleteData(databaseId model.Identifier, collectionId model.Identifier, filters interface{}) error
+	AddData(databaseId, collectionId model.Identifier, inputData interface{}) *er.WdbError
+	GetData(databaseId model.Identifier, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Datum, *er.WdbError)
+	UpdateData(databaseId model.Identifier, collectionId model.Identifier, updatedData interface{}, filters interface{}) *er.WdbError
+	DeleteData(databaseId model.Identifier, collectionId model.Identifier, filters interface{}) *er.WdbError
 }
 
 func NewWdbClient(databases d.Databases) Client {

@@ -1,54 +1,52 @@
 package wdbClient
 
 import (
-	"fmt"
-
 	c "github.com/TanmoySG/wunderDB/internal/collections"
 	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
-func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, schema model.Schema) error {
+func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, schema model.Schema) *er.WdbError {
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
-		return fmt.Errorf("error deleting database %s", er.DatabaseDoesNotExistsError.ErrMessage)
+		return &er.DatabaseDoesNotExistsError
 	}
 
 	collections := c.UseDatabase(*database)
 
 	if exists, _ := collections.CheckIfExists(collectionId); exists {
-		return fmt.Errorf("error creating collection: %s", er.CollectionAlreadyExistsError.ErrMessage)
+		return &er.CollectionAlreadyExistsError
 	}
 
 	collections.CreateCollection(collectionId, schema, model.Metadata{}, model.Access{})
 	return nil
 }
 
-func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*model.Collection, error) {
+func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*model.Collection, *er.WdbError) {
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
-		return nil, fmt.Errorf("error fetching collection %s", er.DatabaseDoesNotExistsError.ErrMessage)
+		return nil, &er.DatabaseDoesNotExistsError
 	}
 
 	collections := c.UseDatabase(*database)
 
 	if exists, _ := collections.CheckIfExists(collectionId); !exists {
-		return nil, fmt.Errorf("error fetching collection %s", er.CollectionAlreadyExistsError.ErrMessage)
+		return nil, &er.CollectionAlreadyExistsError
 	}
 
 	return collections.GetCollection(collectionId), nil
 }
 
-func (wdb wdbClient) DeleteCollection(databaseId, collectionId model.Identifier) error {
+func (wdb wdbClient) DeleteCollection(databaseId, collectionId model.Identifier) *er.WdbError {
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
-		return fmt.Errorf("error deleting collection: %s", er.CollectionDoesNotExistsError.ErrMessage)
+		return &er.CollectionDoesNotExistsError
 	}
 
 	collections := c.UseDatabase(*database)
 
 	if exists, _ := collections.CheckIfExists(collectionId); !exists {
-		return fmt.Errorf("error deleting collection %s", er.CollectionAlreadyExistsError.ErrMessage)
+		return &er.CollectionAlreadyExistsError
 	}
 
 	collections.DeleteCollection(collectionId)
