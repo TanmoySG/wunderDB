@@ -22,7 +22,8 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 	err := wh.wdbClient.AddCollection(model.Identifier(databaseName), model.Identifier(collection.Name), collection.Schema)
 	resp := response.Format(CreateCollectionAction, err, nil)
 
-	return c.Send(resp.Marshal())
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
@@ -32,7 +33,8 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 	fetchedDatabase, err := wh.wdbClient.GetCollection(model.Identifier(databaseName), model.Identifier(collectionName))
 	resp := response.Format(FetchCollectionAction, err, fetchedDatabase)
 
-	return c.Send(resp.Marshal())
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
@@ -42,5 +44,6 @@ func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
 	err := wh.wdbClient.DeleteCollection(model.Identifier(databaseName), model.Identifier(collectionName))
 	resp := response.Format(DeleteCollectionAction, err, nil)
 
-	return c.Send(resp.Marshal())
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
 }

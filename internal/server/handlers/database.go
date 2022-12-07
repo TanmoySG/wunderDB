@@ -20,7 +20,8 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 	err := wh.wdbClient.AddDatabase(model.Identifier(d.Name))
 	resp := response.Format(CreateDatabaseAction, err, nil)
 
-	return c.Send(resp.Marshal())
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
@@ -29,7 +30,8 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 	fetchedDatabase, err := wh.wdbClient.GetDatabase(model.Identifier(databaseName))
 	resp := response.Format(FetchDatabaseAction, err, fetchedDatabase)
 
-	return c.Send(resp.Marshal())
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
@@ -38,5 +40,6 @@ func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
 	err := wh.wdbClient.DeleteDatabase(model.Identifier(databaseName))
 	resp := response.Format(DeleteDatabaseAction, err, nil)
 
-	return c.Send(resp.Marshal())
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
 }
