@@ -5,6 +5,11 @@ const (
 	StatusFailure = "failure"
 )
 
+type ApiResponse struct {
+	Response       Response
+	HttpStatusCode int
+}
+
 type Response struct {
 	Action string      `json:"action"`
 	Status string      `json:"status"`
