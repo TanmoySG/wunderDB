@@ -3,7 +3,7 @@ package fsLoader
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/TanmoySG/wunderDB/pkg/fs"
@@ -14,7 +14,7 @@ func (w WFileSystem) LoadNamespaces() (map[model.Identifier]*model.Namespace, er
 	var namespaces map[model.Identifier]*model.Namespace
 
 	if fs.CheckFileExists(w.namespacesBasePath) {
-		persitedNamespacesBytes, err := ioutil.ReadFile(w.namespacesBasePath)
+		persitedNamespacesBytes, err := os.ReadFile(w.namespacesBasePath)
 		if err != nil {
 			return nil, fmt.Errorf("error reading namespace file: %s", err)
 		}
@@ -33,7 +33,7 @@ func (w WFileSystem) LoadDatabases() (map[model.Identifier]*model.Database, erro
 	var databases map[model.Identifier]*model.Database
 
 	if fs.CheckFileExists(w.databasesBasePath) {
-		persitedDatabasesBytes, err := ioutil.ReadFile(w.databasesBasePath)
+		persitedDatabasesBytes, err := os.ReadFile(w.databasesBasePath)
 		if err != nil {
 			return nil, fmt.Errorf("error reading database file: %s", err)
 		}
