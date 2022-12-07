@@ -4,6 +4,11 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
+const (
+	databaseExists       = true
+	databaseDoesNotExist = false
+)
+
 type Databases map[model.Identifier]*model.Database
 
 func WithWDB(databases Databases) Databases {

@@ -4,6 +4,11 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
+const (
+	collectionExists       = true
+	collectionDoesNotExist = false
+)
+
 type Collections map[model.Identifier]*model.Collection
 
 func UseDatabase(database model.Database) Collections {
