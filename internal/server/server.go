@@ -28,10 +28,12 @@ func (ws wdbServer) Start() {
 
 	app.Get("/api", ws.handler.Hello)
 
+	// Database Routes
 	app.Post("/api/databases", ws.handler.CreateDatabase)
 	app.Get("/api/databases/:database", ws.handler.FetchDatabase)
 	app.Delete("/api/databases/:database", ws.handler.DeleteDatabase)
 
+	// Collection Routes
 	app.Post("/api/databases/:database/collections", ws.handler.CreateCollection)
 	app.Get("/api/databases/:database/collections/:collection", ws.handler.FetchCollection)
 	app.Delete("/api/databases/:database/collections/:collection", ws.handler.DeleteCollection)
