@@ -12,5 +12,6 @@ func LoadConfig() (*Config, error) {
 
 type Config struct {
 	AdminID       string `env:"ADMIN_ID" envDefault:"admin"`
-	AdminPassword string `env:"ADMIN_PASSWORD" envDefault:""` 
+	AdminPassword string `env:"ADMIN_PASSWORD" envDefault:""`
+	Port          string `env:"PORT" envDefault:"8086"`
 }

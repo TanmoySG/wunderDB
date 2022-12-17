@@ -46,3 +46,22 @@ func (w WFileSystem) LoadDatabases() (map[model.Identifier]*model.Database, erro
 
 	return databases, nil
 }
+
+func (w WFileSystem) LoadUsers() (map[model.Identifier]*model.User, error) {
+
+	var users map[model.Identifier]*model.User
+
+	if fs.CheckFileExists(w.usersBasePath) {
+		persitedUsersBytes, err := os.ReadFile(w.usersBasePath)
+		if err != nil {
+			return nil, fmt.Errorf("error reading users persisted file: %s", err)
+		}
+
+		err = json.Unmarshal(persitedUsersBytes, &users)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling database file: %s", err)
+		}
+	}
+
+	return nil, nil
+}
