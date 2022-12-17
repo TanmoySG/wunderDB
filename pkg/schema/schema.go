@@ -2,8 +2,8 @@ package schema
 
 import (
 	"encoding/json"
-	"fmt"
 
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
 	jsonschema "github.com/xeipuuv/gojsonschema"
 )
@@ -12,20 +12,20 @@ type Schema struct {
 	loadedSchema jsonschema.JSONLoader
 }
 
-func UseSchema(schema model.Schema) (*Schema, error) {
+func UseSchema(schema model.Schema) (*Schema, *er.WdbError) {
 	marshaledSchemaJSON, err := json.Marshal(schema)
 	if err != nil {
-		return nil, fmt.Errorf("error with schema: %s", err)
+		return nil, &er.SchemaEncodeDecodeError
 	}
 	loadedSchema := jsonschema.NewStringLoader(string(marshaledSchemaJSON))
 
 	return &Schema{loadedSchema: loadedSchema}, nil
 }
 
-func (s Schema) Validate(data interface{}) (bool, error) {
+func (s Schema) Validate(data interface{}) (bool, *er.WdbError) {
 	marshaledDataJSON, err := json.Marshal(data)
 	if err != nil {
-		return false, fmt.Errorf("error with data: %s", err)
+		return false, &er.DataEncodeDecodeError
 	}
 	loadedData := jsonschema.NewStringLoader(string(marshaledDataJSON))
 

@@ -1,30 +1,28 @@
 package wdbClient
 
 import (
-	"fmt"
-
 	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
-func (wdb wdbClient) AddDatabase(databaseId model.Identifier) error {
+func (wdb wdbClient) AddDatabase(databaseId model.Identifier) *er.WdbError {
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); exists {
-		return fmt.Errorf("error creating database %s", er.DatabaseAlreadyExistsError.ErrMessage)
+		return &er.DatabaseAlreadyExistsError
 	}
 	wdb.Databases.CreateDatabase(databaseId, model.Metadata{}, model.Access{})
 	return nil
 }
 
-func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, error) {
+func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, *er.WdbError) {
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
-		return nil, fmt.Errorf("error creating namespace %s", er.DatabaseAlreadyExistsError.ErrMessage)
+		return nil, &er.DatabaseDoesNotExistsError
 	}
 	return wdb.Databases.GetDatabase(databaseId), nil
 }
 
-func (wdb wdbClient) DeleteDatabase(databaseId model.Identifier) error {
+func (wdb wdbClient) DeleteDatabase(databaseId model.Identifier) *er.WdbError {
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
-		return fmt.Errorf("error deleting database %s", er.DatabaseDoesNotExistsError.ErrMessage)
+		return &er.DatabaseDoesNotExistsError
 	}
 	wdb.Databases.DeleteDatabase(databaseId)
 	return nil

@@ -4,18 +4,23 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
+const (
+	collectionExists       = true
+	collectionDoesNotExist = false
+)
+
 type Collections map[model.Identifier]*model.Collection
 
 func UseDatabase(database model.Database) Collections {
 	return Collections(database.Collections)
 }
 
-func (c Collections) CheckIfExists(collectionID model.Identifier) (bool, model.Collection) {
+func (c Collections) CheckIfExists(collectionID model.Identifier) (bool, *model.Collection) {
 	collection, collExists := c[collectionID]
 	if collExists {
-		return collectionExists, *collection
+		return collectionExists, collection
 	} else {
-		return collectionDoesNotExist, *collection
+		return collectionDoesNotExist, collection
 	}
 }
 
