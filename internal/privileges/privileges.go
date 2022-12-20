@@ -5,7 +5,6 @@ const (
 )
 
 const (
-	CreateUser = "createUser"
 	CreateRole = "createRole"
 	GrantRole  = "grantRole"
 	UpdateRole = "updateRole"
@@ -17,10 +16,10 @@ const (
 	UpdateDatabase = "updateDatabase"
 	DeleteDatabase = "deleteDatabase"
 
-	CreateCollection = "CreateCollection"
-	ReadCollection   = "ReadCollection"
-	UpdateCollection = "UpdateCollection"
-	DeleteCollection = "DeleteCollection"
+	CreateCollection = "createCollection"
+	ReadCollection   = "readCollection"
+	UpdateCollection = "updateCollection"
+	DeleteCollection = "deleteCollection"
 
 	AddData    = "addData"
 	ReadData   = "readData"
@@ -29,6 +28,36 @@ const (
 )
 
 const (
-	Allow = true
-	Deny  = false
+	Allowed = true
+	Denied  = false
 )
+
+func IsAvailable(privilege string) bool {
+
+	availableActions := []string{
+		Wildcard,
+		CreateRole,
+		GrantRole,
+		UpdateRole,
+		CreateDatabase,
+		ReadDatabase,
+		UpdateDatabase,
+		DeleteDatabase,
+		CreateCollection,
+		ReadCollection,
+		UpdateCollection,
+		DeleteCollection,
+		AddData,
+		ReadData,
+		UpdateData,
+		DeleteData,
+	}
+
+	for _, action := range availableActions {
+		if privilege == action {
+			return true
+		}
+	}
+
+	return false
+}
