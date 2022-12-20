@@ -5,7 +5,6 @@ type Identifier string
 type DataMap map[string]interface{}
 type Metadata map[string]interface{}
 type ExtraFields map[string]interface{}
-type Authentication map[string]interface{}
 type Privileges map[string]bool
 type Schema map[string]interface{}
 
@@ -52,7 +51,7 @@ type User struct {
 	UserID         Identifier     `json:"userId"`
 	Authentication Authentication `json:"authentication"`
 	Metadata       Metadata       `json:"metadata"`
-	Permissions    Permissions    `json:"permissions"`
+	Permissions    []Permissions  `json:"permissions"`
 }
 
 type Role struct {
@@ -68,4 +67,9 @@ type Permissions struct {
 type AllowedEntities struct {
 	Databases   *[]string `json:"databases"`
 	Collections *[]string `json:"collections"`
+}
+
+type Authentication struct {
+	HashedSecret     string `json:"hashedSecret"`
+	HashingAlgorithm string `json:"hashingAlgorithm"` // md5, sha1 or sha256
 }
