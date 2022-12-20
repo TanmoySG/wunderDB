@@ -38,5 +38,9 @@ func (ws wdbServer) Start() {
 	app.Get("/api/databases/:database/collections/:collection", ws.handler.FetchCollection)
 	app.Delete("/api/databases/:database/collections/:collection", ws.handler.DeleteCollection)
 
+	// Role Routes
+	app.Post("/api/roles", ws.handler.CreateRole)
+	app.Get("/api/roles", ws.handler.ListRoles)
+
 	app.Listen(":3000")
 }
