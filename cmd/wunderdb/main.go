@@ -9,6 +9,8 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/fsLoader"
 	"github.com/TanmoySG/wunderDB/internal/roles"
 	s "github.com/TanmoySG/wunderDB/internal/server"
+	"github.com/TanmoySG/wunderDB/internal/users"
+	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	log "github.com/sirupsen/logrus"
@@ -19,13 +21,17 @@ func main() {
 
 	loadedDatabase, _ := fs.LoadDatabases()
 	loadedRoles, _ := fs.LoadRoles()
+	loadedUsers, _ := fs.LoadUsers()
 
 	db := databases.Use(loadedDatabase)
 	rl := roles.Use(loadedRoles)
+	us := users.Use(loadedUsers)
 
-	wdbc := wdbClient.NewWdbClient(db, rl)
+	halg := authentication.MD5
 
-	Shutdown(db, rl)
+	wdbc := wdbClient.NewWdbClient(db, rl, us, halg)
+
+	Shutdown(db, rl, us)
 
 	server := s.NewWdbServer(wdbc)
 
@@ -34,7 +40,7 @@ func main() {
 
 // move clean start and exit to a different file
 
-func cleanExit(db map[model.Identifier]*model.Database, rl map[model.Identifier]*model.Role) error {
+func cleanExit(db map[model.Identifier]*model.Database, rl map[model.Identifier]*model.Role, us map[model.Identifier]*model.User) error {
 	fs := fsLoader.NewWFileSystem("wfs")
 
 	err := fs.UnloadDatabases(db)
@@ -47,16 +53,21 @@ func cleanExit(db map[model.Identifier]*model.Database, rl map[model.Identifier]
 		return fmt.Errorf("error in graceful shutdown: %s", err)
 	}
 
+	err = fs.UnloadUsers(us)
+	if err != nil {
+		return fmt.Errorf("error in graceful shutdown: %s", err)
+	}
+
 	return nil
 }
 
-func Shutdown(db map[model.Identifier]*model.Database, rl map[model.Identifier]*model.Role) {
+func Shutdown(db map[model.Identifier]*model.Database, rl map[model.Identifier]*model.Role, us map[model.Identifier]*model.User) {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		_ = <-c
 		log.Infof("Gracefully shutting down...")
-		err := cleanExit(db, rl)
+		err := cleanExit(db, rl, us)
 		if err != nil {
 			os.Exit(1)
 		} else {
