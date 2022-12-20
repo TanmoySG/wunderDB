@@ -7,16 +7,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-const (
-	CreateDatabaseAction = "create-database"
-	FetchDatabaseAction  = "fetch-database"
-	DeleteDatabaseAction = "delete-database"
-
-	CreateCollectionAction = "create-collection"
-	FetchCollectionAction  = "fetch-collection"
-	DeleteCollectionAction = "delete-collection"
-)
-
 type wdbHandlers struct {
 	wdbClient w.Client
 }
@@ -33,6 +23,10 @@ type Client interface {
 	CreateCollection(c *fiber.Ctx) error
 	FetchCollection(c *fiber.Ctx) error
 	DeleteCollection(c *fiber.Ctx) error
+
+	// Role Handlers
+	CreateRole(c *fiber.Ctx) error
+	ListRoles(c *fiber.Ctx) error
 }
 
 func NewHandlers(client w.Client) Client {

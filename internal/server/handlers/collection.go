@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/gofiber/fiber/v2"
@@ -12,6 +13,8 @@ type collection struct {
 }
 
 func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
+	action := privileges.CreateCollection
+
 	databaseName := c.Params("database")
 
 	collection := new(collection)
@@ -20,29 +23,33 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 	}
 
 	err := wh.wdbClient.AddCollection(model.Identifier(databaseName), model.Identifier(collection.Name), collection.Schema)
-	resp := response.Format(CreateCollectionAction, err, nil)
+	resp := response.Format(action, err, nil)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
+	action := privileges.ReadCollection
+
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
 
 	fetchedDatabase, err := wh.wdbClient.GetCollection(model.Identifier(databaseName), model.Identifier(collectionName))
-	resp := response.Format(FetchCollectionAction, err, fetchedDatabase)
+	resp := response.Format(action, err, fetchedDatabase)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
+	action := privileges.DeleteCollection
+
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
 
 	err := wh.wdbClient.DeleteCollection(model.Identifier(databaseName), model.Identifier(collectionName))
-	resp := response.Format(DeleteCollectionAction, err, nil)
+	resp := response.Format(action, err, nil)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
