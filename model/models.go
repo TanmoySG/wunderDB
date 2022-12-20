@@ -6,11 +6,14 @@ type DataMap map[string]interface{}
 type Metadata map[string]interface{}
 type ExtraFields map[string]interface{}
 type Authentication map[string]interface{}
+type Privileges map[string]bool
+type Schema map[string]interface{}
 
 type WDB struct {
 	Namespaces map[Identifier]*Namespace `json:"namespaces"`
 	Databases  map[Identifier]*Database  `json:"databases"`
 	Users      map[Identifier]*User      `json:"users"`
+	Roles      map[Identifier]*Role      `json:"roles"`
 }
 
 type Namespace struct {
@@ -38,8 +41,6 @@ type Datum struct {
 	Identifier Identifier  `json:"id"`
 }
 
-type Schema map[string]interface{}
-
 // Need to Decide exact requirements for Access
 // Access Control List - currently only implemented at Namespace Level
 type Access struct {
@@ -48,7 +49,23 @@ type Access struct {
 }
 
 type User struct {
-	UserID         Identifier
-	Authentication Authentication
-	Metadata       Metadata
+	UserID         Identifier     `json:"userId"`
+	Authentication Authentication `json:"authentication"`
+	Metadata       Metadata       `json:"metadata"`
+	Permissions    Permissions    `json:"permissions"`
+}
+
+type Role struct {
+	RoleID     Identifier `json:"roleID"`
+	Privileges Privileges `json:"privileges"`
+}
+
+type Permissions struct {
+	Role string           `json:"roles"`
+	On   *AllowedEntities `json:"on,omitempty"`
+}
+
+type AllowedEntities struct {
+	Databases   *[]string `json:"databases"`
+	Collections *[]string `json:"collections"`
 }
