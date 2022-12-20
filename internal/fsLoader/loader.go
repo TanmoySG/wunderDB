@@ -59,9 +59,28 @@ func (w WFileSystem) LoadUsers() (map[model.Identifier]*model.User, error) {
 
 		err = json.Unmarshal(persitedUsersBytes, &users)
 		if err != nil {
-			return nil, fmt.Errorf("error marshaling database file: %s", err)
+			return nil, fmt.Errorf("error marshaling users file: %s", err)
 		}
 	}
 
-	return nil, nil
+	return users, nil
+}
+
+func (w WFileSystem) LoadRoles() (map[model.Identifier]*model.Role, error) {
+
+	var roles map[model.Identifier]*model.Role
+
+	if fs.CheckFileExists(w.rolesBasePath) {
+		persitedRolesBytes, err := os.ReadFile(w.rolesBasePath)
+		if err != nil {
+			return nil, fmt.Errorf("error reading persisted persisted file: %s", err)
+		}
+
+		err = json.Unmarshal(persitedRolesBytes, &roles)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling roles file: %s", err)
+		}
+	}
+
+	return roles, nil
 }
