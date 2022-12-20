@@ -27,6 +27,9 @@ type Client interface {
 	// Role Handlers
 	CreateRole(c *fiber.Ctx) error
 	ListRoles(c *fiber.Ctx) error
+
+	// User Handlers
+	CreateUser(c *fiber.Ctx) error
 }
 
 func NewHandlers(client w.Client) Client {
