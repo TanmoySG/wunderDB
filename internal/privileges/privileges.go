@@ -5,6 +5,8 @@ const (
 )
 
 const (
+	CreateUser = "createUser"
+
 	CreateRole = "createRole"
 	GrantRole  = "grantRole"
 	UpdateRole = "updateRole"
