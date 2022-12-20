@@ -53,6 +53,13 @@ var (
 		HttpStatusCode: 404,
 	}
 
+	// Role Errors
+	RoleAlreadyExistsError = WdbError{
+		ErrCode:        "roleExists",
+		ErrMessage:     "role with name already exists",
+		HttpStatusCode: 409,
+	}
+
 	// Other Errors
 	SchemaValidationFailed = WdbError{
 		ErrCode:        "schemaValidationError",
