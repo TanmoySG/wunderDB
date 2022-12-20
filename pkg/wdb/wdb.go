@@ -3,14 +3,17 @@ package wdbClient
 import (
 	d "github.com/TanmoySG/wunderDB/internal/databases"
 	r "github.com/TanmoySG/wunderDB/internal/roles"
+	u "github.com/TanmoySG/wunderDB/internal/users"
 
 	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
 type wdbClient struct {
-	Databases d.Databases `json:"databases"`
-	Roles     r.Roles     `json:"roles"`
+	HashingAlgorithm string      `json:"hashingAlgorithm"`
+	Databases        d.Databases `json:"databases"`
+	Roles            r.Roles     `json:"roles"`
+	Users            u.Users     `json:"users"`
 }
 
 type Client interface {
@@ -31,13 +34,16 @@ type Client interface {
 	DeleteData(databaseId model.Identifier, collectionId model.Identifier, filters interface{}) *er.WdbError
 
 	// Methods for Roles and Users
+	CreateUser(userID model.Identifier, password string) *er.WdbError
 	CreateRole(roleID model.Identifier, allowedActions []string, deniedActions []string) *er.WdbError
 	ListRole() r.Roles
 }
 
-func NewWdbClient(databases d.Databases, roles r.Roles) Client {
+func NewWdbClient(databases d.Databases, roles r.Roles, users u.Users, hashingAlgorithm string) Client {
 	return wdbClient{
-		Databases: databases,
-		Roles:     roles,
+		HashingAlgorithm: hashingAlgorithm,
+		Databases:        databases,
+		Roles:            roles,
+		Users:            users,
 	}
 }
