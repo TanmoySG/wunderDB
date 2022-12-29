@@ -60,6 +60,18 @@ var (
 		HttpStatusCode: 409,
 	}
 
+	// User Errors
+	UserAlreadyExistsError = WdbError{
+		ErrCode:        "userExists",
+		ErrMessage:     "user with id already exists",
+		HttpStatusCode: 409,
+	}
+	UserAlreadyDoesNotExistError = WdbError{
+		ErrCode:        "userMissing",
+		ErrMessage:     "user with id already exists",
+		HttpStatusCode: 404,
+	}
+
 	// Other Errors
 	SchemaValidationFailed = WdbError{
 		ErrCode:        "schemaValidationError",
