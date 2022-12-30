@@ -44,6 +44,7 @@ func (ws wdbServer) Start() {
 
 	// User Routes
 	app.Post("/api/users", ws.handler.CreateUser)
+	app.Post("/api/users/grant", ws.handler.GrantRoles)
 
 	app.Listen(":3000")
 }
