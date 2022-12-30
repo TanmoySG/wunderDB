@@ -1,65 +1,40 @@
 package privileges
 
-const (
-	Wildcard = "*"
-)
+var (
+	Categories = map[string]string{
+		// Role Privileges
+		CreateRole: RolePrivileges,
+		GrantRole:  RolePrivileges,
+		UpdateRole: RolePrivileges,
 
-const (
-	CreateUser = "createUser"
+		// Database Privileges
+		CreateDatabase: DatabasePrivileges,
+		ReadDatabase:   DatabasePrivileges,
+		UpdateDatabase: DatabasePrivileges,
+		DeleteDatabase: DatabasePrivileges,
 
-	CreateRole = "createRole"
-	GrantRole  = "grantRole"
-	UpdateRole = "updateRole"
-)
+		// Collection Privileges
+		CreateCollection: CollectionPrivileges,
+		ReadCollection:   CollectionPrivileges,
+		UpdateCollection: CollectionPrivileges,
+		DeleteCollection: CollectionPrivileges,
 
-const (
-	CreateDatabase = "createDatabase"
-	ReadDatabase   = "readDatabase"
-	UpdateDatabase = "updateDatabase"
-	DeleteDatabase = "deleteDatabase"
-
-	CreateCollection = "createCollection"
-	ReadCollection   = "readCollection"
-	UpdateCollection = "updateCollection"
-	DeleteCollection = "deleteCollection"
-
-	AddData    = "addData"
-	ReadData   = "readData"
-	UpdateData = "updateData"
-	DeleteData = "deleteData"
-)
-
-const (
-	Allowed = true
-	Denied  = false
+		// Data Privileges
+		AddData:    DataPrivileges,
+		ReadData:   DataPrivileges,
+		UpdateData: DataPrivileges,
+		DeleteData: DataPrivileges,
+	}
 )
 
 func IsAvailable(privilege string) bool {
+	_, privilegeExists := Categories[privilege]
+	return privilegeExists
+}
 
-	availableActions := []string{
-		Wildcard,
-		CreateRole,
-		GrantRole,
-		UpdateRole,
-		CreateDatabase,
-		ReadDatabase,
-		UpdateDatabase,
-		DeleteDatabase,
-		CreateCollection,
-		ReadCollection,
-		UpdateCollection,
-		DeleteCollection,
-		AddData,
-		ReadData,
-		UpdateData,
-		DeleteData,
+func Category(privilege string) string {
+	if IsAvailable(privilege) {
+		return Categories[privilege]
 	}
-
-	for _, action := range availableActions {
-		if privilege == action {
-			return true
-		}
-	}
-
-	return false
+	return ""
 }
