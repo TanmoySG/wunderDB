@@ -4,7 +4,9 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
+	"encoding/base64"
 	"fmt"
+	"strings"
 )
 
 const (
@@ -38,4 +40,24 @@ func Hash(hashableString string, algorithm string) string {
 		hash = fmt.Sprintf("%x", sha256.Sum256([]byte(hashableString)))
 	}
 	return hash
+}
+
+func HandleUserCredentials(authorizationHeaderString string) (*string, *string, error) {
+
+	if len(authorizationHeaderString) == 0 {
+		return nil, nil, fmt.Errorf("missing credentials")
+	}
+
+	authorizationHeaders := strings.Split(authorizationHeaderString, " ")
+
+	decodedCredentials, err := base64.StdEncoding.DecodeString(authorizationHeaders[1])
+	if err != nil {
+		return nil, nil, fmt.Errorf("error decoding credentials : %s", err)
+	}
+
+	credentialArray := strings.Split(string(decodedCredentials), ":")
+
+	username, password := credentialArray[0], credentialArray[1]
+
+	return &username, &password, nil
 }

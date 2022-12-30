@@ -1,40 +1,45 @@
 package handlers
 
 import (
-	"encoding/base64"
-	"strings"
-
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
+	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/gofiber/fiber/v2"
 )
 
 type user struct {
-	Username string `json:"username" xml:"username" form:"username"`
-	Password string `json:"password" xml:"password" form:"password"`
+	Username    string              `json:"username" xml:"username" form:"username"`
+	Permissions []model.Permissions `json:"permissions" xml:"permissions" form:"permissions"`
 }
 
 func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 	action := privileges.CreateUser
 
-	authorizationHeader := strings.Split(c.Get(Authorization), " ")
+	username, password, _ := authentication.HandleUserCredentials(c.Get(Authorization))
 
-	decodedCredentials, err := base64.StdEncoding.DecodeString(authorizationHeader[1])
+	error := wh.wdbClient.CreateUser(model.Identifier(*username), *password)
+	resp := response.Format(action, error, nil)
+
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
+}
+
+func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
+	action := privileges.GrantRole
+
+	username, _, err := authentication.HandleUserCredentials(c.Get(Authorization))
 	if err != nil {
 		return err
 	}
 
-	credentialArray := strings.Split(string(decodedCredentials), ":")
+	u := new(user)
 
-	username, password := credentialArray[0], credentialArray[1]
-	r := new(role)
-
-	if err := c.BodyParser(r); err != nil {
+	if err := c.BodyParser(u); err != nil {
 		return err
 	}
 
-	error := wh.wdbClient.CreateUser(model.Identifier(username), password)
+	error := wh.wdbClient.GrantRoles(model.Identifier(*username), u.Permissions)
 	resp := response.Format(action, error, nil)
 
 	c.Send(resp.Marshal())

@@ -36,10 +36,15 @@ func (u Users) CreateUser(userID model.Identifier, password string, hashingAlgor
 			HashingAlgorithm: hashingAlgorithm,
 			HashedSecret:     authentication.Hash(password, hashingAlgorithm),
 		},
-		Permissions: nil,
+		Permissions: []model.Permissions{},
 	}
 }
 
 func (u Users) GrantRole(userID model.Identifier, permissions []model.Permissions) {
-	u[userID].Permissions = permissions
+	// Permissions added latest have higher priority
+	u[userID].Permissions = append(permissions, u[userID].Permissions...)
+}
+
+func (u Users) Permission(userID model.Identifier) []model.Permissions {
+	return u[userID].Permissions
 }
