@@ -35,8 +35,9 @@ type Client interface {
 
 	// Methods for Roles and Users
 	CreateUser(userID model.Identifier, password string) *er.WdbError
-	CreateRole(roleID model.Identifier, allowedActions []string, deniedActions []string) *er.WdbError
+	CreateRole(roleID model.Identifier, permissions r.Permissions) *er.WdbError
 	ListRole() r.Roles
+	GrantRoles(userID model.Identifier, permissions []model.Permissions) *er.WdbError
 }
 
 func NewWdbClient(databases d.Databases, roles r.Roles, users u.Users, hashingAlgorithm string) Client {

@@ -54,19 +54,29 @@ type User struct {
 	Permissions    []Permissions  `json:"permissions"`
 }
 
-type Role struct {
-	RoleID     Identifier `json:"roleID"`
-	Privileges Privileges `json:"privileges"`
-}
-
 type Permissions struct {
-	Role string           `json:"roles"`
-	On   *AllowedEntities `json:"on,omitempty"`
+	Role Identifier `json:"roleId"`
+	On   *Entities  `json:"on,omitempty"`
 }
 
-type AllowedEntities struct {
-	Databases   *[]string `json:"databases"`
-	Collections *[]string `json:"collections"`
+type Role struct {
+	RoleID Identifier `json:"roleId"`
+	Grants Grants     `json:"grants"`
+}
+
+type Grants struct {
+	DatabasePrivileges   *Privileges `json:"databasePrivileges,omitempty"`
+	CollectionPrivileges *Privileges `json:"collectionPrivileges,omitempty"`
+	DataPrivileges       *Privileges `json:"dataPrivileges,omitempty"`
+	UserPrivileges       *Privileges `json:"userPrivileges,omitempty"`
+	RolePrivileges       *Privileges `json:"rolePrivileges,omitempty"`
+}
+
+type Entities struct {
+	Databases   *string `json:"databases,omitempty"`
+	Collections *string `json:"collections,omitempty"`
+	Users       *bool   `json:"users,omitempty"`
+	Roles       *bool   `json:"roles,omitempty"`
 }
 
 type Authentication struct {
