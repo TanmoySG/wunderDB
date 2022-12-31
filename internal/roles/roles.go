@@ -12,6 +12,9 @@ import (
 const (
 	roleExists       = true
 	roleDoesNotExist = false
+
+	allowed = true
+	denied  = false
 )
 
 type Roles map[model.Identifier]*model.Role
@@ -54,20 +57,30 @@ func (r Roles) ListRoles() Roles {
 
 func (r Roles) Check(permissions []model.Permissions, privilege string, on *model.Entities) bool {
 	for _, permission := range permissions {
-
 		roleID := permission.Role
-		if on.Databases != nil && on.Databases == permission.On.Databases {
-			databasePrivileges := r[roleID].Grants.DatabasePrivileges
-			return checkPermission(privilege, *databasePrivileges)
-		} else if on.Collections != nil && on.Collections == permission.On.Collections {
-			collectionPrivileges := r[roleID].Grants.CollectionPrivileges
-			return checkPermission(privilege, *collectionPrivileges)
-		} else if on.Roles != nil && (*on.Roles) == p.Allowed {
-			rolePrivileges := r[roleID].Grants.CollectionPrivileges
-			return checkPermission(privilege, *rolePrivileges)
+
+		privilegeCategory := p.Category(privilege)
+		if privilegeCategory == p.GlobalPrivileges {
+			globalPrivileges := r[roleID].Grants.GlobalPrivileges
+			return checkPermission(privilege, *globalPrivileges)
+		} else if privilegeCategory == p.DatabasePrivileges {
+			if *on.Databases == *permission.On.Databases {
+				databasePrivileges := r[roleID].Grants.DatabasePrivileges
+				return checkPermission(privilege, *databasePrivileges)
+			}
+			return denied
+		} else if privilegeCategory == p.CollectionPrivileges {
+			if *on.Databases == *permission.On.Databases {
+				if on.Collections == permission.On.Collections {
+					collectionPrivileges := r[roleID].Grants.CollectionPrivileges
+					return checkPermission(privilege, *collectionPrivileges)
+				}
+				return denied
+			}
+			return denied
 		}
 	}
-	return false
+	return denied
 }
 
 func checkPermission(privilege string, rolePrivileges model.Privileges) bool {
