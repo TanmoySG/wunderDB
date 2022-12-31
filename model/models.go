@@ -73,8 +73,6 @@ type Grants struct {
 type Entities struct {
 	Databases   *string `json:"databases,omitempty"`
 	Collections *string `json:"collections,omitempty"`
-	Users       *bool   `json:"users,omitempty"`
-	Roles       *bool   `json:"roles,omitempty"`
 }
 
 type Authentication struct {
