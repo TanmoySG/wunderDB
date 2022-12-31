@@ -31,6 +31,7 @@ type Client interface {
 
 	// User Handlers
 	CreateUser(c *fiber.Ctx) error
+	CheckPermissions(c *fiber.Ctx) error
 }
 
 func NewHandlers(client w.Client) Client {
