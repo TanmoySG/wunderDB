@@ -66,7 +66,7 @@ func (wh wdbHandlers) CheckPermissions(c *fiber.Ctx) error {
 	isAllowed, error := wh.wdbClient.CheckUserPermissions(model.Identifier(*username), privilege, entities)
 	data := map[string]string{
 		"privilege": privilege,
-		"allowed": strconv.FormatBool(*isAllowed),
+		"allowed":   strconv.FormatBool(*isAllowed),
 	}
 	resp := response.Format("", error, data)
 
