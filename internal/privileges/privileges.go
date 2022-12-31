@@ -1,40 +1,33 @@
 package privileges
 
 var (
-	Categories = map[string]string{
-		// Role Privileges
-		CreateRole: RolePrivileges,
-		GrantRole:  RolePrivileges,
-		UpdateRole: RolePrivileges,
-
-		// Database Privileges
-		CreateDatabase: DatabasePrivileges,
-		ReadDatabase:   DatabasePrivileges,
-		UpdateDatabase: DatabasePrivileges,
-		DeleteDatabase: DatabasePrivileges,
-
-		// Collection Privileges
-		CreateCollection: CollectionPrivileges,
+	PrivilegeScope = map[string]string{
+		CreateRole:       GlobalPrivileges,
+		CreateDatabase:   GlobalPrivileges,
+		GrantRole:        DatabasePrivileges,
+		UpdateRole:       DatabasePrivileges,
+		ReadDatabase:     DatabasePrivileges,
+		UpdateDatabase:   DatabasePrivileges,
+		DeleteDatabase:   DatabasePrivileges,
+		CreateCollection: DatabasePrivileges,
 		ReadCollection:   CollectionPrivileges,
 		UpdateCollection: CollectionPrivileges,
 		DeleteCollection: CollectionPrivileges,
-
-		// Data Privileges
-		AddData:    DataPrivileges,
-		ReadData:   DataPrivileges,
-		UpdateData: DataPrivileges,
-		DeleteData: DataPrivileges,
+		AddData:          CollectionPrivileges,
+		ReadData:         CollectionPrivileges,
+		UpdateData:       CollectionPrivileges,
+		DeleteData:       CollectionPrivileges,
 	}
 )
 
 func IsAvailable(privilege string) bool {
-	_, privilegeExists := Categories[privilege]
+	_, privilegeExists := PrivilegeScope[privilege]
 	return privilegeExists
 }
 
 func Category(privilege string) string {
 	if IsAvailable(privilege) {
-		return Categories[privilege]
+		return PrivilegeScope[privilege]
 	}
 	return ""
 }

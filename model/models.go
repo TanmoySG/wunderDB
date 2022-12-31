@@ -65,11 +65,9 @@ type Role struct {
 }
 
 type Grants struct {
+	GlobalPrivileges     *Privileges `json:"globalPrivileges,omitempty"`
 	DatabasePrivileges   *Privileges `json:"databasePrivileges,omitempty"`
 	CollectionPrivileges *Privileges `json:"collectionPrivileges,omitempty"`
-	DataPrivileges       *Privileges `json:"dataPrivileges,omitempty"`
-	UserPrivileges       *Privileges `json:"userPrivileges,omitempty"`
-	RolePrivileges       *Privileges `json:"rolePrivileges,omitempty"`
 }
 
 type Entities struct {

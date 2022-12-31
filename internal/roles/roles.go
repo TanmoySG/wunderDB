@@ -1,8 +1,12 @@
 package roles
 
 import (
+	"encoding/json"
+
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 	p "github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
 )
 
 const (
@@ -11,19 +15,6 @@ const (
 )
 
 type Roles map[model.Identifier]*model.Role
-
-type Permissions struct {
-	DatabasePermissions   *Privileges `json:"databasePermissions,omitempty"`
-	CollectionPermissions *Privileges `json:"collectionPermissions,omitempty"`
-	DataPermissions       *Privileges `json:"dataPermissions,omitempty"`
-	UserPermissions       *Privileges `json:"userPermissions,omitempty"`
-	RolePermissions       *Privileges `json:"rolePermissions,omitempty"`
-}
-
-type Privileges struct {
-	Allowed []string `json:"allowed,omitempty"`
-	Denied  []string `json:"denied,omitempty"`
-}
 
 func Use(roles Roles) Roles {
 	return roles
@@ -38,33 +29,23 @@ func (r Roles) CheckIfExists(roleID model.Identifier) (bool, *model.Role) {
 	}
 }
 
-func (r Roles) CreateRole(roleID model.Identifier, permissions Permissions) {
-	grants := model.Grants{}
+func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []string) *er.WdbError {
 
-	if permissions.DatabasePermissions != nil {
-		grants.DatabasePrivileges = getPrivileges(permissions.DatabasePermissions.Allowed, permissions.DatabasePermissions.Denied)
-	}
-
-	if permissions.CollectionPermissions != nil {
-		grants.CollectionPrivileges = getPrivileges(permissions.CollectionPermissions.Allowed, permissions.CollectionPermissions.Denied)
-	}
-
-	if permissions.DataPermissions != nil {
-		grants.DataPrivileges = getPrivileges(permissions.DataPermissions.Allowed, permissions.DataPermissions.Denied)
-	}
-
-	if permissions.UserPermissions != nil {
-		grants.UserPrivileges = getPrivileges(permissions.UserPermissions.Allowed, permissions.UserPermissions.Denied)
-	}
-
-	if permissions.UserPermissions != nil {
-		grants.RolePrivileges = getPrivileges(permissions.RolePermissions.Allowed, permissions.RolePermissions.Denied)
+	grants, err := getPrivileges(allowed, denied)
+	if err != nil {
+		return &er.WdbError{
+			ErrCode:        er.EncodeDecodeError.ErrCode,
+			ErrMessage:     err.Error(),
+			HttpStatusCode: er.EncodeDecodeError.HttpStatusCode,
+		}
 	}
 
 	r[roleID] = &model.Role{
 		RoleID: roleID,
-		Grants: grants,
+		Grants: *grants,
 	}
+	return nil
+
 }
 
 func (r Roles) ListRoles() Roles {
@@ -99,20 +80,83 @@ func checkPermission(privilege string, rolePrivileges model.Privileges) bool {
 	return p.Denied
 }
 
-func getPrivileges(allowedActions []string, deniedActions []string) *model.Privileges {
-	privileges := model.Privileges{}
+func getPrivileges(allowedActions, deniedActions []string) (*model.Grants, error) {
 
-	for _, action := range allowedActions {
+	var grants model.Grants
+
+	allowedGrantsMap := sortPrivileges(allowedActions, p.Allowed)
+	deniedGrantsMap := sortPrivileges(deniedActions, p.Denied)
+
+	globalPrivileges, err := mergeGrantMaps(maps.Marshal(allowedGrantsMap.GlobalPrivileges), maps.Marshal(deniedGrantsMap.GlobalPrivileges))
+	if err != nil {
+		return nil, err
+	}
+
+	databasePrivileges, err := mergeGrantMaps(maps.Marshal(allowedGrantsMap.DatabasePrivileges), maps.Marshal(deniedGrantsMap.DatabasePrivileges))
+	if err != nil {
+		return nil, err
+	}
+
+	collectionPrivileges, err := mergeGrantMaps(maps.Marshal(allowedGrantsMap.CollectionPrivileges), maps.Marshal(deniedGrantsMap.CollectionPrivileges))
+	if err != nil {
+		return nil, err
+	}
+
+	grants.GlobalPrivileges = globalPrivileges
+	grants.DatabasePrivileges = databasePrivileges
+	grants.CollectionPrivileges = collectionPrivileges
+
+	return &grants, nil
+
+}
+
+func sortPrivileges(actions []string, assignedPermission bool) model.Grants {
+	var privilegeGrants model.Grants
+
+	globalPrivileges := model.Privileges{}
+	databasePrivileges := model.Privileges{}
+	collectionPrivileges := model.Privileges{}
+
+	for _, action := range actions {
 		if p.IsAvailable(action) {
-			privileges[action] = p.Allowed
+			actionCategory := p.Category(action)
+			switch actionCategory {
+			case p.DatabasePrivileges:
+				databasePrivileges[action] = assignedPermission
+			case p.CollectionPrivileges:
+				collectionPrivileges[action] = assignedPermission
+			case p.GlobalPrivileges:
+				globalPrivileges[action] = assignedPermission
+			}
 		}
 	}
 
-	for _, action := range deniedActions {
-		if p.IsAvailable(action) {
-			privileges[action] = p.Allowed
-		}
+	privilegeGrants.GlobalPrivileges = &globalPrivileges
+	privilegeGrants.DatabasePrivileges = &databasePrivileges
+	privilegeGrants.CollectionPrivileges = &collectionPrivileges
+
+	return privilegeGrants
+}
+
+func mergeGrantMaps(allowedPrivilegesMap, deniedPrivilegesMap map[string]interface{}) (*model.Privileges, error) {
+	var privileges model.Privileges
+
+	mergeableGrantMaps := []map[string]interface{}{
+		allowedPrivilegesMap,
+		deniedPrivilegesMap,
 	}
 
-	return &privileges
+	mergedGrantsMap, err := maps.Merge(mergeableGrantMaps...)
+	if err != nil {
+		return nil, err
+	}
+
+	mergedGrantBytes, err := json.Marshal(mergedGrantsMap)
+	if err != nil {
+		return nil, err
+	}
+
+	json.Unmarshal(mergedGrantBytes, &privileges)
+
+	return &privileges, nil
 }
