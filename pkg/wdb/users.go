@@ -15,7 +15,7 @@ func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.Wd
 
 func (wdb wdbClient) GrantRoles(userID model.Identifier, permissions []model.Permissions) *er.WdbError {
 	if exists, _ := wdb.Users.CheckIfExists(userID); !exists {
-		return &er.UserAlreadyDoesNotExistError
+		return &er.UserDoesNotExistError
 	}
 	wdb.Users.GrantRole(userID, permissions)
 	return nil

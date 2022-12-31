@@ -66,10 +66,17 @@ var (
 		ErrMessage:     "user with id already exists",
 		HttpStatusCode: 409,
 	}
-	UserAlreadyDoesNotExistError = WdbError{
+	UserDoesNotExistError = WdbError{
 		ErrCode:        "userMissing",
-		ErrMessage:     "user with id already exists",
+		ErrMessage:     "user with id does not exist",
 		HttpStatusCode: 404,
+	}
+
+	// Privilege
+	PrivilegeUnauthorized = WdbError{
+		ErrCode:        "permissionDenied",
+		ErrMessage:     "permission denied",
+		HttpStatusCode: 409,
 	}
 
 	// Other Errors
