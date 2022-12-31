@@ -79,6 +79,12 @@ var (
 		HttpStatusCode: 422,
 	}
 
+	EncodeDecodeError = WdbError{
+		ErrCode:        encodeDecodeErrorCode,
+		ErrMessage:     "error encoding/decoding data",
+		HttpStatusCode: 406,
+	}
+
 	// Encode/Decode Error
 	DataEncodeDecodeError = WdbError{
 		ErrCode:        encodeDecodeErrorCode,
