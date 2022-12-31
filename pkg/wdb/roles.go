@@ -6,12 +6,11 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
-func (wdb wdbClient) CreateRole(roleID model.Identifier, permissions roles.Permissions) *er.WdbError {
+func (wdb wdbClient) CreateRole(roleID model.Identifier, allowed []string, denied []string) *er.WdbError {
 	if exists, _ := wdb.Roles.CheckIfExists(roleID); exists {
 		return &er.RoleAlreadyExistsError
 	}
-	wdb.Roles.CreateRole(roleID, permissions)
-	return nil
+	return wdb.Roles.CreateRole(roleID, allowed, denied)
 }
 
 func (wdb wdbClient) ListRole() roles.Roles {
