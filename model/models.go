@@ -55,7 +55,7 @@ type User struct {
 }
 
 type Permissions struct {
-	Role Identifier `json:"roleId"`
+	Role Identifier `json:"role"`
 	On   *Entities  `json:"on,omitempty"`
 }
 

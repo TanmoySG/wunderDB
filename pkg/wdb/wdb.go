@@ -35,6 +35,7 @@ type Client interface {
 
 	// Methods for Roles and Users
 	CreateUser(userID model.Identifier, password string) *er.WdbError
+	AuthenticateUser(userID model.Identifier, password string) (bool, *er.WdbError)
 	CreateRole(roleID model.Identifier, allowed []string, denied []string) *er.WdbError
 	ListRole() r.Roles
 	CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (*bool, *er.WdbError)
