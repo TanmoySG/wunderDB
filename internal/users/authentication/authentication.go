@@ -7,6 +7,8 @@ import (
 	"encoding/base64"
 	"fmt"
 	"strings"
+
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 )
 
 const (
@@ -14,8 +16,11 @@ const (
 	SHA1   = "sha1"
 	SHA256 = "sha256"
 
-	validUser   = true
-	invalidUser = false
+	ValidUser   = true
+	InvalidUser = false
+
+	BasicAuthHeader       = "Basic"
+	BearerTokenAuthHeader = "Bearer"
 )
 
 type Authentication struct {
@@ -23,7 +28,7 @@ type Authentication struct {
 }
 
 func Authenticate(passwordHash string) bool {
-	return validUser
+	return ValidUser
 }
 
 // Returns hex of Hash
@@ -42,17 +47,17 @@ func Hash(hashableString string, algorithm string) string {
 	return hash
 }
 
-func HandleUserCredentials(authorizationHeaderString string) (*string, *string, error) {
+func HandleUserCredentials(authorizationHeaderString string) (*string, *string, *er.WdbError) {
 
 	if len(authorizationHeaderString) == 0 {
-		return nil, nil, fmt.Errorf("missing credentials")
+		return nil, nil, &er.InvalidCredentialsError
 	}
 
 	authorizationHeaders := strings.Split(authorizationHeaderString, " ")
 
 	decodedCredentials, err := base64.StdEncoding.DecodeString(authorizationHeaders[1])
 	if err != nil {
-		return nil, nil, fmt.Errorf("error decoding credentials : %s", err)
+		return nil, nil, &er.InvalidCredentialsError
 	}
 
 	credentialArray := strings.Split(string(decodedCredentials), ":")

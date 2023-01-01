@@ -40,6 +40,18 @@ func (u Users) CreateUser(userID model.Identifier, password string, hashingAlgor
 	}
 }
 
+func (u Users) GetUser(userID model.Identifier) *model.User {
+	user := u[userID]
+	redactedUser := model.User{
+		UserID:   user.UserID,
+		Metadata: user.Metadata,
+		Authentication: model.Authentication{
+			HashingAlgorithm: user.Authentication.HashingAlgorithm,
+		},
+	}
+	return &redactedUser
+}
+
 func (u Users) GrantRole(userID model.Identifier, permissions []model.Permissions) {
 	// Permissions added latest have higher priority
 	u[userID].Permissions = append(permissions, u[userID].Permissions...)
@@ -47,4 +59,8 @@ func (u Users) GrantRole(userID model.Identifier, permissions []model.Permission
 
 func (u Users) Permission(userID model.Identifier) []model.Permissions {
 	return u[userID].Permissions
+}
+
+func (u Users) Authenticate(userID model.Identifier, hashedPassword string) bool {
+	return u[userID].Authentication.HashedSecret == hashedPassword
 }

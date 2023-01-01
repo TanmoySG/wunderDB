@@ -72,7 +72,14 @@ var (
 		HttpStatusCode: 404,
 	}
 
-	// Privilege
+	// Credential Error
+	InvalidCredentialsError = WdbError{
+		ErrCode:        "invalidCredentials",
+		ErrMessage:     "username/password/token provided is not valid",
+		HttpStatusCode: 401,
+	}
+
+	// Privilege Error
 	PrivilegeUnauthorized = WdbError{
 		ErrCode:        "permissionDenied",
 		ErrMessage:     "permission denied",
