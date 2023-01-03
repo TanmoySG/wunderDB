@@ -38,8 +38,8 @@ type Client interface {
 	AuthenticateUser(userID model.Identifier, password string) (bool, *er.WdbError)
 	CreateRole(roleID model.Identifier, allowed []string, denied []string) *er.WdbError
 	ListRole() r.Roles
-	CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (*bool, *er.WdbError)
-	GrantRoles(userID model.Identifier, permissions []model.Permissions) *er.WdbError
+	CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError)
+	GrantRoles(userID model.Identifier, permissions model.Permissions) *er.WdbError
 }
 
 func NewWdbClient(databases d.Databases, roles r.Roles, users u.Users, hashingAlgorithm string) Client {
