@@ -14,11 +14,18 @@ func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.Wd
 	return nil
 }
 
-func (wdb wdbClient) GrantRoles(userID model.Identifier, permissions []model.Permissions) *er.WdbError {
+func (wdb wdbClient) GrantRoles(userID model.Identifier, permission model.Permissions) *er.WdbError {
 	if exists, _ := wdb.Users.CheckIfExists(userID); !exists {
 		return &er.UserDoesNotExistError
 	}
-	wdb.Users.GrantRole(userID, permissions)
+
+	validRole, _ := wdb.Roles.CheckIfExists(permission.Role)
+	if !validRole {
+		return &er.InvalidRoleError
+	}
+
+	wdb.Users.GrantRole(userID, permission)
+
 	return nil
 }
 
