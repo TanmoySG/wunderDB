@@ -23,16 +23,16 @@ func (wdb wdbClient) ListRole() roles.Roles {
 	return wdb.Roles.ListRoles()
 }
 
-func (wdb wdbClient) CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (*bool, *er.WdbError) {
+func (wdb wdbClient) CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError) {
 	if exists, _ := wdb.Users.CheckIfExists(userID); !exists {
-		return nil, &er.UserDoesNotExistError
+		return Denied, &er.UserDoesNotExistError
 	}
 
 	userPermissions := wdb.Users.Permission(userID)
 
 	isPermitted := wdb.Roles.Check(userPermissions, privilege, &entities)
 	if isPermitted == privileges.Allowed {
-		return &Allowed, nil
+		return Allowed, nil
 	}
-	return &Denied, nil
+	return Denied, &er.PrivilegeUnauthorized
 }
