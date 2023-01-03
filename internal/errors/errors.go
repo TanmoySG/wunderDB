@@ -99,6 +99,12 @@ var (
 		HttpStatusCode: 406,
 	}
 
+	InvalidRoleError = WdbError{
+		ErrCode:        "invalidRole",
+		ErrMessage:     "role not valid",
+		HttpStatusCode: 400,
+	}
+
 	// Encode/Decode Error
 	DataEncodeDecodeError = WdbError{
 		ErrCode:        encodeDecodeErrorCode,
