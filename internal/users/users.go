@@ -52,9 +52,9 @@ func (u Users) GetUser(userID model.Identifier) *model.User {
 	return &redactedUser
 }
 
-func (u Users) GrantRole(userID model.Identifier, permissions []model.Permissions) {
+func (u Users) GrantRole(userID model.Identifier, permissions model.Permissions) {
 	// Permissions added latest have higher priority
-	u[userID].Permissions = append(permissions, u[userID].Permissions...)
+	u[userID].Permissions = append([]model.Permissions{permissions}, u[userID].Permissions...)
 }
 
 func (u Users) Permission(userID model.Identifier) []model.Permissions {
