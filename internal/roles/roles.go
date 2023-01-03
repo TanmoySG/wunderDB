@@ -59,20 +59,25 @@ func (r Roles) Check(permissions []model.Permissions, privilege string, on *mode
 	for _, permission := range permissions {
 		roleID := permission.Role
 
+		validRole, role := r.CheckIfExists(roleID)
+		if !validRole {
+			continue
+		}
+
 		privilegeCategory := p.Category(privilege)
 		if privilegeCategory == p.GlobalPrivileges {
-			globalPrivileges := r[roleID].Grants.GlobalPrivileges
+			globalPrivileges := role.Grants.GlobalPrivileges
 			return checkPermission(privilege, *globalPrivileges)
 		} else if privilegeCategory == p.DatabasePrivileges {
 			if *on.Databases == *permission.On.Databases {
-				databasePrivileges := r[roleID].Grants.DatabasePrivileges
+				databasePrivileges := role.Grants.DatabasePrivileges
 				return checkPermission(privilege, *databasePrivileges)
 			}
 			return denied
 		} else if privilegeCategory == p.CollectionPrivileges {
 			if *on.Databases == *permission.On.Databases {
 				if on.Collections == permission.On.Collections {
-					collectionPrivileges := r[roleID].Grants.CollectionPrivileges
+					collectionPrivileges := role.Grants.CollectionPrivileges
 					return checkPermission(privilege, *collectionPrivileges)
 				}
 				return denied
