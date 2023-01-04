@@ -56,8 +56,8 @@ func (r Roles) ListRoles() Roles {
 }
 
 func (r Roles) Check(permissions []model.Permissions, privilege string, on *model.Entities) bool {
-	for _, permission := range permissions {
-		roleID := permission.Role
+	for _, userPermission := range permissions {
+		roleID := userPermission.Role
 
 		validRole, role := r.CheckIfExists(roleID)
 		if !validRole {
@@ -69,14 +69,14 @@ func (r Roles) Check(permissions []model.Permissions, privilege string, on *mode
 			globalPrivileges := role.Grants.GlobalPrivileges
 			return checkPermission(privilege, *globalPrivileges)
 		} else if privilegeCategory == p.DatabasePrivileges {
-			if *on.Databases == *permission.On.Databases {
+			if *on.Databases == *userPermission.On.Databases || *userPermission.On.Databases == p.Wildcard {
 				databasePrivileges := role.Grants.DatabasePrivileges
 				return checkPermission(privilege, *databasePrivileges)
 			}
 			return denied
 		} else if privilegeCategory == p.CollectionPrivileges {
-			if *on.Databases == *permission.On.Databases {
-				if on.Collections == permission.On.Collections {
+			if *on.Databases == *userPermission.On.Databases || *userPermission.On.Databases == p.Wildcard {
+				if *on.Collections == *userPermission.On.Collections || *userPermission.On.Collections == p.Wildcard {
 					collectionPrivileges := role.Grants.CollectionPrivileges
 					return checkPermission(privilege, *collectionPrivileges)
 				}
