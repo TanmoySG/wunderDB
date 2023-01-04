@@ -1,7 +1,6 @@
 package users
 
 import (
-	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
@@ -28,13 +27,13 @@ func (u Users) CheckIfExists(userID model.Identifier) (bool, *model.User) {
 	}
 }
 
-func (u Users) CreateUser(userID model.Identifier, password string, hashingAlgorithm string, metadata model.Metadata) {
+func (u Users) CreateUser(userID model.Identifier, hashedPassword string, hashingAlgorithm string, metadata model.Metadata) {
 	u[userID] = &model.User{
 		UserID:   userID,
 		Metadata: metadata,
 		Authentication: model.Authentication{
 			HashingAlgorithm: hashingAlgorithm,
-			HashedSecret:     authentication.Hash(password, hashingAlgorithm),
+			HashedSecret:     hashedPassword,
 		},
 		Permissions: []model.Permissions{},
 	}
