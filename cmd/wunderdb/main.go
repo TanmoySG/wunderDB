@@ -31,6 +31,8 @@ func main() {
 
 	wdbc := wdbClient.NewWdbClient(db, rl, us, halg)
 
+	wdbc.CreateDeafultAdmin()
+
 	Shutdown(db, rl, us)
 
 	server := s.NewWdbServer(wdbc)

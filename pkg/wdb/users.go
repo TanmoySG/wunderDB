@@ -10,7 +10,8 @@ func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.Wd
 	if exists, _ := wdb.Users.CheckIfExists(userID); exists {
 		return &er.UserAlreadyExistsError
 	}
-	wdb.Users.CreateUser(userID, password, wdb.HashingAlgorithm, model.Metadata{})
+	hashedPassword := authentication.Hash(password, wdb.HashingAlgorithm)
+	wdb.Users.CreateUser(userID, hashedPassword, wdb.HashingAlgorithm, model.Metadata{})
 	return nil
 }
 
