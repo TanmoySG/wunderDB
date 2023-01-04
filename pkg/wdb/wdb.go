@@ -40,6 +40,9 @@ type Client interface {
 	ListRole() r.Roles
 	CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError)
 	GrantRoles(userID model.Identifier, permissions model.Permissions) *er.WdbError
+
+	// Admin Methods
+	CreateDeafultAdmin()
 }
 
 func NewWdbClient(databases d.Databases, roles r.Roles, users u.Users, hashingAlgorithm string) Client {
