@@ -10,10 +10,11 @@ import (
 )
 
 type wdbClient struct {
-	HashingAlgorithm string      `json:"hashingAlgorithm"`
-	Databases        d.Databases `json:"databases"`
-	Roles            r.Roles     `json:"roles"`
-	Users            u.Users     `json:"users"`
+	HashingAlgorithm string
+	Databases        d.Databases
+	Roles            r.Roles
+	Users            u.Users
+	Admin            model.User
 }
 
 type Client interface {
@@ -42,14 +43,17 @@ type Client interface {
 	GrantRoles(userID model.Identifier, permissions model.Permissions) *er.WdbError
 
 	// Admin Methods
-	CreateDeafultAdmin()
+	CreateDefaultAdmin()
+	AdminExists() bool
+	CreateAdmin(adminUserId, password string) *er.WdbError
 }
 
-func NewWdbClient(databases d.Databases, roles r.Roles, users u.Users, hashingAlgorithm string) Client {
+func NewWdbClient(admin model.User, databases d.Databases, roles r.Roles, users u.Users, hashingAlgorithm string) Client {
 	return wdbClient{
 		HashingAlgorithm: hashingAlgorithm,
 		Databases:        databases,
 		Roles:            roles,
 		Users:            users,
+		Admin:            admin,
 	}
 }

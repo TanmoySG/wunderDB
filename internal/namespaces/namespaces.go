@@ -9,8 +9,8 @@ import (
 
 type Namespaces map[model.Identifier]*model.Namespace
 
-func WithWDB(wdb model.WDB) Namespaces {
-	return wdb.Namespaces
+func WithWDB(namespace Namespaces) Namespaces {
+	return namespace
 }
 
 func (ns Namespaces) CheckIfNamespaceExists(namespaceID model.Identifier) bool {
