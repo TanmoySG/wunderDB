@@ -1,6 +1,7 @@
 package wdbClient
 
 import (
+	"github.com/TanmoySG/wunderDB/internal/config"
 	d "github.com/TanmoySG/wunderDB/internal/databases"
 	r "github.com/TanmoySG/wunderDB/internal/roles"
 	u "github.com/TanmoySG/wunderDB/internal/users"
@@ -14,7 +15,7 @@ type wdbClient struct {
 	Databases        d.Databases
 	Roles            r.Roles
 	Users            u.Users
-	Admin            model.User
+	Configurations   model.Configurations
 }
 
 type Client interface {
@@ -42,18 +43,16 @@ type Client interface {
 	CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError)
 	GrantRoles(userID model.Identifier, permissions model.Permissions) *er.WdbError
 
-	// Admin Methods
-	CreateDefaultAdmin()
-	AdminExists() bool
-	CreateAdmin(adminUserId, password string) *er.WdbError
+	// Admin Method
+	InitializeAdmin(config *config.Config)
 }
 
-func NewWdbClient(admin model.User, databases d.Databases, roles r.Roles, users u.Users, hashingAlgorithm string) Client {
+func NewWdbClient(configurations model.Configurations, databases d.Databases, roles r.Roles, users u.Users, hashingAlgorithm string) Client {
 	return wdbClient{
 		HashingAlgorithm: hashingAlgorithm,
 		Databases:        databases,
 		Roles:            roles,
 		Users:            users,
-		Admin:            admin,
+		Configurations:   configurations,
 	}
 }
