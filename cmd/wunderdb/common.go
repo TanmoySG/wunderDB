@@ -5,10 +5,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/TanmoySG/wunderDB/internal/config"
 	"github.com/TanmoySG/wunderDB/internal/fsLoader"
 	"github.com/TanmoySG/wunderDB/model"
-	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -48,12 +46,4 @@ func Shutdown(db map[model.Identifier]*model.Database, rl map[model.Identifier]*
 			os.Exit(0)
 		}
 	}()
-}
-
-func handleAdmin(config *config.Config, wdb wdbClient.Client) {
-	if config.AdminID == "" && config.AdminPassword == "" {
-		if !wdb.AdminExists() {
-			wdb.CreateDefaultAdmin()
-		}
-	}
 }

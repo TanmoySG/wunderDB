@@ -30,9 +30,9 @@ func main() {
 
 	halg := authentication.MD5
 
-	wdbc := wdbClient.NewWdbClient(model.User{}, db, rl, us, halg)
+	wdbc := wdbClient.NewWdbClient(model.Configurations{}, db, rl, us, halg)
 
-	handleAdmin(c, wdbc)
+	wdbc.InitializeAdmin(c)
 
 	Shutdown(db, rl, us)
 
