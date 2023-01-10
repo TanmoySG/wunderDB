@@ -9,10 +9,15 @@ type Privileges map[string]bool
 type Schema map[string]interface{}
 
 type WDB struct {
-	Namespaces map[Identifier]*Namespace `json:"namespaces"`
-	Databases  map[Identifier]*Database  `json:"databases"`
-	Users      map[Identifier]*User      `json:"users"`
-	Roles      map[Identifier]*Role      `json:"roles"`
+	Configurations Configurations            `json:"configurations"`
+	Namespaces     map[Identifier]*Namespace `json:"namespaces"`
+	Databases      map[Identifier]*Database  `json:"databases"`
+	Users          map[Identifier]*User      `json:"users"`
+	Roles          map[Identifier]*Role      `json:"roles"`
+}
+
+type Configurations struct {
+	Admin *Identifier `json:"admin"`
 }
 
 type Namespace struct {
