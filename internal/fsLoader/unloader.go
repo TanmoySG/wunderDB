@@ -41,3 +41,37 @@ func (w WFileSystem) UnloadDatabases(databases map[model.Identifier]*model.Datab
 	}
 	return nil
 }
+
+func (w WFileSystem) UnloadRoles(roles map[model.Identifier]*model.Role) error {
+	rolesJson, err := json.Marshal(roles)
+	if err != nil {
+		return err
+	}
+
+	if !fs.CheckFileExists(w.rolesBasePath) {
+		os.Create(w.rolesBasePath)
+	}
+
+	err = os.WriteFile(w.rolesBasePath, rolesJson, 0740)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (w WFileSystem) UnloadUsers(users map[model.Identifier]*model.User) error {
+	usersJson, err := json.Marshal(users)
+	if err != nil {
+		return err
+	}
+
+	if !fs.CheckFileExists(w.usersBasePath) {
+		os.Create(w.usersBasePath)
+	}
+
+	err = os.WriteFile(w.usersBasePath, usersJson, 0740)
+	if err != nil {
+		return err
+	}
+	return nil
+}

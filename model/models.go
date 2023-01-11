@@ -5,12 +5,19 @@ type Identifier string
 type DataMap map[string]interface{}
 type Metadata map[string]interface{}
 type ExtraFields map[string]interface{}
-type Authentication map[string]interface{}
+type Privileges map[string]bool
+type Schema map[string]interface{}
 
 type WDB struct {
-	Namespaces map[Identifier]*Namespace `json:"namespaces"`
-	Databases  map[Identifier]*Database  `json:"databases"`
-	Users      map[Identifier]*User      `json:"users"`
+	Configurations Configurations            `json:"configurations"`
+	Namespaces     map[Identifier]*Namespace `json:"namespaces"`
+	Databases      map[Identifier]*Database  `json:"databases"`
+	Users          map[Identifier]*User      `json:"users"`
+	Roles          map[Identifier]*Role      `json:"roles"`
+}
+
+type Configurations struct {
+	Admin *Identifier `json:"admin"`
 }
 
 type Namespace struct {
@@ -38,8 +45,6 @@ type Datum struct {
 	Identifier Identifier  `json:"id"`
 }
 
-type Schema map[string]interface{}
-
 // Need to Decide exact requirements for Access
 // Access Control List - currently only implemented at Namespace Level
 type Access struct {
@@ -48,7 +53,34 @@ type Access struct {
 }
 
 type User struct {
-	UserID         Identifier
-	Authentication Authentication
-	Metadata       Metadata
+	UserID         Identifier     `json:"userId"`
+	Authentication Authentication `json:"authentication"`
+	Metadata       Metadata       `json:"metadata"`
+	Permissions    []Permissions  `json:"permissions"`
+}
+
+type Permissions struct {
+	Role Identifier `json:"role"`
+	On   *Entities  `json:"on,omitempty"`
+}
+
+type Role struct {
+	RoleID Identifier `json:"roleId"`
+	Grants Grants     `json:"grants"`
+}
+
+type Grants struct {
+	GlobalPrivileges     *Privileges `json:"globalPrivileges,omitempty"`
+	DatabasePrivileges   *Privileges `json:"databasePrivileges,omitempty"`
+	CollectionPrivileges *Privileges `json:"collectionPrivileges,omitempty"`
+}
+
+type Entities struct {
+	Databases   *string `json:"databases,omitempty"`
+	Collections *string `json:"collections,omitempty"`
+}
+
+type Authentication struct {
+	HashedSecret     string `json:"hashedSecret"`
+	HashingAlgorithm string `json:"hashingAlgorithm"` // md5, sha1 or sha256
 }

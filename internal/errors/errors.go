@@ -53,11 +53,56 @@ var (
 		HttpStatusCode: 404,
 	}
 
+	// Role Errors
+	RoleAlreadyExistsError = WdbError{
+		ErrCode:        "roleExists",
+		ErrMessage:     "role with name already exists",
+		HttpStatusCode: 409,
+	}
+
+	// User Errors
+	UserAlreadyExistsError = WdbError{
+		ErrCode:        "userExists",
+		ErrMessage:     "user with id already exists",
+		HttpStatusCode: 409,
+	}
+	UserDoesNotExistError = WdbError{
+		ErrCode:        "userMissing",
+		ErrMessage:     "user with id does not exist",
+		HttpStatusCode: 404,
+	}
+
+	// Credential Error
+	InvalidCredentialsError = WdbError{
+		ErrCode:        "invalidCredentials",
+		ErrMessage:     "username/password/token provided is not valid",
+		HttpStatusCode: 401,
+	}
+
+	// Privilege Error
+	PrivilegeUnauthorized = WdbError{
+		ErrCode:        "permissionDenied",
+		ErrMessage:     "permission denied",
+		HttpStatusCode: 409,
+	}
+
 	// Other Errors
 	SchemaValidationFailed = WdbError{
 		ErrCode:        "schemaValidationError",
 		ErrMessage:     "data failed schema validation",
 		HttpStatusCode: 422,
+	}
+
+	EncodeDecodeError = WdbError{
+		ErrCode:        encodeDecodeErrorCode,
+		ErrMessage:     "error encoding/decoding data",
+		HttpStatusCode: 406,
+	}
+
+	InvalidRoleError = WdbError{
+		ErrCode:        "invalidRole",
+		ErrMessage:     "role not valid",
+		HttpStatusCode: 400,
 	}
 
 	// Encode/Decode Error
