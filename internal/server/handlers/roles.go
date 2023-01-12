@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/internal/privileges"
+	"github.com/TanmoySG/wunderDB/internal/roles"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/gofiber/fiber/v2"
@@ -14,32 +16,47 @@ type role struct {
 }
 
 func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
-	action := privileges.CreateRole
+	privilege := privileges.CreateRole
+
+	var apiError *er.WdbError
 
 	r := new(role)
-
 	if err := c.BodyParser(r); err != nil {
 		return err
 	}
 
-	err := wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied)
-	resp := response.Format(action, err, nil)
+	isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
+	if !isValid {
+		apiError = error
+	} else {
+		apiError = wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied)
+	}
+
+	resp := response.Format(privilege, apiError, nil)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
-	action := privileges.CreateRole
+	privilege := privileges.ListRole
+
+	var apiError *er.WdbError
+	var roleList roles.Roles
 
 	r := new(role)
-
 	if err := c.BodyParser(r); err != nil {
 		return err
 	}
 
-	roleList := wh.wdbClient.ListRole()
-	resp := response.Format(action, nil, roleList)
+	isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
+	if !isValid {
+		apiError = error
+	} else {
+		roleList = wh.wdbClient.ListRole()
+	}
+
+	resp := response.Format(privilege, apiError, roleList)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
