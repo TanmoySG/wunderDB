@@ -17,12 +17,12 @@ type userPermissions struct {
 }
 
 func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
-	action := privileges.CreateUser
+	privilege := privileges.CreateUser
 
 	username, password, _ := authentication.HandleUserCredentials(c.Get(Authorization))
 
 	error := wh.wdbClient.CreateUser(model.Identifier(*username), *password)
-	resp := response.Format(action, error, nil)
+	resp := response.Format(privilege, error, nil)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
