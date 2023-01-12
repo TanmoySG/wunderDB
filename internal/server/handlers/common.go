@@ -7,6 +7,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+var (
+	noEntities = model.Entities{}
+)
+
 const (
 	authSuccessful = true
 	authFailure    = false
