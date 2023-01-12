@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/model"
@@ -12,40 +13,70 @@ type database struct {
 }
 
 func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
-	action := privileges.CreateDatabase
+	privilege := privileges.CreateDatabase
+
+	var apiError *er.WdbError
 
 	d := new(database)
-
 	if err := c.BodyParser(d); err != nil {
 		return err
 	}
 
-	err := wh.wdbClient.AddDatabase(model.Identifier(d.Name))
-	resp := response.Format(action, err, nil)
+	isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
+	if !isValid {
+		apiError = error
+	} else {
+		apiError = wh.wdbClient.AddDatabase(model.Identifier(d.Name))
+	}
+
+	resp := response.Format(privilege, apiError, nil)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
-	action := privileges.ReadDatabase
+	privilege := privileges.ReadDatabase
+
+	var apiError *er.WdbError
+	var fetchedDatabase *model.Database
 
 	databaseName := c.Params("database")
+	entities := model.Entities{
+		Databases: &databaseName,
+	}
 
-	fetchedDatabase, err := wh.wdbClient.GetDatabase(model.Identifier(databaseName))
-	resp := response.Format(action, err, fetchedDatabase)
+	isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
+	if !isValid {
+		apiError = error
+	} else {
+		fetchedDatabase, apiError = wh.wdbClient.GetDatabase(model.Identifier(databaseName))
+	}
+
+	resp := response.Format(privilege, apiError, fetchedDatabase)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
-	action := privileges.DeleteDatabase
+	privilege := privileges.DeleteDatabase
+
+	var apiError *er.WdbError
 
 	databaseName := c.Params("database")
+	entities := model.Entities{
+		Databases: &databaseName,
+	}
 
-	err := wh.wdbClient.DeleteDatabase(model.Identifier(databaseName))
-	resp := response.Format(action, err, nil)
+	isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
+	if !isValid {
+		apiError = error
+	} else {
+		apiError = wh.wdbClient.DeleteDatabase(model.Identifier(databaseName))
+	}
+
+	resp := response.Format(privilege, apiError, nil)
 
 	c.Send(resp.Marshal())
 	return c.SendStatus(resp.HttpStatusCode)
