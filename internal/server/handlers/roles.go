@@ -44,11 +44,6 @@ func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
 	var apiError *er.WdbError
 	var roleList roles.Roles
 
-	r := new(role)
-	if err := c.BodyParser(r); err != nil {
-		return err
-	}
-
 	isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
 	if !isValid {
 		apiError = error
