@@ -15,7 +15,7 @@ func (wdb wdbClient) InitializeAdmin(config *config.Config) {
 			if config.AdminPassword == "" {
 				userPassword = admin.DEFAULT_ADMIN_PASSWORD
 			} else {
-				userPassword = config.AdminPassword
+				userPassword = authentication.Hash(config.AdminPassword, authentication.SHA256)
 			}
 		} else {
 			userID = config.AdminID
