@@ -24,7 +24,7 @@ var (
 func getAllowedRole() []string {
 	var adminPrivileges []string
 
-	for privilege, _ := range p.PrivilegeScope {
+	for privilege := range p.PrivilegeScope {
 		adminPrivileges = append(adminPrivileges, privilege)
 	}
 

@@ -16,6 +16,7 @@ const (
 	CreateRole = "createRole"
 	GrantRole  = "grantRole"
 	UpdateRole = "updateRole"
+	ListRole   = "listRole"
 )
 
 const (

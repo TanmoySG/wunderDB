@@ -10,9 +10,13 @@ import (
 func (wdb wdbClient) InitializeAdmin(config *config.Config) {
 	var userID, userPassword string
 	if wdb.Configurations.Admin == nil {
-		if config.AdminID == "" || config.AdminPassword == "" {
+		if config.AdminID == "" {
 			userID = admin.DEFAULT_ADMIN_USERID
-			userPassword = admin.DEFAULT_ADMIN_PASSWORD
+			if config.AdminPassword == "" {
+				userPassword = admin.DEFAULT_ADMIN_PASSWORD
+			} else {
+				userPassword = authentication.Hash(config.AdminPassword, authentication.SHA256)
+			}
 		} else {
 			userID = config.AdminID
 			userPassword = authentication.Hash(config.AdminPassword, authentication.SHA256)
