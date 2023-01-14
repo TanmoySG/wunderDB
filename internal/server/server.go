@@ -41,6 +41,7 @@ func (ws wdbServer) Start() {
 	// Data Routes
 	app.Post("/api/databases/:database/collections/:collection/data", ws.handler.AddData)
 	app.Get("/api/databases/:database/collections/:collection/data", ws.handler.ReadData)
+	app.Delete("/api/databases/:database/collections/:collection/data", ws.handler.DeleteData)
 
 	// Role Routes
 	app.Post("/api/roles", ws.handler.CreateRole)

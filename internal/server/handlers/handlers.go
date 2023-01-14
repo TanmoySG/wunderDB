@@ -27,6 +27,8 @@ type Client interface {
 	// Data Handlers
 	AddData(c *fiber.Ctx) error
 	ReadData(c *fiber.Ctx) error
+	DeleteData(c *fiber.Ctx) error
+	UpdateData(c *fiber.Ctx) error
 
 	// Role Handlers
 	CreateRole(c *fiber.Ctx) error
