@@ -1,6 +1,8 @@
 package server
 
 import (
+	"fmt"
+
 	"github.com/TanmoySG/wunderDB/internal/server/handlers"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
@@ -8,6 +10,7 @@ import (
 )
 
 type wdbServer struct {
+	port    string
 	handler handlers.Client
 }
 
@@ -15,8 +18,9 @@ type Client interface {
 	Start()
 }
 
-func NewWdbServer(wdbClient wdbClient.Client) Client {
+func NewWdbServer(wdbClient wdbClient.Client, port string) Client {
 	return wdbServer{
+		port:    fmt.Sprintf(":%s", port),
 		handler: handlers.NewHandlers(wdbClient),
 	}
 }
@@ -53,5 +57,5 @@ func (ws wdbServer) Start() {
 	app.Post("/api/users/grant", ws.handler.GrantRoles)
 	app.Get("/api/users/permission", ws.handler.CheckPermissions)
 
-	app.Listen(":3000")
+	app.Listen(ws.port)
 }

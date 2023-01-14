@@ -36,7 +36,7 @@ func main() {
 
 	Shutdown(db, rl, us)
 
-	server := s.NewWdbServer(wdbc)
+	server := s.NewWdbServer(wdbc, c.Port)
 
 	server.Start()
 }
