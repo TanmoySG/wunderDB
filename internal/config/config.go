@@ -11,7 +11,8 @@ func LoadConfig() (*Config, error) {
 }
 
 type Config struct {
-	AdminID       string `env:"ADMIN_ID"`
-	AdminPassword string `env:"ADMIN_PASSWORD"`
-	Port          string `env:"PORT" envDefault:"8086"`
+	AdminID               string `env:"ADMIN_ID"`
+	AdminPassword         string `env:"ADMIN_PASSWORD"`
+	Port                  string `env:"PORT" envDefault:"8086"`
+	PersistantStoragePath string `env:"PERSISTANT_STORAGE_PATH" envDefault:"wfs"`
 }
