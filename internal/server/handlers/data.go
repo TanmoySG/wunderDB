@@ -17,11 +17,6 @@ func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
 
 	var apiError *er.WdbError
 
-	incomingData := new(interface{})
-	if err := c.BodyParser(incomingData); err != nil {
-		return err
-	}
-
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
 
@@ -34,6 +29,11 @@ func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
 	if !isValid {
 		apiError = error
 	} else {
+		incomingData := new(interface{})
+		if err := c.BodyParser(incomingData); err != nil {
+			return err
+		}
+
 		apiError = wh.wdbClient.AddData(model.Identifier(databaseName), model.Identifier(collectionName), incomingData)
 	}
 
@@ -81,48 +81,83 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 	return c.SendStatus(resp.HttpStatusCode)
 }
 
-// func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
-// 	privilege := privileges.DeleteDatabase
+func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
+	privilege := privileges.DeleteData
 
-// 	var apiError *er.WdbError
+	var apiError *er.WdbError
+	var fetchedData map[model.Identifier]*model.Datum
+	var filter interface{}
 
-// 	databaseName := c.Params("database")
-// 	entities := model.Entities{
-// 		Databases: &databaseName,
-// 	}
+	databaseName := c.Params("database")
+	collectionName := c.Params("collection")
 
-// 	isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
-// 	if !isValid {
-// 		apiError = error
-// 	} else {
-// 		apiError = wh.wdbClient.DeleteDatabase(model.Identifier(databaseName))
-// 	}
+	entities := model.Entities{
+		Databases:   &databaseName,
+		Collections: &collectionName,
+	}
 
-// 	resp := response.Format(privilege, apiError, nil)
+	isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
+	if !isValid {
+		apiError = error
+	} else {
+		filterKey, filterValue := c.Query("key"), c.Query("value")
+		if filterKey == emptyFilter || filterValue == emptyFilter {
+			filter = nil
+		} else {
+			filter = map[string]interface{}{
+				"key":   filterKey,
+				"value": filterValue,
+			}
+		}
 
-// 	c.Send(resp.Marshal())
-// 	return c.SendStatus(resp.HttpStatusCode)
-// }
+		apiError = wh.wdbClient.DeleteData(model.Identifier(databaseName), model.Identifier(collectionName), filter)
+	}
 
-// func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
-// 	privilege := privileges.DeleteDatabase
+	resp := response.Format(privilege, apiError, fetchedData)
 
-// 	var apiError *er.WdbError
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
+}
 
-// 	databaseName := c.Params("database")
-// 	entities := model.Entities{
-// 		Databases: &databaseName,
-// 	}
+func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
+	privilege := privileges.UpdateData
 
-// 	isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
-// 	if !isValid {
-// 		apiError = error
-// 	} else {
-// 		apiError = wh.wdbClient.DeleteDatabase(model.Identifier(databaseName))
-// 	}
+	var apiError *er.WdbError
+	var fetchedData map[model.Identifier]*model.Datum
+	var filter interface{}
 
-// 	resp := response.Format(privilege, apiError, nil)
+	databaseName := c.Params("database")
+	collectionName := c.Params("collection")
 
-// 	c.Send(resp.Marshal())
-// 	return c.SendStatus(resp.HttpStatusCode)
-// }
+	entities := model.Entities{
+		Databases:   &databaseName,
+		Collections: &collectionName,
+	}
+
+	isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
+	if !isValid {
+		apiError = error
+	} else {
+		incomingUpdatedData := new(interface{})
+		if err := c.BodyParser(incomingUpdatedData); err != nil {
+			return err
+		}
+
+		filterKey, filterValue := c.Query("key"), c.Query("value")
+		if filterKey == emptyFilter || filterValue == emptyFilter {
+			filter = nil
+		} else {
+			filter = map[string]interface{}{
+				"key":   filterKey,
+				"value": filterValue,
+			}
+		}
+
+		apiError = wh.wdbClient.UpdateData(model.Identifier(databaseName), model.Identifier(collectionName), incomingUpdatedData, filter)
+	}
+
+	resp := response.Format(privilege, apiError, fetchedData)
+
+	c.Send(resp.Marshal())
+	return c.SendStatus(resp.HttpStatusCode)
+}
