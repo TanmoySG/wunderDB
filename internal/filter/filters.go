@@ -2,6 +2,7 @@ package filter
 
 import (
 	"encoding/json"
+	"fmt"
 
 	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
@@ -28,7 +29,6 @@ func fieldExists(fieldKey string, dataMap map[string]interface{}) (bool, interfa
 }
 
 func UseFilter(filter interface{}) (*Filter, *er.WdbError) {
-
 	var dataFilter Filter
 
 	filterJson, err := json.Marshal(filter)
@@ -53,9 +53,8 @@ func filter(data map[model.Identifier]*model.Datum, filter Filter, iterator func
 	} else {
 		for identifier, dataRow := range data {
 			dataMap := dataRow.DataMap()
-			// TODO: move key check out of loop, or maybe not
 			if exists, _ := fieldExists(filter.Key, dataMap); exists {
-				if dataMap[filter.Key] == filter.Value {
+				if equal(dataMap[filter.Key], filter.Value) {
 					iterator(identifier, *dataRow)
 				}
 			}
@@ -76,4 +75,9 @@ func (f Filter) Iterate(data map[model.Identifier]*model.Datum, iterator func(mo
 	filter(data, f, func(id model.Identifier, dataRow model.Datum) {
 		iterator(id, dataRow)
 	})
+}
+
+func equal(a, b interface{}) bool {
+	// Type Irrespective Comparison
+	return fmt.Sprint(a) == fmt.Sprint(b)
 }
