@@ -20,12 +20,9 @@ func Marshal(data interface{}) map[string]interface{} {
 	return dataMap
 }
 
-func Merge(maps ...map[string]interface{}) (map[string]interface{}, error) {
-	result := make(map[string]interface{})
-	for _, m := range maps {
-		for k, v := range m {
-			result[k] = v
-		}
+func Merge(mapA, mapB map[string]interface{}) (map[string]interface{}, error) {
+	for k, v := range mapA {
+		mapB[k] = v
 	}
-	return result, nil
+	return mapB, nil
 }

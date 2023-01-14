@@ -159,12 +159,7 @@ func sortPrivileges(actions []string, assignedPermission bool) model.Grants {
 func mergeGrantMaps(allowedPrivilegesMap, deniedPrivilegesMap map[string]interface{}) (*model.Privileges, error) {
 	var privileges model.Privileges
 
-	mergeableGrantMaps := []map[string]interface{}{
-		allowedPrivilegesMap,
-		deniedPrivilegesMap,
-	}
-
-	mergedGrantsMap, err := maps.Merge(mergeableGrantMaps...)
+	mergedGrantsMap, err := maps.Merge(allowedPrivilegesMap, deniedPrivilegesMap)
 	if err != nil {
 		return nil, err
 	}

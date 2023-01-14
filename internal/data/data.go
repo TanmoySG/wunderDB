@@ -71,12 +71,7 @@ func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError 
 
 	f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Datum) {
 
-		mergableDataMaps := []map[string]interface{}{
-			maps.Marshal(updatedData),
-			dataRow.DataMap(),
-		}
-
-		data, err := maps.Merge(mergableDataMaps...)
+		data, err := maps.Merge(maps.Marshal(updatedData), dataRow.DataMap())
 		if err != nil {
 			iterError = &er.DataEncodeDecodeError
 		} else {
@@ -87,9 +82,7 @@ func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError 
 			} else {
 				isValid, err := schema.Validate(data)
 				if err == nil && isValid {
-					d.Data[identifier] = &model.Datum{
-						Data: data,
-					}
+					d.Data[identifier].Data = &data
 				}
 				iterError = err
 			}
