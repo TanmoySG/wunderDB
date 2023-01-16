@@ -3,7 +3,6 @@ module github.com/TanmoySG/wunderDB
 go 1.18
 
 require (
-	github.com/caarlos0/env/v6 v6.10.1
 	github.com/gofiber/fiber/v2 v2.40.1
 	github.com/google/uuid v1.3.0
 	github.com/sirupsen/logrus v1.9.0
