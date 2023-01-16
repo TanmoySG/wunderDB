@@ -2,14 +2,8 @@ package main
 
 import (
 	"github.com/TanmoySG/wunderDB/internal/config"
-	"github.com/TanmoySG/wunderDB/internal/databases"
-	"github.com/TanmoySG/wunderDB/internal/roles"
-	s "github.com/TanmoySG/wunderDB/internal/server"
-	"github.com/TanmoySG/wunderDB/internal/users"
-	"github.com/TanmoySG/wunderDB/internal/users/authentication"
-	"github.com/TanmoySG/wunderDB/internal/wfs"
-	"github.com/TanmoySG/wunderDB/model"
-	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
+	"github.com/TanmoySG/wunderDB/internal/lifecycle/shutdown"
+	"github.com/TanmoySG/wunderDB/internal/lifecycle/startup"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -19,31 +13,11 @@ func main() {
 		log.Fatalf("error loading configurations: %s", err)
 	}
 
-	fs := wfs.NewWFileSystem(c.PersistantStoragePath)
-	err = fs.InitializeFS()
+	w, err := startup.Prepare(*c)
 	if err != nil {
-		log.Fatalf("error loading wfs: %s", err)
+		log.Fatalf("error loading configurations: %s", err)
 	}
 
-	log.Info(c)
-
-	loadedDatabase, _ := fs.LoadDatabases()
-	loadedRoles, _ := fs.LoadRoles()
-	loadedUsers, _ := fs.LoadUsers()
-
-	db := databases.Use(loadedDatabase)
-	rl := roles.Use(loadedRoles)
-	us := users.Use(loadedUsers)
-
-	halg := authentication.MD5
-
-	wdbc := wdbClient.NewWdbClient(model.Configurations{}, db, rl, us, halg)
-
-	wdbc.InitializeAdmin(c)
-
-	Shutdown(c.PersistantStoragePath, db, rl, us)
-
-	server := s.NewWdbServer(wdbc, c.Port)
-
-	server.Start()
+	shutdown.Listen(*w, *c) // listens to shutdown signals
+	startup.Start(w, c)     // starts server and initial setup
 }
