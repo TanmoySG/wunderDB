@@ -3,22 +3,29 @@ package main
 import (
 	"github.com/TanmoySG/wunderDB/internal/config"
 	"github.com/TanmoySG/wunderDB/internal/databases"
-	"github.com/TanmoySG/wunderDB/internal/fsLoader"
 	"github.com/TanmoySG/wunderDB/internal/roles"
 	s "github.com/TanmoySG/wunderDB/internal/server"
 	"github.com/TanmoySG/wunderDB/internal/users"
 	"github.com/TanmoySG/wunderDB/internal/users/authentication"
+	"github.com/TanmoySG/wunderDB/internal/wfs"
 	"github.com/TanmoySG/wunderDB/model"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	log "github.com/sirupsen/logrus"
 )
 
 func main() {
-	c, err := config.LoadConfig()
+	c, err := config.Load()
 	if err != nil {
 		log.Fatalf("error loading configurations: %s", err)
 	}
-	fs := fsLoader.NewWFileSystem("wfs")
+
+	fs := wfs.NewWFileSystem(c.PersistantStoragePath)
+	err = fs.InitializeFS()
+	if err != nil {
+		log.Fatalf("error loading wfs: %s", err)
+	}
+
+	log.Info(c)
 
 	loadedDatabase, _ := fs.LoadDatabases()
 	loadedRoles, _ := fs.LoadRoles()
@@ -34,7 +41,7 @@ func main() {
 
 	wdbc.InitializeAdmin(c)
 
-	Shutdown(db, rl, us)
+	Shutdown(c.PersistantStoragePath, db, rl, us)
 
 	server := s.NewWdbServer(wdbc, c.Port)
 
