@@ -1,4 +1,4 @@
-package fsLoader
+package wfs
 
 import (
 	"encoding/json"

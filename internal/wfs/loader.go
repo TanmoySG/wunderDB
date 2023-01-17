@@ -1,4 +1,4 @@
-package fsLoader
+package wfs
 
 import (
 	"encoding/json"
@@ -49,7 +49,7 @@ func (w WFileSystem) LoadDatabases() (map[model.Identifier]*model.Database, erro
 
 func (w WFileSystem) LoadUsers() (map[model.Identifier]*model.User, error) {
 
-	var users map[model.Identifier]*model.User
+	users := map[model.Identifier]*model.User{}
 
 	if fs.CheckFileExists(w.usersBasePath) {
 		persitedUsersBytes, err := os.ReadFile(w.usersBasePath)
@@ -68,7 +68,7 @@ func (w WFileSystem) LoadUsers() (map[model.Identifier]*model.User, error) {
 
 func (w WFileSystem) LoadRoles() (map[model.Identifier]*model.Role, error) {
 
-	var roles map[model.Identifier]*model.Role
+	roles := map[model.Identifier]*model.Role{}
 
 	if fs.CheckFileExists(w.rolesBasePath) {
 		persitedRolesBytes, err := os.ReadFile(w.rolesBasePath)
@@ -83,4 +83,22 @@ func (w WFileSystem) LoadRoles() (map[model.Identifier]*model.Role, error) {
 	}
 
 	return roles, nil
+}
+
+func loadEntity(entityPath string, entity any) (any, error) {
+	if !fs.CheckFileExists(entityPath) {
+		return nil, fmt.Errorf("%s does not exist", entityPath)
+	}
+
+	persitedRolesBytes, err := os.ReadFile(entityPath)
+	if err != nil {
+		return nil, fmt.Errorf("error reading persisted persisted file: %s", err)
+	}
+
+	err = json.Unmarshal(persitedRolesBytes, &entity)
+	if err != nil {
+		return nil, fmt.Errorf("error marshaling roles file: %s", err)
+	}
+
+	return entity, nil
 }

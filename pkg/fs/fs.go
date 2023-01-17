@@ -14,3 +14,33 @@ func CheckFileExists(filepath string) bool {
 	}
 	return true
 }
+
+func CreateFile(filepath string) error {
+	err := os.WriteFile(filepath, []byte{}, 0740)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CreateDirectory(dirPath string) error {
+	err := os.MkdirAll(dirPath, os.ModePerm)
+	return err
+}
+
+func WriteToFile(filepath string, data []byte) error {
+	err := os.WriteFile(filepath, data, 0740)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func ReadFile(filepath string) ([]byte, error) {
+	dataBytes, err := os.ReadFile(filepath)
+	if err != nil {
+		return nil, err
+	}
+
+	return dataBytes, nil
+}

@@ -25,9 +25,9 @@ func (wdb wdbClient) InitializeAdmin(config *config.Config) {
 		userExists, _ := wdb.Users.CheckIfExists(model.Identifier(userID))
 		if !userExists {
 			wdb.Users.CreateUser(model.Identifier(userID), userPassword, authentication.SHA256, model.Metadata{})
+			wdb.Roles.CreateRole(model.Identifier(admin.DEFAULT_ADMIN_ROLE), admin.ALLOWED_ADMIN_PRIVILEGES, admin.DENIED_ADMIN_PRIVILEGES)
+			wdb.Users.GrantRole(model.Identifier(userID), admin.DEFAULT_ADMIN_PERMISSION)
 		}
 
-		wdb.Roles.CreateRole(model.Identifier(admin.DEFAULT_ADMIN_ROLE), admin.ALLOWED_ADMIN_PRIVILEGES, admin.DENIED_ADMIN_PRIVILEGES)
-		wdb.Users.GrantRole(model.Identifier(userID), admin.DEFAULT_ADMIN_PERMISSION)
 	}
 }
