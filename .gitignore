@@ -25,3 +25,6 @@ go.work
 
 # VS Code
 .vscode
+
+# Build
+bin
