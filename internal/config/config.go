@@ -9,8 +9,7 @@ import (
 	"github.com/TanmoySG/wunderDB/pkg/utils/system"
 )
 
-var 	WFS_DIRECTORIES = []string{"users", "namespaces", "databases", "roles"}
-
+var WFS_DIRECTORIES = []string{"users", "namespaces", "databases", "roles"}
 
 const (
 	WDB_ROOT_PATH_FORMAT = "%s/wdb"

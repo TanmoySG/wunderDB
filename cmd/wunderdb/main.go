@@ -15,7 +15,7 @@ func main() {
 
 	w, err := startup.Prepare(*c)
 	if err != nil {
-		log.Fatalf("error loading configurations: %s", err)
+		log.Fatalf("error starting wdb server: %s", err)
 	}
 
 	shutdown.Listen(*w, *c) // listens to shutdown signals
