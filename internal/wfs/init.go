@@ -8,7 +8,7 @@ import (
 	"github.com/TanmoySG/wunderDB/pkg/utils/system"
 )
 
-func (wfs WFileSystem) InitializeFS() error {
+func (wfs WFileSystem) InitializeWFS() error {
 	hostOS, err := system.GetHostOS()
 	if err != nil {
 		return fmt.Errorf(err.Error())
@@ -19,12 +19,6 @@ func (wfs WFileSystem) InitializeFS() error {
 
 	wdbConfigDirectory := fmt.Sprintf(config.WDB_CONFIG_DIR_PATH_FORMAT, wdbRootDirectory)
 	err = fs.CreateDirectory(wdbConfigDirectory)
-	if err != nil {
-		return err
-	}
-
-	wdbConfigFilePath := fmt.Sprintf(config.WDB_CONFIG_FILE_PATH_FORMAT, wdbConfigDirectory)
-	err = handleFile(wdbConfigFilePath)
 	if err != nil {
 		return err
 	}
