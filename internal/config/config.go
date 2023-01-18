@@ -40,8 +40,7 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf(err.Error())
 	}
 
-	overrideFlag := os.Getenv(OVERRIDE_CONFIG)
-	override, _ := strconv.ParseBool(overrideFlag)
+	override, _ := strconv.ParseBool(os.Getenv(OVERRIDE_CONFIG))
 
 	homeDir := system.GetUserHome(hostOS)
 	wdbRootDirectory := fmt.Sprintf(WDB_ROOT_PATH_FORMAT, homeDir)
@@ -78,6 +77,10 @@ func Load() (*Config, error) {
 
 	if c.PersistantStoragePath == "" {
 		c.PersistantStoragePath = fmt.Sprintf(WDB_PERSISTANT_STORAGE_DIR_PATH_FORMAT, wdbRootDirectory)
+	}
+
+	if string(configFileBytes) == "{}" {
+		override = true
 	}
 
 	err = overrideConfigFile(wdbConfigFilePath, *c, override)

@@ -13,7 +13,6 @@ const (
 	WDB_LOGS_DIR_PATH_FORMAT    = "%s/logs"
 	WDB_CONFIG_DIR_PATH_FORMAT  = "%s/configs"
 	WDB_CONFIG_FILE_PATH_FORMAT = "%s/conf.json"
-
 )
 
 func FirstLaunch() error {
