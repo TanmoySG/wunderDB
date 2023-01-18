@@ -6,7 +6,6 @@ import (
 	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
-	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/gofiber/fiber/v2"
 )
@@ -16,12 +15,22 @@ type userPermissions struct {
 	Permission model.Permissions `json:"permissions" xml:"permissions" form:"permissions"`
 }
 
+type newUser struct {
+	Username string `json:"username" xml:"username" form:"username"`
+	Password string `json:"password" xml:"password" form:"password"`
+	// HashingAlgorithm string `json:"hashingAlgorithm" xml:"hashingAlgorithm" form:"hashingAlgorithm"`
+}
+
 func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 	privilege := privileges.CreateUser
 
-	username, password, _ := authentication.HandleUserCredentials(c.Get(Authorization))
+	u := new(newUser)
 
-	error := wh.wdbClient.CreateUser(model.Identifier(*username), *password)
+	if err := c.BodyParser(u); err != nil {
+		return err
+	}
+
+	error := wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
 	resp := response.Format(privilege, error, nil)
 
 	c.Send(resp.Marshal())
