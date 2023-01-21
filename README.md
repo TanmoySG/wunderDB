@@ -1,10 +1,29 @@
-# wunderDB v2
+# wunderDB
 
-Hi! Welcome to the wunderDB Repository.
+wunderDb is a JSON-based in-memory Data Store. For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown). 
 
-Currently I am rewriting the whole project in Golang with standard API following standard development practices. So this branch is still a Work in Progress! 👷🏻 🏗️ Hope to deliver the initial version of v2 soon!
+## Setup
 
-## WDB-Retro
+To run wunderDb, download the `wunderdb` binary of the [latest release](https://github.com/TanmoySG/wunderDB/releases) based on your OS and Architecture. Once downloaded, run the following command to start wunderdb.
+
+```shell
+./wunderdb
+```
+
+This should start a wunderDb instance. For ease of used move the binaries to you bin directory.
+
+wunderDb has a few configurations that are required to run the instance - port (default to 8086), persitant file storage (default to ~/wdb/wfs). To use them see [here]()
+
+### wdbctl
+
+For ease of use, we've also developed a command-line tool for wunderDb - `wdbctl`. This tool helps you start an instance of wunderDb, set and override configurations. To use it, download the `wdbctl` binary of the latest release and run the `start` command.
+
+```shell
+wdbctl start
+```
+You can also override default and existing values with the `-o` flag.
+
+## wunderDB-Retro
 
 The first version, based on Python Flask will not be phased out any time soon. To keep it accessible and so that the version 1 doesn't get lost in the version list, I have moved the v1 to a new repository here - [wdb-retro](https://github.com/TanmoySG/wdb-retro).
 
