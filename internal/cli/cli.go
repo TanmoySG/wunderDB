@@ -9,7 +9,7 @@ import (
 
 func Run() {
 	app := cli.NewApp()
-	app.Name = "wdbCLI"
+	app.Name = "wdbctl"
 	app.Usage = "Command Line Interface for wdb"
 
 	app.Commands = []*cli.Command{
