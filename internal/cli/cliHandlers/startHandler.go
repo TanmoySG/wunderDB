@@ -1,13 +1,14 @@
 package cliHandlers
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"strconv"
 
 	"github.com/TanmoySG/wunderDB/internal/config"
 	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/shutdown"
 	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/startup"
+	"github.com/charmbracelet/lipgloss"
 	"github.com/urfave/cli/v2"
 )
 
@@ -29,7 +30,7 @@ var StartOptFlags = []cli.Flag{
 	},
 }
 
-func StartOptHandler(ctx *cli.Context) error {
+func (ch cliHandler) StartOptHandler(ctx *cli.Context) error {
 	overrideConfigFlag := ctx.Bool("override")
 	if overrideConfigFlag {
 		portOverride := ctx.String("port")
@@ -37,14 +38,20 @@ func StartOptHandler(ctx *cli.Context) error {
 		setEnvs(portOverride, persistantStoragePathOverride, overrideConfigFlag)
 	}
 
+	var style = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(lipgloss.Color("#7D56F4")).PaddingTop(1)
+
+	fmt.Println(style.Render("Starting wunderDb..."))
+
 	c, err := config.Load()
 	if err != nil {
-		log.Fatalf("error loading configurations: %s", err)
+		return fmt.Errorf("error loading configurations: %s", err)
 	}
 
 	w, err := startup.Prepare(*c)
 	if err != nil {
-		log.Fatalf("error starting wdb server: %s", err)
+		return fmt.Errorf("error starting wdb server: %s", err)
 	}
 
 	shutdown.Listen(*w, *c) // listens to shutdown signals
