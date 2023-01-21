@@ -18,7 +18,7 @@ import (
 func Prepare(c config.Config) (*model.WDB, error) {
 	fs := wfs.NewWFileSystem(c.PersistantStoragePath)
 
-	err := fs.InitializeFS()
+	err := fs.InitializeWFS()
 	if err != nil {
 		return nil, fmt.Errorf("error loading wfs: %s", err)
 	}

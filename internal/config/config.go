@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/TanmoySG/wunderDB/pkg/fs"
 	"github.com/TanmoySG/wunderDB/pkg/utils/system"
@@ -39,11 +40,22 @@ func Load() (*Config, error) {
 		return nil, fmt.Errorf(err.Error())
 	}
 
+	override, _ := strconv.ParseBool(os.Getenv(OVERRIDE_CONFIG))
+
 	homeDir := system.GetUserHome(hostOS)
 	wdbRootDirectory := fmt.Sprintf(WDB_ROOT_PATH_FORMAT, homeDir)
 
 	wdbConfigDirectory := fmt.Sprintf(WDB_CONFIG_DIR_PATH_FORMAT, wdbRootDirectory)
+	err = fs.CreateDirectory(wdbConfigDirectory)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
 	wdbConfigFilePath := fmt.Sprintf(WDB_CONFIG_FILE_PATH_FORMAT, wdbConfigDirectory)
+	err = handleFile(wdbConfigFilePath)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
 
 	configFileBytes, err := fs.ReadFile(wdbConfigFilePath)
 	if err != nil {
@@ -57,33 +69,81 @@ func Load() (*Config, error) {
 	}
 
 	c := &Config{
-		AdminID:               configMap.getValue(ADMIN_ID),
-		AdminPassword:         configMap.getValue(ADMIN_PASSWORD),
-		Port:                  configMap.getValue(PORT),
-		PersistantStoragePath: configMap.getValue(PERSISTANT_STORAGE_PATH),
+		AdminID:               configMap.getValue(ADMIN_ID, override),
+		AdminPassword:         configMap.getValue(ADMIN_PASSWORD, override),
+		Port:                  configMap.getValue(PORT, override),
+		PersistantStoragePath: configMap.getValue(PERSISTANT_STORAGE_PATH, override),
 	}
 
 	if c.PersistantStoragePath == "" {
 		c.PersistantStoragePath = fmt.Sprintf(WDB_PERSISTANT_STORAGE_DIR_PATH_FORMAT, wdbRootDirectory)
 	}
 
+	if string(configFileBytes) == "{}" {
+		override = true
+	}
+
+	err = overrideConfigFile(wdbConfigFilePath, *c, override)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
 	return c, nil
 
 }
 
-func (c ConfigMap) getValue(key string) string {
+func (c ConfigMap) getValue(key string, override bool) string {
 	val, exists := c[key]
 	if !exists {
-		envVal := os.Getenv(key)
-		if envVal == "" {
-			defaultVal, defaultvalExists := defaultValues[key]
-			if !defaultvalExists {
-				return ""
-			} else {
-				return defaultVal
-			}
-		}
-		return envVal
+		return handleConfig(key)
 	}
+
+	if override {
+		return handleConfig(key)
+	}
+
 	return val
+}
+
+func handleFile(filePath string) error {
+	if !fs.CheckFileExists(filePath) {
+		err := fs.CreateFile(filePath)
+		if err != nil {
+			return err
+		}
+
+		err = fs.WriteToFile(filePath, []byte("{}"))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func overrideConfigFile(configFilePath string, config Config, override bool) error {
+	if override {
+		configMapOverrideBytes, err := json.Marshal(config)
+		if err != nil {
+			return fmt.Errorf(err.Error())
+		}
+		err = fs.WriteToFile(configFilePath, configMapOverrideBytes)
+		if err != nil {
+			return fmt.Errorf(err.Error())
+		}
+	}
+
+	return nil
+}
+
+func handleConfig(key string) string {
+	envVal := os.Getenv(key)
+	if envVal == "" {
+		defaultVal, defaultvalExists := defaultValues[key]
+		if !defaultvalExists {
+			return ""
+		} else {
+			return defaultVal
+		}
+	}
+	return envVal
 }

@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/TanmoySG/wunderDB/internal/config"
-	"github.com/TanmoySG/wunderDB/internal/lifecycle/shutdown"
-	"github.com/TanmoySG/wunderDB/internal/lifecycle/startup"
+	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/shutdown"
+	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/startup"
 	log "github.com/sirupsen/logrus"
 )
 
