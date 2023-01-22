@@ -50,14 +50,14 @@ brews:
     commit_author:
       name: TanmoySG
       email: tanmoysps@gmail.com
-  - name: wunderdb
-    homepage: "https://github.com/TanmoySG/wunderDB"
-    tap:
-      owner: TanmoySG
-      name: homebrew-TanmoySG
-    commit_author:
-      name: TanmoySG
-      email: tanmoysps@gmail.com
+  # - name: wunderdb
+  #   homepage: "https://github.com/TanmoySG/wunderDB"
+  #   tap:
+  #     owner: TanmoySG
+  #     name: homebrew-TanmoySG
+  #   commit_author:
+  #     name: TanmoySG
+  #     email: tanmoysps@gmail.com
 release:
   github:
     owner: TanmoySG
