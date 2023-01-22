@@ -38,8 +38,10 @@ var StartOptFlags = []cli.Flag{
 func (ch cliHandler) StartOptHandler(ctx *cli.Context) error {
 	overrideConfigFlag := ctx.Bool("override")
 	if overrideConfigFlag {
-		override(ctx)
+		os.Setenv(config.OVERRIDE_CONFIG, "true")
 	}
+
+	setEnv(ctx)
 
 	var style = lipgloss.NewStyle().
 		Bold(true).
@@ -63,8 +65,7 @@ func (ch cliHandler) StartOptHandler(ctx *cli.Context) error {
 	return nil
 }
 
-func override(ctx *cli.Context) {
-	os.Setenv(config.OVERRIDE_CONFIG, "true")
+func setEnv(ctx *cli.Context) {
 	portOverride := ctx.String("port")
 	if portOverride != "" {
 		os.Setenv(config.PORT, portOverride)

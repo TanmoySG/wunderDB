@@ -26,7 +26,7 @@ const (
 )
 
 type Config struct {
-	AdminID               string `json:"-"`
+	AdminID               string `json:"ADMIN_ID"`
 	AdminPassword         string `json:"-"`
 	Port                  string `json:"PORT"`
 	PersistantStoragePath string `json:"PERSISTANT_STORAGE_PATH"`
@@ -79,11 +79,7 @@ func Load() (*Config, error) {
 		c.PersistantStoragePath = fmt.Sprintf(WDB_PERSISTANT_STORAGE_DIR_PATH_FORMAT, wdbRootDirectory)
 	}
 
-	if string(configFileBytes) == "{}" {
-		override = true
-	}
-
-	err = overrideConfigFile(wdbConfigFilePath, *c, override)
+	err = writeConfigFile(wdbConfigFilePath, *c)
 	if err != nil {
 		return nil, fmt.Errorf(err.Error())
 	}
@@ -94,12 +90,20 @@ func Load() (*Config, error) {
 
 func (c ConfigMap) getValue(key string, override bool) string {
 	val, exists := c[key]
+
+	// invoke handleConfig if config doesn't exist
 	if !exists {
-		return handleConfig(key)
+		return getConfigurationValue(key)
 	}
 
+	// invoke handleConfig if override is enabled
 	if override {
-		return handleConfig(key)
+		return getConfigurationValue(key)
+	}
+
+	// invoke handleConfig if value is empty
+	if val == "" {
+		return getConfigurationValue(key)
 	}
 
 	return val
@@ -120,22 +124,20 @@ func handleFile(filePath string) error {
 	return nil
 }
 
-func overrideConfigFile(configFilePath string, config Config, override bool) error {
-	if override {
-		configMapOverrideBytes, err := json.Marshal(config)
-		if err != nil {
-			return fmt.Errorf(err.Error())
-		}
-		err = fs.WriteToFile(configFilePath, configMapOverrideBytes)
-		if err != nil {
-			return fmt.Errorf(err.Error())
-		}
+func writeConfigFile(configFilePath string, config Config) error {
+	configMapOverrideBytes, err := json.Marshal(config)
+	if err != nil {
+		return fmt.Errorf(err.Error())
+	}
+	err = fs.WriteToFile(configFilePath, configMapOverrideBytes)
+	if err != nil {
+		return fmt.Errorf(err.Error())
 	}
 
 	return nil
 }
 
-func handleConfig(key string) string {
+func getConfigurationValue(key string) string {
 	envVal := os.Getenv(key)
 	if envVal == "" {
 		defaultVal, defaultvalExists := defaultValues[key]
