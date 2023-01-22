@@ -4,7 +4,7 @@ wunderDb is a JSON-based in-memory Data Store. For persistent data storage wunde
 
 ## Setup
 
-To run wunderDb, download the `wunderdb` binary of the [latest release](https://github.com/TanmoySG/wunderDB/releases) based on your OS and Architecture. Once downloaded, run the following command to start wunderdb.
+To run wunderDb, download the `wunderdb` binary of the [latest release](https://github.com/TanmoySG/wunderDB/releases) based on your OS and Architecture. Once downloaded, run the binary to start wunderdb.
 
 ```shell
 ./wunderdb
@@ -12,11 +12,12 @@ To run wunderDb, download the `wunderdb` binary of the [latest release](https://
 
 This should start a wunderDb instance. For ease of used move the binaries to your bin directory.
 
-wunderDb has a few configurations that are required to run the instance - port (default to 8086), persitant file storage (default to ~/wdb/wfs). To use them see [here]()
+wunderDb has a few configurations that are required to run the instance - port (default to 8086), persitant file storage (default to ~/wdb/wfs). To pass the configurations use environment variables - read [this]() for more.
 
 ### wdbctl
 
 For ease of use, we've also developed a command-line tool for wunderDb - `wdbctl`. To use it, use homebrew 
+
 ```shell
 brew tap TanmoySG/TanmoySG
 brew install wdbctl
@@ -27,7 +28,7 @@ Or download the `wdbctl` binary of the latest release. To start the wunderDb ser
 ```shell
 wdbctl start
 ```
-You can also override default and existing configuration values with the `-o` flag, followed by `-p <port>` or `-s <persistant/storage/path>` 
+You can also override default and existing configuration values with the `-o` flag, followed by `-p <port>` or `-s <path>` 
 
 ## wunderDB-Retro
 
