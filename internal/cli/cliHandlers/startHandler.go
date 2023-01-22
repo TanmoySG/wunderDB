@@ -3,7 +3,7 @@ package cliHandlers
 import (
 	"fmt"
 	"os"
-	"strconv"
+	"strings"
 
 	"github.com/TanmoySG/wunderDB/internal/config"
 	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/shutdown"
@@ -28,14 +28,17 @@ var StartOptFlags = []cli.Flag{
 		Aliases: []string{"s"},
 		Usage:   "set persistant storage path",
 	},
+	&cli.StringFlag{
+		Name:    "admin",
+		Aliases: []string{"a"},
+		Usage:   "Admin Username and password. Value should be passed as username:password",
+	},
 }
 
 func (ch cliHandler) StartOptHandler(ctx *cli.Context) error {
 	overrideConfigFlag := ctx.Bool("override")
 	if overrideConfigFlag {
-		portOverride := ctx.String("port")
-		persistantStoragePathOverride := ctx.String("storage")
-		setEnvs(portOverride, persistantStoragePathOverride, overrideConfigFlag)
+		override(ctx)
 	}
 
 	var style = lipgloss.NewStyle().
@@ -60,8 +63,27 @@ func (ch cliHandler) StartOptHandler(ctx *cli.Context) error {
 	return nil
 }
 
-func setEnvs(port, persistantStoragePath string, override bool) {
-	os.Setenv(config.PORT, port)
-	os.Setenv(config.PERSISTANT_STORAGE_PATH, persistantStoragePath)
-	os.Setenv(config.OVERRIDE_CONFIG, strconv.FormatBool(override))
+func override(ctx *cli.Context) {
+	os.Setenv(config.OVERRIDE_CONFIG, "true")
+	portOverride := ctx.String("port")
+	if portOverride != "" {
+		os.Setenv(config.PORT, portOverride)
+	}
+
+	persistantStoragePathOverride := ctx.String("storage")
+	if persistantStoragePathOverride != "" {
+		os.Setenv(config.PERSISTANT_STORAGE_PATH, persistantStoragePathOverride)
+	}
+
+	adminCredentials := ctx.String("admin")
+	if adminCredentials != "" {
+		adminCredentialSlice := strings.Split(adminCredentials, ":")
+		adminUserID, adminPassword := adminCredentialSlice[0], adminCredentialSlice[1]
+		if adminUserID != "" {
+			os.Setenv(config.ADMIN_ID, adminUserID)
+			if adminPassword != "" {
+				os.Setenv(config.ADMIN_PASSWORD, adminPassword)
+			}
+		}
+	}
 }
