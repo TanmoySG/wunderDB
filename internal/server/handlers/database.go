@@ -31,8 +31,7 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
@@ -55,8 +54,7 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedDatabase)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
@@ -78,6 +76,5 @@ func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }

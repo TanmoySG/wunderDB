@@ -33,8 +33,7 @@ func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 	error := wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
 	resp := response.Format(privilege, error, nil)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
@@ -62,8 +61,7 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 	}
 
 	resp := response.Format(privilege, apiError, data)
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) CheckPermissions(c *fiber.Ctx) error {
@@ -83,6 +81,5 @@ func (wh wdbHandlers) CheckPermissions(c *fiber.Ctx) error {
 	}
 	resp := response.Format("", error, data)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }

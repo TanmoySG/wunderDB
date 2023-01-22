@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/TanmoySG/wunderDB/internal/config"
 	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/shutdown"
 	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/startup"
@@ -13,7 +15,7 @@ func main() {
 		Bold(true).
 		Foreground(lipgloss.Color("#7D56F4")).PaddingTop(1)
 
-	log.Println(style.Render("Starting wunderDb..."))
+	fmt.Println(style.Render("Starting wunderDb..."))
 
 	c, err := config.Load()
 	if err != nil {

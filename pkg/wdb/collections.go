@@ -31,7 +31,7 @@ func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*
 	collections := c.UseDatabase(*database)
 
 	if exists, _ := collections.CheckIfExists(collectionId); !exists {
-		return nil, &er.CollectionAlreadyExistsError
+		return nil, &er.CollectionDoesNotExistsError
 	}
 
 	return collections.GetCollection(collectionId), nil

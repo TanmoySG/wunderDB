@@ -34,8 +34,7 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
@@ -53,6 +52,5 @@ func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, roleList)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
