@@ -14,21 +14,29 @@ This should start a wunderDb instance. For ease of used move the binaries to you
 
 wunderDb has a few configurations that are required to run the instance - port (default to 8086), persitant file storage (default to ~/wdb/wfs). To pass the configurations use environment variables - read [this]() for more.
 
-### wdbctl
+### wdbctl - CLI Tool
 
-For ease of use, we've also developed a command-line tool for wunderDb - `wdbctl`. To use it, use homebrew 
+For ease of use, we've also developed a command-line tool for wunderDb - `wdbctl`. Install it using homebrew or download the `wdbctl` binary of the latest release.
 
-```shell
+```sh
 brew tap TanmoySG/TanmoySG
 brew install wdbctl
 ```
 
-Or download the `wdbctl` binary of the latest release. To start the wunderDb server using wdbctl, run the `start` command.
+To start the wunderDb server using wdbctl, run the `start` command.
 
 ```shell
 wdbctl start
 ```
-You can also override default and existing configuration values with the `-o` flag, followed by `-p <port>` or `-s <path>` 
+To start wunderDb by overriding default and existing configuration values, use the override flag `-o` , followed by `-p <port>` and/or `-s <path>`.
+
+### Docker
+TBD
+
+## Usage
+
+
+
 
 ## wunderDB-Retro
 
