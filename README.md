@@ -12,7 +12,9 @@ To run wunderDb, download the `wunderdb` binary of the [latest release](https://
 
 This should start a wunderDb instance. For ease of used move the binaries to your bin directory.
 
-<!-- wunderDb has a few configurations that are required to run the instance - port (default to 8086), persitant file storage (default to ~/wdb/wfs). To pass the configurations use environment variables - read [this]() for more. -->
+<!-- wunderDb has a few configurations that are required to run the instance - port (default to 8086), persitant file storage (default to ~/wdb/wfs). -->
+
+Configurations can also be passed using environment variables. Refer [Documentation]() for details.
 
 ### wdbctl - CLI Tool
 
@@ -34,12 +36,16 @@ To specify configuration while starting an instance, use the flags available, eg
 Once set, configurations cant be updated with the configuration flags. To override default or existing configurations, use the override flag `-o` `--override`, followed by the configuration flags, eg: `wdbctl start -o -p 5000` will override the existing/default port and run the instance on port 5000.
 
 For more about `wdbctl`, refer to the [documentation]().
-
+<!-- 
 ### Docker
 
-TBD
+TBD -->
 
 ## Usage
+
+Once wunderDb instance is running, use the [Admin]() credentials to perform any operations required. For additional security, we recommend creating delegate user(s) with coarse-grained access, to perform the actions.
+
+
 
 ## wunderDB-Retro
 
