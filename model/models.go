@@ -23,20 +23,20 @@ type Configurations struct {
 type Namespace struct {
 	Databases []Identifier           `json:"databases"`
 	Metadata  Metadata               `json:"metadata"`
-	Access    map[Identifier]*Access `json:"access,omitempty"` // Use only namespace level access control for Initial build v2
+	Access    map[Identifier]*Access `json:"access,omitempty"`
 }
 
 type Database struct {
 	Collections map[Identifier]*Collection `json:"collections"`
 	Metadata    Metadata                   `json:"metadata"`
-	Access      map[Identifier]*Access     `json:"access,omitempty"` // not in scope for Initial Version of 2.0
+	Access      map[Identifier]*Access     `json:"access,omitempty"`
 }
 
 type Collection struct {
 	Data     map[Identifier]*Datum  `json:"data"`
 	Metadata Metadata               `json:"metadata"`
 	Schema   Schema                 `json:"schema"`
-	Access   map[Identifier]*Access `json:"access,omitempty"` // not in scope for Initial Version of 2.0
+	Access   map[Identifier]*Access `json:"access,omitempty"`
 }
 
 type Datum struct {
@@ -45,8 +45,6 @@ type Datum struct {
 	Identifier Identifier  `json:"id"`
 }
 
-// Need to Decide exact requirements for Access
-// Access Control List - currently only implemented at Namespace Level
 type Access struct {
 	UserID         string   `json:"userId"`
 	AllowedActions []string `json:"allowedActions"`
