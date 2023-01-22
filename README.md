@@ -2,7 +2,7 @@
 
 wunderDb is a JSON-based in-memory Data Store. For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown).
 
-## Setup
+## Quickstart
 
 To run wunderDb, download the `wunderdb` binary of the [latest release](https://github.com/TanmoySG/wunderDB/releases) based on your OS and Architecture. Once downloaded, run the binary to start wunderdb.
 
@@ -11,8 +11,6 @@ To run wunderDb, download the `wunderdb` binary of the [latest release](https://
 ```
 
 This should start a wunderDb instance. For ease of used move the binaries to your bin directory.
-
-<!-- wunderDb has a few configurations that are required to run the instance - port (default to 8086), persitant file storage (default to ~/wdb/wfs). -->
 
 Configurations can also be passed using environment variables. Refer [Documentation]() for details.
 
@@ -45,6 +43,20 @@ TBD -->
 
 Once wunderDb instance is running, use the [Admin]() credentials to perform any operations required. For additional security, we recommend creating delegate user(s) with coarse-grained access, to perform the actions.
 
+wunderDb APIs are completely RESTful and all actions can be performed using simple HTTP Requests. Read the API Documentation for more.
+
+Feel free to browse the documentation for usage instructions and other important concepts used in wunderDb - like coarse-grained access using Role-based Access Control.
+
+<!-- Here's an outline of some of the topics in the documentations. -->
+
+- Users, Roles and Access Control
+    - Users and Roles
+    - Role-Based Access Control
+- Databases, Collections and Data
+    - Databases
+    - Collections
+    - Data
+- 
 
 
 ## wunderDB-Retro
