@@ -12,7 +12,7 @@ To run wunderDb, download the `wunderdb` binary of the [latest release](https://
 
 This should start a wunderDb instance. For ease of used move the binaries to your bin directory.
 
-Configurations can also be passed using environment variables. Refer [Documentation]() for details.
+Configurations can also be passed using environment variables. Refer [documentation]() for details.
 
 ### wdbctl - CLI Tool
 
@@ -41,23 +41,28 @@ TBD -->
 
 ## Usage
 
-Once wunderDb instance is running, use the [Admin]() credentials to perform any operations required. For additional security, we recommend creating delegate user(s) with coarse-grained access, to perform the actions.
+<!-- Once wunderDb instance is running, use the [Admin]() credentials to perform any operations required. For additional security, we recommend creating delegate user(s) with coarse-grained access, to perform the actions. -->
 
-wunderDb APIs are completely RESTful and all actions can be performed using simple HTTP Requests. Read the API Documentation for more.
-
-Feel free to browse the documentation for usage instructions and other important concepts used in wunderDb - like coarse-grained access using Role-based Access Control.
+wunderDb APIs are completely RESTful and all actions can be performed using simple HTTP Requests. Feel free to browse the documentation for usage instructions and other important concepts used in wunderDb.
 
 <!-- Here's an outline of some of the topics in the documentations. -->
 
+- Get Started
+  - Persistence of Data
+  - Configurations
+- Design of wdb
 - Users, Roles and Access Control
-    - Users and Roles
-    - Role-Based Access Control
-- Databases, Collections and Data
-    - Databases
-    - Collections
-    - Data
-- 
-
+  - Users and Roles
+  - Permissions
+  - Role-Based Access Control
+- Databases, Collections
+  - Databases
+  - Collections
+    - Schema
+- Data
+  - Filter
+  - Schema
+  - Metadata
 
 ## wunderDB-Retro
 
