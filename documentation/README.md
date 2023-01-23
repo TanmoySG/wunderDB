@@ -42,9 +42,27 @@ Find more about `wdbctl` here.
 
 Some of the configurations that wunderDb uses are listed below. These configs can be set up using environemt variable or wdbctl flags.
 
-| Configuration                    | Description                                                                             | Environment Variable     | wdbctl Flag                     | Type           | Default            |
-| -------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ | ------------------------------- | -------------- | ------------------ |
-| Port                             | Port where instance should run                                                          | PORT                     | --port, -p  <value>             | number, int    | 8086               |
-| Persistent Storage Location/Path | Path value to directory to persist data after shutdown                                  | PERSISTANT_STORAGE_PATH  | --storage, -s <value>           | path, string   | ~/wdb/wfs (on mac) |
-| Admin ID and Password            | Instance Admin Username and Password                                                    | ADMIN_ID, ADMIN_PASSWORD | --admin, -a <username:password> | string, string | admin, admin       |
-| Override Flag                    | Once the other config are set, this flag is used to override value as and when required | OVERRIDE_CONFIG          | --overide, -o                   | boolean        | false              |
+| Configuration                                                 | Description                                                                             | Environment Variable     | wdbctl Flag                     | Type           | Default                |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ | ------------------------------- | -------------- | ---------------------- |
+| Port                                                          | Port where instance should run                                                          | PORT                     | --port, -p  <value>             | number, int    | 8086                   |
+| [Persistent Storage](README.md#persisting-data) Location/Path | Path value to directory to persist data after shutdown                                  | PERSISTANT_STORAGE_PATH  | --storage, -s <value>           | path, string   | $HOME/wdb/wfs (on mac) |
+| Admin ID and Password                                         | Instance Admin Username and Password                                                    | ADMIN_ID, ADMIN_PASSWORD | --admin, -a <username:password> | string, string | admin, admin           |
+| Override Flag                                                 | Once the other config are set, this flag is used to override value as and when required | OVERRIDE_CONFIG          | --overide, -o                   | boolean        | false                  |
+
+### Persisting Data
+
+wunderDb is completely in-memory, that is, all its data read, write operatio happen from/on the runtime memory of the server. But when the server is shutdown, the same data needs to be persisted, so that its not lost between startup and shutdown cycles.
+
+Hence, the data is persisted as JSON Files on the file system. The data is loaded from the files when starting up and data in-memory is dumped while the wdb-server gracefully shuts down.
+
+The Persistent Storage path can be defined by the user, if required, but when not set, data is persisted in the user's home directory, in the `wdb/wfs/` directory.
+
+## wdb: Design
+
+TBD
+
+## Tools
+
+Here are some of the tools built to help you run and use wunderDb. 
+
+### wdbctl

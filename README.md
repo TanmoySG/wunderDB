@@ -51,8 +51,6 @@ wunderDb APIs are completely RESTful and all actions can be performed using simp
   - Persistence of Data
   - Configurations
 - Design of wdb
-- Tools
-  - wdbctl
 - Users, Roles and Access Control
   - Users and Roles
   - Permissions
@@ -65,6 +63,8 @@ wunderDb APIs are completely RESTful and all actions can be performed using simp
   - Filter
   - Schema
   - Metadata
+- Tools
+  - wdbctl
 
 ## wunderDB-Retro
 
