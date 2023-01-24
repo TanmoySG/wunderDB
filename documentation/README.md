@@ -76,20 +76,22 @@ While starting a wdb instance an `admin` user profile can be created by setting 
 Make POST request to the `/api/users` endpoint, passing username and password to create user.
 ```http
 POST /api/users HTTP/1.1
+Content-Type: application/json
 
 {
     "username": "username",
     "password": "password"
 }
 ```
-<details>
-<summary>Grant Role to User</summary>
 
-Once a user and a role is created in wdb, grant a user access to the role by querying the following endpoint.
+### Grant Role to User
+
+To grant a user access to the role on a resource, query the following endpoint, passing the required details.
 
 ```http
 POST /api/users/grant HTTP/1.1
 Authorization: Basic 
+Content-Type: application/json
 
 {
     "username": "username",
@@ -97,16 +99,59 @@ Authorization: Basic
         "role": "rolename",
         "on": {
             "databases": "database",
-            "collection": "collection"
+            "collections": "collection"
         }
     }
 }
 ```
-</details>
 
-Passing wildcard (`*`) entity in databases or collections grants the user the role on any database or collection. 
+Passing wildcard (`*`) resource in databases or collections grants the user the role on any database or collection.
 
 This action requires authentication, as well as autorization - the user commiting this action must have the `grantRole` privilege.
+
+## Roles
+
+A role grants [privileges]() to perform a specified actions on a [resource](). To ensure security and fine-grained access control, wdb uses [RBAC or Role-based Access Control](). A user is granted one or more roles that controls the user's access to a resource.
+
+#### Privileges
+
+A privilege is the right to commit a particular action on a wunderDb resource. There are multiple privileges that wdb uses to control access to the actions that can be performed. Multiple privileges are grouped together in a role. Privileges can be allowed or denied while defining a role.
+
+#### Resources
+
+A resource is a database, collection, set of databases and collections, or more system specifc resources like users, roles and permissions.
+
+### Creating a Role
+
+To create a `role`, query the following endpoint passing the role name, allowed and denied actions. To perform this action, the user must have the `createRole` privilege.
+
+```http
+POST /api/roles HTTP/1.1
+Authorization: Basic 
+Content-Type: application/json
+
+{
+    "role": "rolename",
+    "allowed": [
+        "createDatabase",
+        "grantRole",
+        "...",
+    ],
+    "denied": [
+        "addData"
+    ]
+}
+```
+
+### List Roles
+
+To list the roles available in wdb query the following endpoint. An authenticated user requires the `listRoles` privilege to run this action.
+
+```http
+GET /api/roles HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
 
 
 ## Tools
