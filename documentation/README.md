@@ -42,12 +42,12 @@ Find more about `wdbctl` here.
 
 Some of the configurations that wunderDb uses are listed below. These configs can be set up using environemt variable or wdbctl flags.
 
-| Configuration                                                 | Description                                                                             | Environment Variable     | wdbctl Flag                     | Type           | Default                |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ | ------------------------------- | -------------- | ---------------------- |
+| Configuration                                                 | Description                                                                             | Environment Variable     | wdbctl Flag                   | Type           | Default                |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ | ----------------------------- | -------------- | ---------------------- |
 | Port                                                          | Port where instance should run                                                          | PORT                     | --port, -p  value             | number, int    | 8086                   |
 | [Persistent Storage](README.md#persisting-data) Location/Path | Path value to directory to persist data after shutdown                                  | PERSISTANT_STORAGE_PATH  | --storage, -s value           | path, string   | $HOME/wdb/wfs (on mac) |
 | Admin ID and Password                                         | Instance Admin Username and Password                                                    | ADMIN_ID, ADMIN_PASSWORD | --admin, -a username:password | string, string | admin, admin           |
-| Override Flag                                                 | Once the other config are set, this flag is used to override value as and when required | OVERRIDE_CONFIG          | --overide, -o                   | boolean        | false                  |
+| Override Flag                                                 | Once the other config are set, this flag is used to override value as and when required | OVERRIDE_CONFIG          | --overide, -o                 | boolean        | false                  |
 
 ### Persisting Data
 
@@ -82,8 +82,8 @@ POST /api/users HTTP/1.1
     "password": "password"
 }
 ```
-
-### Grant Role to User
+<summary>
+<details>Grant Role to User</details>
 
 Once a user and a role is created in wdb, grant a user access to the role by querying the following endpoint.
 
@@ -102,6 +102,7 @@ Authorization: Basic
     }
 }
 ```
+</summary>
 
 Passing wildcard (`*`) entity in databases or collections grants the user the role on any database or collection. 
 
