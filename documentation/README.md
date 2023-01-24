@@ -63,7 +63,7 @@ TBD -->
 
 ## Users
 
-Like most databases, wdb uses `users` as the primary "agents" that commit operations, i.e. to perform most operations the requests would need to be requested by a user that exists in wdb. User profile-led operations also helps in access control, by allowing only certain operations to a user.
+Like most databases, wdb Users/User Profiles, `users` are the primary "agents" that commit operations, i.e. to perform most operations the requests would need to be requested by a user that exists in wdb. User profile-led operations also helps in access control, by allowing only certain operations to a user.
 
 Each wdb instance has an **administrator** user, with WDB Super-Admin Role `wdb_super_admin_role`, that grants all available privileges on all entities (all databases and collections). The administrator can perform all operations on all entities. 
 
@@ -71,6 +71,19 @@ While starting a wdb instance an `admin` user profile can be created by setting 
 
 In wdb users can be added/created and granted roles (with permissions) for access-control using the `user-API`s available. 
 
+### Create User
+
+Make POST request to the `/api/users` endpoint, passing username and password to create user.
+
+```http
+POST /api/users HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "username",
+    "password": "password"
+}
+```
 
 ## Tools
 
