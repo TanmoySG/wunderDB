@@ -85,7 +85,7 @@ POST /api/users HTTP/1.1
 
 ### Grant Role to User
 
-Once a user and a role is created in wdb, [create a `role`]() granting the required privileges. Once the `role` is created
+Once a user and a role is created in wdb, grant a user access to the role by querying the following endpoint.
 
 ```http
 POST /api/users/grant HTTP/1.1
@@ -102,6 +102,8 @@ Authorization: Basic
     }
 }
 ```
+
+Passing wildcard (`*`) entity in databases or collections grants the user the role on any database or collection. 
 
 This action requires authentication, as well as autorization - the user commiting this action must have the `grantRole` privilege.
 
