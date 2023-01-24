@@ -69,7 +69,7 @@ Each wdb instance has an **administrator** user, with WDB Super-Admin Role `wdb_
 
 While starting a wdb instance an `admin` user profile can be created by setting the required credentials, refer to the [configuration details](#configuration) for more. If no configuration is set for admin, the default admin credentials - username and password are set as `admin` and `admin`, respectively.
 
-In wdb users can be added/created and granted roles (with permissions) for access-control using the `user-API`s available. 
+<!-- In wdb users can be added/created and granted roles (with permissions) for access-control using the `user-API`s available.  -->
 
 ### Create User
 
@@ -77,8 +77,6 @@ Make POST request to the `/api/users` endpoint, passing username and password to
 
 ```http
 POST /api/users HTTP/1.1
-Content-Type: application/json
-
 {
     "username": "username",
     "password": "password"
