@@ -82,8 +82,8 @@ POST /api/users HTTP/1.1
     "password": "password"
 }
 ```
-<summary>
-<details>Grant Role to User</details>
+<details>
+<summary>Grant Role to User</summary>
 
 Once a user and a role is created in wdb, grant a user access to the role by querying the following endpoint.
 
@@ -102,7 +102,7 @@ Authorization: Basic
     }
 }
 ```
-</summary>
+</details>
 
 Passing wildcard (`*`) entity in databases or collections grants the user the role on any database or collection. 
 
