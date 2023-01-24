@@ -74,14 +74,37 @@ While starting a wdb instance an `admin` user profile can be created by setting 
 ### Create User
 
 Make POST request to the `/api/users` endpoint, passing username and password to create user.
-
 ```http
 POST /api/users HTTP/1.1
+
 {
     "username": "username",
     "password": "password"
 }
 ```
+
+### Grant Role to User
+
+Once a user and a role is created in wdb, [create a `role`]() granting the required privileges. Once the `role` is created
+
+```http
+POST /api/users/grant HTTP/1.1
+Authorization: Basic 
+
+{
+    "username": "username",
+    "permissions": {
+        "role": "rolename",
+        "on": {
+            "databases": "database",
+            "collection": "collection"
+        }
+    }
+}
+```
+
+This action requires authentication, as well as autorization - the user commiting this action must have the `grantRole` privilege.
+
 
 ## Tools
 
