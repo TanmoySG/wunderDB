@@ -65,7 +65,7 @@ TBD -->
 
 Like most databases, wdb Users/User Profiles, `users` are the primary "agents" that commit operations, i.e. to perform most operations the requests would need to be requested by a user that exists in wdb. User profile-led operations also helps in access control, by allowing only certain operations to a user.
 
-Each wdb instance has an **administrator** user, with WDB Super-Admin Role `wdb_super_admin_role`, that grants all available privileges on all entities (all databases and collections). The administrator can perform all operations on all entities. 
+Each wdb instance has an **administrator** user, with WDB Super-Admin Role `wdb_super_admin_role`, that grants all available privileges on all entities (all databases and collections). The administrator can perform all operations on all entities.
 
 While starting a wdb instance an `admin` user profile can be created by setting the required credentials, refer to the [configuration details](#configuration) for more. If no configuration is set for admin, the default admin credentials - username and password are set as `admin` and `admin`, respectively.
 
@@ -74,6 +74,7 @@ While starting a wdb instance an `admin` user profile can be created by setting 
 ### Create User
 
 Make POST request to the `/api/users` endpoint, passing username and password to create user.
+
 ```http
 POST /api/users HTTP/1.1
 Content-Type: application/json
@@ -113,7 +114,6 @@ This action requires authentication, as well as autorization - the user commitin
 
 A role grants [privileges](#privileges) to perform a specified actions on a [resource](). To ensure security and fine-grained access control, wdb uses [RBAC or Role-based Access Control](). A user is granted one or more roles that controls the user's access to a resource.
 
-
 ### Creating a Role
 
 To create a `role`, query the following endpoint passing the role name, allowed and denied actions. To perform this action, the user must have the `createRole` privilege.
@@ -152,10 +152,11 @@ A privilege is the right to commit a particular action on a wunderDb resource. T
 
 ### Privilege Category
 
-In wunderDb privileges are categorized based on their scope. 
+In wunderDb privileges are categorized based on their scope.
 
-- GlobalPrivilege : Some privileges don't need an associated resource, they have global scoped, that is, wdb doesn't check if the privilege is granted on a resource or not. Example: the `listRole` privilege is a global privilege, when a user runs the query for listing roles, wdb only checks if the associated privilege is granted on the user or not.
-- DatabasePrivilege : A Database Privilege is scoped to specific databases. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the 
+- Global Privilege : Some privileges don't need an associated resource, they have global scoped, that is, wdb doesn't check if the privilege is granted on a resource or not. Example: the `listRole` privilege is a global privilege, when a user runs the query for listing roles, wdb only checks if the associated privilege is granted on the user or not.
+- Database Privilege : A Database Privilege is scoped to specific databases. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target database. A role granted on a specific Database would only allow access to that database while blocking access for others.
+- Collection Privileges :  A Collection Privilege is scoped to specific collections of a specific databae. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target collection. A role granted on a specific collection would only allow access to that collecttion while blocking access for others.
 
 ### Resources
 
@@ -163,10 +164,26 @@ A resource is a database, collection, set of databases and collections, or more 
 
 Some of the Privileges available for use in wunderDb and associated actions.
 
-| Privilege | Category | 
+| Privilege        | Category              | Action | Endpoint |
+| ---------------- | --------------------- | ------ | -------- |
+| createDatabase   | global privilege      |        |          |
+| createRole       | global privilege      |        |          |
+| listRole         | global privilege      |        |          |
+| grantRole        | database privileges   |        |          |
+| deleteDatabase   | database privileges   |        |          |
+| readDatabase     | database privileges   |        |          |
+| updateDatabase   | database privileges   |        |          |
+| createCollection | database privileges   |        |          |
+| readCollection   | collection privileges |        |          |
+| updateCollection | collection privileges |        |          |
+| deleteCollection | collection privileges |        |          |
+| addData          | collection privileges |        |          |
+| deleteData       | collection privileges |        |          |
+| readData         | collection privileges |        |          |
+| updateData       | collection privileges |        |          |
 
 ## Tools
 
-Here are some of the tools built to help you run and use wunderDb. 
+Here are some of the tools built to help you run and use wunderDb.
 
 ### wdbctl
