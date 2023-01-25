@@ -111,15 +111,8 @@ This action requires authentication, as well as autorization - the user commitin
 
 ## Roles
 
-A role grants [privileges]() to perform a specified actions on a [resource](). To ensure security and fine-grained access control, wdb uses [RBAC or Role-based Access Control](). A user is granted one or more roles that controls the user's access to a resource.
+A role grants [privileges](#privileges) to perform a specified actions on a [resource](). To ensure security and fine-grained access control, wdb uses [RBAC or Role-based Access Control](). A user is granted one or more roles that controls the user's access to a resource.
 
-#### Privileges
-
-A privilege is the right to commit a particular action on a wunderDb resource. There are multiple privileges that wdb uses to control access to the actions that can be performed. Multiple privileges are grouped together in a role. Privileges can be allowed or denied while defining a role.
-
-#### Resources
-
-A resource is a database, collection, set of databases and collections, or more system specifc resources like users, roles and permissions.
 
 ### Creating a Role
 
@@ -153,6 +146,24 @@ Accept: application/json
 Authorization: Basic 
 ```
 
+## Privileges
+
+A privilege is the right to commit a particular action on a wunderDb resource. There are multiple privileges that wdb uses to control access to the actions that can be performed. Multiple privileges are grouped together in a role. Privileges can be allowed or denied while defining a role.
+
+### Privilege Category
+
+In wunderDb privileges are categorized based on their scope. 
+
+- GlobalPrivilege : Some privileges don't need an associated resource, they have global scoped, that is, wdb doesn't check if the privilege is granted on a resource or not. Example: the `listRole` privilege is a global privilege, when a user runs the query for listing roles, wdb only checks if the associated privilege is granted on the user or not.
+- DatabasePrivilege : A Database Privilege is scoped to specific databases. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the 
+
+### Resources
+
+A resource is a database, collection, set of databases and collections, or more system specifc resources like users, roles and permissions.
+
+Some of the Privileges available for use in wunderDb and associated actions.
+
+| Privilege | Category | 
 
 ## Tools
 
