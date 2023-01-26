@@ -158,8 +158,13 @@ In wunderDb privileges are categorized based on their scope.
   
   Some privileges don't need an associated resource, they have global scoped, that is, wdb doesn't check if the privilege is granted on a resource or not. Example: the `listRole` privilege is a global privilege, when a user runs the query for listing roles, wdb only checks if the associated privilege is granted on the user or not.
   
-- Database Privilege : A Database Privilege is scoped to specific databases. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target database. A role granted on a specific Database would only allow access to that database while blocking access for others.
-- Collection Privileges :  A Collection Privilege is scoped to specific collections of a specific databae. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target collection. A role granted on a specific collection would only allow access to that collecttion while blocking access for others.
+- Database Privilege 
+  
+  A Database Privilege is scoped to specific databases. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target database. A role granted on a specific Database would only allow access to that database while blocking access for others. Example, if a user, A is granted a role, R with `readDatabase` privilege on the resource (database) DB1, then the user can only read data from DB1, if user A tried to read database B, it'll be blocked.
+
+- Collection Privileges
+  
+  A Collection Privilege is scoped to specific collections of a specific databae. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target collection. A role granted on a specific collection would only allow access to that collecttion while blocking access for others.
 
 ### Resources
 
