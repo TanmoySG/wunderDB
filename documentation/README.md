@@ -43,7 +43,7 @@ Find more about `wdbctl` here.
 Some of the configurations that wunderDb uses are listed below. These configs can be set up using environemt variable or wdbctl flags.
 
 | Configuration                                                 | Description                                                                             | Environment Variable     | wdbctl Flag                   | Type           | Default                |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ | ----------------------------- | -------------- | ---------------------- |
+|---------------------------------------------------------------|-----------------------------------------------------------------------------------------|--------------------------|-------------------------------|----------------|------------------------|
 | Port                                                          | Port where instance should run                                                          | PORT                     | --port, -p  value             | number, int    | 8086                   |
 | [Persistent Storage](README.md#persisting-data) Location/Path | Path value to directory to persist data after shutdown                                  | PERSISTANT_STORAGE_PATH  | --storage, -s value           | path, string   | $HOME/wdb/wfs (on mac) |
 | Admin ID and Password                                         | Instance Admin Username and Password                                                    | ADMIN_ID, ADMIN_PASSWORD | --admin, -a username:password | string, string | admin, admin           |
@@ -154,7 +154,10 @@ A privilege is the right to commit a particular action on a wunderDb resource. T
 
 In wunderDb privileges are categorized based on their scope.
 
-- Global Privilege : Some privileges don't need an associated resource, they have global scoped, that is, wdb doesn't check if the privilege is granted on a resource or not. Example: the `listRole` privilege is a global privilege, when a user runs the query for listing roles, wdb only checks if the associated privilege is granted on the user or not.
+- Global Privilege 
+  
+  Some privileges don't need an associated resource, they have global scoped, that is, wdb doesn't check if the privilege is granted on a resource or not. Example: the `listRole` privilege is a global privilege, when a user runs the query for listing roles, wdb only checks if the associated privilege is granted on the user or not.
+  
 - Database Privilege : A Database Privilege is scoped to specific databases. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target database. A role granted on a specific Database would only allow access to that database while blocking access for others.
 - Collection Privileges :  A Collection Privilege is scoped to specific collections of a specific databae. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target collection. A role granted on a specific collection would only allow access to that collecttion while blocking access for others.
 
@@ -164,23 +167,24 @@ A resource is a database, collection, set of databases and collections, or more 
 
 Some of the Privileges available for use in wunderDb and associated actions.
 
-| Privilege        | Category              | Action | Endpoint |
-| ---------------- | --------------------- | ------ | -------- |
-| createDatabase   | global privilege      |        |          |
-| createRole       | global privilege      |        |          |
-| listRole         | global privilege      |        |          |
-| grantRole        | database privileges   |        |          |
-| deleteDatabase   | database privileges   |        |          |
-| readDatabase     | database privileges   |        |          |
-| updateDatabase   | database privileges   |        |          |
-| createCollection | database privileges   |        |          |
-| readCollection   | collection privileges |        |          |
-| updateCollection | collection privileges |        |          |
-| deleteCollection | collection privileges |        |          |
-| addData          | collection privileges |        |          |
-| deleteData       | collection privileges |        |          |
-| readData         | collection privileges |        |          |
-| updateData       | collection privileges |        |          |
+| Privilege        | Category              | Action                             |
+|------------------|-----------------------|------------------------------------|
+| createUser       |                       | create user                        |
+| createRole       | global privilege      | create roles                       |
+| listRole         | global privilege      | list roles in wdb                  |
+| createDatabase   | global privilege      | create database                    |
+| grantRole        | database privileges   | grant role to user                 |
+| readDatabase     | database privileges   | read/fetch database                |
+| updateDatabase   | database privileges   | update database                    |
+| deleteDatabase   | database privileges   | delete existing database           |
+| createCollection | database privileges   | create collection in database      |
+| readCollection   | collection privileges | read/fetch collections in database |
+| updateCollection | collection privileges | update collections in database     |
+| deleteCollection | collection privileges | delete collection from database    |
+| addData          | collection privileges | add/insert data in collection      |
+| readData         | collection privileges | read/fetch data from collection    |
+| updateData       | collection privileges | update data in collection          |
+| deleteData       | collection privileges | delete data from collection        |
 
 ## Tools
 
