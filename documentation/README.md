@@ -148,7 +148,7 @@ Authorization: Basic
 
 ## Database
 
-A Database in wunderDb is a group of similar kind of collections. They are the primary containers of data.
+A Database in wunderDb is a group of similar kind of collections.
 
 ### Create Database
 
@@ -180,6 +180,54 @@ To delete a database from wdb, the user requires the `deleteDatabase` privilege.
 
 ```http
 DELETE /api/databases/{databse-name} HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
+
+## Collections
+
+A collection is a group of records/data of same modality (schema). Collections are the primary containers of data. 
+
+### Schema 
+
+Each collection has a schema that defines its modality and how data in that collection should be structured. In wunderDb schema for a collection is defined using [JSON Schema](https://json-schema.org/) and at the time when collections are created. JSON Schema defines the structure, type and various other standards of the data. Read more on how to define schema using JSON Schema [here](https://json-schema.org/learn/getting-started-step-by-step.html).
+
+### Create Collection
+
+To create a collection in a database, use the following endpoint, passing the schema of the data (in JSON Schema notations) in the body. User must have the `createCollection` access granted on the database where the collection is to be created.
+
+```http
+POST /api/databases/{database-name}/collections HTTP/1.1
+Authorization: Basic 
+Content-Type: application/json
+
+{
+    "name": "collection-name",
+    "schema": {
+        // JSON Schema
+        "type": "object",
+        "properties": {...},
+        "required": [...]
+    }
+}
+```
+
+### Read Collection
+
+To read a collection, the user can use the following request. The user must have `readCollection` access granted on the collection that needs to be read/fetched.
+
+```http
+GET /api/databases/{database-name}/collections/{collection-name} HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
+
+### Delete Collection
+
+To delete a collection from a database, the user must have `deleteCollection` access granted on the collection that needs to be deleted.
+
+```http
+DELETE /api/databases/{database-name}/collections/{collection-name} HTTP/1.1
 Accept: application/json
 Authorization: Basic 
 ```
