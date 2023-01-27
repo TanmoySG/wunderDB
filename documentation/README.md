@@ -146,6 +146,44 @@ Accept: application/json
 Authorization: Basic 
 ```
 
+## Database
+
+A Database in wunderDb is a group of similar kind of collections. They are the primary containers of data.
+
+### Create Database
+
+To create a database in wdb, the user requires the `createDatabase` privilege.
+
+```http
+POST /api/databases HTTP/1.1
+Authorization: Basic
+Content-Type: application/json
+
+{
+    "name" : "name-of-db"
+}
+```
+
+### Read Database
+
+To read/fetch a database in wdb, the user requires the `readDatabase` privilege. It returns the list of collections in the database and other metadata information.
+
+```http
+GET /api/databases/{databse-name} HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
+
+### Delete Database
+
+To delete a database from wdb, the user requires the `deleteDatabase` privilege.
+
+```http
+DELETE /api/databases/{databse-name} HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
+
 ## Privileges
 
 A privilege is the right to commit a particular action on a wunderDb resource. There are multiple privileges that wdb uses to control access to the actions that can be performed. Multiple privileges are grouped together in a role. Privileges can be allowed or denied while defining a role.
@@ -154,11 +192,11 @@ A privilege is the right to commit a particular action on a wunderDb resource. T
 
 In wunderDb privileges are categorized based on their scope.
 
-- Global Privilege 
+- Global Privilege
   
   Some privileges don't need an associated resource, they have global scoped, that is, wdb doesn't check if the privilege is granted on a resource or not. Example: the `listRole` privilege is a global privilege, when a user runs the query for listing roles, wdb only checks if the associated privilege is granted on the user or not.
   
-- Database Privilege 
+- Database Privilege
   
   A Database Privilege is scoped to specific databases. While checking if the user has the access to the action, wunderDb also checks if the privilege is granted on the target database. A role granted on a specific Database would only allow access to that database while blocking access for others. Example, if a user, A is granted a role, R with `readDatabase` privilege on the resource (database) DB1, then the user can only read data from DB1, if user A tried to read database B, it'll be blocked.
 
@@ -174,7 +212,7 @@ Some of the Privileges available for use in wunderDb and associated actions.
 
 | Privilege        | Category              | Action                             |
 |------------------|-----------------------|------------------------------------|
-| createUser       |                       | create user                        |
+| createUser       | global privilege      | create user                        |
 | createRole       | global privilege      | create roles                       |
 | listRole         | global privilege      | list roles in wdb                  |
 | createDatabase   | global privilege      | create database                    |
