@@ -240,7 +240,7 @@ Records that are complaint/in-line with the collection's schema are stored as da
 
 Filters are used to (as the name suggests) filter or to create smaller buckets/views of data. Filters are extremely important while updating, deleting or reading specific records based on some conditions. Currently wdb only supports key and value match based filters.
 
-To filter data while reading, updating or deleting, we need to pass the field name to the `key` and the value (of the field) that needs to be matched to the `value`. Example: `key:name value:John`, will filter all records with `name=John`.
+To filter data while reading, updating or deleting, we need to pass the field name to the `key` and the value (of the field) that needs to be matched to the `value`. Example: `.../data?key:name&value:John`, will filter all records with `name=John`.
 
 ### Insert/Add Data
 
