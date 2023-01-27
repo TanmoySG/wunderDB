@@ -186,9 +186,9 @@ Authorization: Basic
 
 ## Collections
 
-A collection is a group of records/data of same modality (schema). Collections are the primary containers of data. 
+A collection is a group of records/data of same modality (schema). Collections are the primary containers of data.
 
-### Schema 
+### Schema
 
 Each collection has a schema that defines its modality and how data in that collection should be structured. In wunderDb schema for a collection is defined using [JSON Schema](https://json-schema.org/) and at the time when collections are created. JSON Schema defines the structure, type and various other standards of the data. Read more on how to define schema using JSON Schema [here](https://json-schema.org/learn/getting-started-step-by-step.html).
 
@@ -230,6 +230,40 @@ To delete a collection from a database, the user must have `deleteCollection` ac
 DELETE /api/databases/{database-name}/collections/{collection-name} HTTP/1.1
 Accept: application/json
 Authorization: Basic 
+```
+
+## Data
+
+Records that are complaint/in-line with the collection's schema are stored as data. While reading, data can be filtered using `filters`.
+
+### Filters
+
+Filters are used to (as the name suggests) filter or to create smaller buckets/views of data. Filters are extremely important while updating, deleting or reading specific records based on some conditions. Currently wdb only supports key and value match based filters.
+
+To filter data while reading, updating or deleting, we need to pass the field name to the `key` and the value (of the field) that needs to be matched to the `value`. Example: `key:name value:John`, will filter all records with `name=John`.
+
+### Insert/Add Data
+
+User must have `addData` permission granted on the collection to add data to. Pass the data to add in the body as JSON object.
+
+```http
+POST /api/databases/{database}/collections/{collection}/data HTTP/1.1
+Authorization: Basic 
+Content-Type: application/json
+
+{
+  "name": "tfds"
+}
+```
+
+If schema validation succeeds for the data, it is added otherwise returns error.
+
+### Get Data
+
+```http
+GET /api/databases/test-db-001/collections/test-coll-001/data?key=age&value=23 HTTP/1.1
+Host: localhost:8086
+Authorization: Basic YWRtaW46YWRtaW4=
 ```
 
 ## Privileges
