@@ -313,6 +313,8 @@ All requests made to wunderDb returns a response that has the same structure and
 }
 ```
 
+The API Response also returns the appropriate HTTP status code.
+
 #### Error
 
 If any error is raised by the wunderDb server as reponse, the error returned has the error code and the error stack.
@@ -333,6 +335,12 @@ The `code` field contains the error code. While the `stack` contains the stack o
 The `data` field contains the data/response returned by the particular action. Like the `getData` action would return the list of records in the `data` field. 
 
 Each action has its own format of returning data/messages in the `data` field. Read more about data returned in the API Documentation or Postman Collection Examples.
+
+## WunderDB Errors
+
+wunderDb has a defined set of errors in the [`wdbError`](../internal/errors/errors.go) package. These standard set of errors are used through-out the actions for raising and returning any errors, if there is any issue while processing a request.
+
+Read more about the error in the errors documentation.
 
 ## API Documentation
 
