@@ -252,18 +252,50 @@ Authorization: Basic
 Content-Type: application/json
 
 {
-  "name": "tfds"
+  // data
 }
 ```
 
-If schema validation succeeds for the data, it is added otherwise returns error.
+If the data passes schema validation it is added otherwise returns error.
 
 ### Get Data
 
+To fetch/read data user must have `readData` permission granted on the collection.
+
 ```http
-GET /api/databases/test-db-001/collections/test-coll-001/data?key=age&value=23 HTTP/1.1
-Host: localhost:8086
-Authorization: Basic YWRtaW46YWRtaW4=
+GET /api/databases/{database}/collections/{collection}/data HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
+
+Use [filters](#filters) to fetch specific records based on some condition.
+
+```http
+GET /api/databases/{database}/collections/{collection}/data?key={field-name}&value={field-value}
+```
+
+### Delete Data
+
+Use filters to specify/select the data to be deleted based on the key-value condition. User must have `deleteData` permission granted on the collection to delete data from.
+
+```http
+DELETE /api/databases/{database}/collections/{collection}/data?key={field-name}&value={field-value} HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
+
+### Update Data
+
+Updating data requires the user to pass the `filters` to specify the data to update as well as the updated values of the fields to change in the body of the request. The user required `updateData` permission granted on the collection.
+
+```http
+PATCH /api/databases/{database}/collections/{collection}/data?key={field-name}&value={field-value} HTTP/1.1
+Authorization: Basic 
+Content-Type: application/json
+
+{
+    "field": "updated value"
+}
 ```
 
 ## Privileges
