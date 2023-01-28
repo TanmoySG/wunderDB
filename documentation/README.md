@@ -240,7 +240,9 @@ Records that are complaint/in-line with the collection's schema are stored as da
 
 Filters are used to (as the name suggests) filter or to create smaller buckets/views of data. Filters are extremely important while updating, deleting or reading specific records based on some conditions. Currently wdb only supports key and value match based filters.
 
-To filter data while reading, updating or deleting, we need to pass the field name to the `key` and the value (of the field) that needs to be matched to the `value`. Example: `.../data?key:name&value:John`, will filter all records with `name=John`.
+To filter data while reading, updating or deleting, we need to pass the field name to the `key` and the value (of the field) that needs to be matched to the `value`.
+
+Example, `.../data?key:name&value:John`, will filter all records with `name=John`.
 
 ### Insert/Add Data
 
@@ -268,10 +270,10 @@ Accept: application/json
 Authorization: Basic 
 ```
 
-Use [filters](#filters) to fetch specific records based on some condition.
+Use filters to fetch specific records based on some condition.
 
 ```http
-GET /api/databases/{database}/collections/{collection}/data?key={field-name}&value={field-value}
+GET /api/databases/{database}/collections/{collection}/data?key={field-name}&value={field-value} HTTP/1.1
 ```
 
 ### Delete Data
@@ -297,6 +299,44 @@ Content-Type: application/json
     "field": "updated value"
 }
 ```
+
+## API Response
+
+All requests made to wunderDb returns a response that has the same structure and consists of specific fields. The response consists of the request status, the data returned (if any) and errors (if any). The structure of the response returned by wunderDb is
+
+```jsonl
+{
+    "action": "action-code",    // privilege performed, eg: addData, readCollection, etc.
+    "status": "request status", // success or failure
+    "error": {},                // errors returned
+    "data": {}                  // data returned
+}
+```
+
+#### Error
+
+If any error is raised by the wunderDb server as reponse, the error returned has the error code and the error stack.
+
+```jsonl
+{
+    "code": "invalidCredentials",
+    "stack": [
+        "username/password/token provided is not valid"
+    ]
+}
+```
+
+The `code` field contains the error code. While the `stack` contains the stack of error(s), currently only the latest error is returned.
+
+#### Data
+
+The `data` field contains the data/response returned by the particular action. Like the `getData` action would return the list of records in the `data` field. 
+
+Each action has its own format of returning data/messages in the `data` field. Read more about data returned in the API Documentation or Postman Collection Examples.
+
+## API Documentation
+
+For ease of use a Postman Collection JSON is also added in the repository. We have also added an API Documentation page [here]() for extended details.
 
 ## Privileges
 
