@@ -50,7 +50,7 @@ wunderDb APIs are completely RESTful and all actions can be performed using simp
 - [Get Started](./documentation/README.md#getting-started)
   - [Persistence of Data](./documentation/README.md#persisting-data)
   - [Configurations](./documentation/README.md#configuration)
-- [Tools - `wdbctl`](./documentation/README.md#wdbctl---cli-tool-for-wunderdb)
+- [Tools - `wdbctl`](./documentation/README.md#wdbctl)
 - Users, Roles and Access Control
   - [Users](./documentation/README.md#users)
   - [Roles and RBAC](./documentation/README.md#roles)
