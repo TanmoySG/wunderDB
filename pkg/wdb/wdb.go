@@ -6,8 +6,8 @@ import (
 	r "github.com/TanmoySG/wunderDB/internal/roles"
 	u "github.com/TanmoySG/wunderDB/internal/users"
 
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 type wdbClient struct {

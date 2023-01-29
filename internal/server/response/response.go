@@ -3,7 +3,7 @@ package response
 import (
 	"encoding/json"
 
-	er "github.com/TanmoySG/wunderDB/internal/errors"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 func Format(action string, err *er.WdbError, data interface{}) ApiResponse {

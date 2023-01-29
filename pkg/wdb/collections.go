@@ -2,8 +2,8 @@ package wdbClient
 
 import (
 	c "github.com/TanmoySG/wunderDB/internal/collections"
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, schema model.Schema) *er.WdbError {

@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"strings"
 
-	er "github.com/TanmoySG/wunderDB/internal/errors"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 const (

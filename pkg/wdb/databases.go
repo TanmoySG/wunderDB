@@ -1,8 +1,8 @@
 package wdbClient
 
 import (
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 func (wdb wdbClient) AddDatabase(databaseId model.Identifier) *er.WdbError {
