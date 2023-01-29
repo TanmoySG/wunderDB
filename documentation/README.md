@@ -57,9 +57,47 @@ Hence, the data is persisted as JSON Files on the file system. The data is loade
 
 The Persistent Storage path can be defined by the user, if required, but when not set, data is persisted in the user's home directory, in the `wdb/wfs/` sub-directory.
 
-<!-- ## wdb: Design
+## Tools
 
-TBD -->
+Here are some of the tools built to help you run and use wunderDb.
+
+### wdbctl
+
+wdbctl is a commandline tool we built for ease of starting wunderDb server locally with the required configurations.
+
+wdbctl currently supports following commands
+
+```sh
+USAGE:
+   wdbctl [global options] command [command options] [arguments...]
+
+COMMANDS:
+    start    starts the wdb instance
+    version  version of CLI and wunderDb
+    help, h  Shows a list of commands or help for one command
+```
+
+To start a wdb instance with default configurations.
+
+```sh
+wdbctl start
+```
+
+To start wdb instance (for the first time) by passing custom configuration.
+
+```sh
+wdbctl start --port 8082 --storage '/path/to/wfs' --admin "user:pwd"
+
+// or
+
+wdbctl start -p 8082 -s '/path/to/wfs' -s "user:pwd"
+```
+
+Once configurations are set, using the configuration flags to pass custom values would not override the set values. To override the existing configurations use the `-o` flag followed by the config-flags to be overriden.
+
+```sh
+wdbctl start -o -p 8081
+```
 
 ## Users
 
@@ -394,7 +432,7 @@ Some of the Privileges available for use in wunderDb and associated actions.
 
 Here are some of the tools built to help you run and use wunderDb.
 
-### wdbctl
+<!-- ### wdbctl
 
 wdbctl is a commandline tool we built for ease of starting wunderDb server locally with the required configurations.
 
@@ -426,4 +464,4 @@ wdbctl start -p 8082 -s '/path/to/wfs' -s "user:pwd"
 Once configurations are set, using the configuration flags to pass custom values would not override the set values. To override the existing configurations use the `-o` flag followed by the config-flags to be overriden.
 ```sh
 wdbctl start -o -p 8081
-```
+``` -->
