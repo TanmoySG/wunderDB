@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/TanmoySG/wunderDB/internal/server/response"
 	w "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
 )
@@ -47,6 +48,15 @@ func NewHandlers(client w.Client) Client {
 }
 
 func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
-	msg := fmt.Sprintf("✋ %s", "hello")
-	return c.SendString(msg) // => ✋ register
+	msg := map[string]string{
+		"message": fmt.Sprintf("✋ %s", "hello"),
+	}
+	resp := response.Format("ping", nil, msg)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+}
+
+func SendResponse(c *fiber.Ctx, marshaledResponse []byte, statusCode int) error {
+	c.Set(ContentType, ApplicationJson)
+	c.Send(marshaledResponse)
+	return c.SendStatus(statusCode)
 }

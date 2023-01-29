@@ -19,7 +19,7 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
-		return &er.DatabaseDoesNotExistsError
+		return &er.CollectionDoesNotExistsError
 	}
 
 	dataId := identities.GenerateID()
@@ -38,7 +38,7 @@ func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters 
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
-		return nil, &er.DatabaseDoesNotExistsError
+		return nil, &er.CollectionDoesNotExistsError
 	}
 
 	data := d.UseCollection(*collection)
@@ -61,7 +61,7 @@ func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updat
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
-		return &er.DatabaseDoesNotExistsError
+		return &er.CollectionDoesNotExistsError
 	}
 
 	data := d.UseCollection(*collection)
@@ -84,7 +84,7 @@ func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filte
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
-		return &er.DatabaseDoesNotExistsError
+		return &er.CollectionDoesNotExistsError
 	}
 
 	data := d.UseCollection(*collection)

@@ -38,8 +38,7 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
@@ -65,8 +64,7 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedDatabase)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
@@ -91,6 +89,5 @@ func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }

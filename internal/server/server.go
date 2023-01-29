@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/TanmoySG/wunderDB/internal/server/handlers"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
@@ -57,5 +58,8 @@ func (ws wdbServer) Start() {
 	app.Post("/api/users/grant", ws.handler.GrantRoles)
 	app.Get("/api/users/permission", ws.handler.CheckPermissions)
 
-	app.Listen(ws.port)
+	err := app.Listen(ws.port)
+	if err != nil {
+		log.Fatalf("exiting wdb: %s", err)
+	}
 }

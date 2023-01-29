@@ -39,8 +39,7 @@ func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
@@ -77,8 +76,7 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedData)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
@@ -115,8 +113,7 @@ func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedData)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
@@ -158,6 +155,5 @@ func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedData)
 
-	c.Send(resp.Marshal())
-	return c.SendStatus(resp.HttpStatusCode)
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
