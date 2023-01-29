@@ -32,7 +32,7 @@ brew install wdbctl
 wdbctl start
 ```
 
-Find more about `wdbctl` here.
+Find more about `wdbctl` [here.](#wdbctl---cli-tool-for-wunderdb)
 
 <!-- #### Docker -->
 
@@ -69,7 +69,6 @@ Each wdb instance has an **administrator** user, with WDB Super-Admin Role `wdb_
 
 While starting a wdb instance an `admin` user profile can be created by setting the required credentials, refer to the [configuration details](#configuration) for more. If no configuration is set for admin, the default admin credentials - username and password are set as `admin` and `admin`, respectively.
 
-<!-- In wdb users can be added/created and granted roles (with permissions) for access-control using the `user-API`s available.  -->
 
 ### Create User
 
@@ -334,7 +333,7 @@ The `code` field contains the error code. While the `stack` contains the stack o
 
 The `data` field contains the data/response returned by the particular action. Like the `getData` action would return the list of records in the `data` field. 
 
-Each action has its own format of returning data/messages in the `data` field. Read more about data returned in the API Documentation or Postman Collection Examples.
+Each action has its own format of returning data/messages in the `data` field. Read more about data returned in the API Documentation or Postman Collection examples.
 
 ## WunderDB Errors
 
@@ -344,7 +343,7 @@ Read more about the error in the errors documentation.
 
 ## API Documentation
 
-For ease of use a Postman Collection JSON is also added in the repository. We have also added an API Documentation page [here]() for extended details.
+Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s8Z6yXtAq#92ca810f-9f7d-4d65-8e2e-7941bb1990d0) for more details on the wunderDb API, examples, known errors, and API responses. We've also added the Postman Collection JSON, that can be loaded onto Postman for ease of use.
 
 ## Privileges
 
@@ -396,3 +395,35 @@ Some of the Privileges available for use in wunderDb and associated actions.
 Here are some of the tools built to help you run and use wunderDb.
 
 ### wdbctl
+
+wdbctl is a commandline tool we built for ease of starting wunderDb server locally with the required configurations.
+
+wdbctl currently supports following commands
+```sh
+USAGE:
+   wdbctl [global options] command [command options] [arguments...]
+
+COMMANDS:
+    start    starts the wdb instance
+    version  version of CLI and wunderDb
+    help, h  Shows a list of commands or help for one command
+```
+
+To start a wdb instance with default configurations.
+```sh
+wdbctl start
+```
+
+To start wdb instance (for the first time) by passing custom configuration.
+```sh
+wdbctl start --port 8082 --storage '/path/to/wfs' --admin "user:pwd"
+
+// or
+
+wdbctl start -p 8082 -s '/path/to/wfs' -s "user:pwd"
+```
+
+Once configurations are set, using the configuration flags to pass custom values would not override the set values. To override the existing configurations use the `-o` flag followed by the config-flags to be overriden.
+```sh
+wdbctl start -o -p 8081
+```
