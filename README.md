@@ -47,24 +47,20 @@ wunderDb APIs are completely RESTful and all actions can be performed using simp
 
 <!-- Here's an outline of some of the topics in the documentations. -->
 
-- Get Started
-  - Persistence of Data
-  - Configurations
-- Design of wdb
+- [Get Started](./documentation/README.md#getting-started)
+  - [Persistence of Data](./documentation/README.md#persisting-data)
+  - [Configurations](./documentation/README.md#configuration)
+- [Tools - `wdbctl`](./documentation/README.md#wdbctl---cli-tool-for-wunderdb)
 - Users, Roles and Access Control
-  - Users and Roles
-  - Permissions
-  - Role-Based Access Control
+  - [Users](./documentation/README.md#users)
+  - [Roles and RBAC](./documentation/README.md#roles)
+  - [Privileges](./documentation/README.md#privileges)
 - Databases, Collections
-  - Databases
-  - Collections
-    - Schema
-- Data
-  - Filter
-  - Schema
-  - Metadata
-- Tools
-  - wdbctl
+  - [Databases](./documentation/README.md#database)
+  - [Collections](./documentation/README.md#collections)
+- [Data](./documentation/README.md#data)
+  - [Filter](./documentation/README.md#filters)
+  - [Schema](./documentation/README.md#schema)
 
 ## wunderDB-Retro
 
