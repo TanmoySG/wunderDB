@@ -17,19 +17,19 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 
 	var apiError *er.WdbError
 
-	d := new(database)
-	if err := c.BodyParser(d); err != nil {
+	database := new(database)
+	if err := c.BodyParser(database); err != nil {
 		return err
 	}
 
-	if err := ValidateRequest(d); err != nil {
+	if err := ValidateRequest(database); err != nil {
 		apiError = err
 	} else {
 		isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
 		if !isValid {
 			apiError = error
 		} else {
-			apiError = wh.wdbClient.AddDatabase(model.Identifier(d.Name))
+			apiError = wh.wdbClient.AddDatabase(model.Identifier(database.Name))
 		}
 	}
 	resp := response.Format(privilege, apiError, nil)

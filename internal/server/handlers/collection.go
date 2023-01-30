@@ -9,8 +9,8 @@ import (
 )
 
 type collection struct {
-	Name   string                 `json:"name" xml:"name" form:"name"`
-	Schema map[string]interface{} `json:"schema" xml:"schema" form:"schema"`
+	Name   string                 `json:"name" xml:"name" form:"name" validate:"required"`
+	Schema map[string]interface{} `json:"schema" xml:"schema" form:"schema" validate:"required"`
 }
 
 func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
@@ -29,11 +29,15 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 		Databases: &databaseName,
 	}
 
-	isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
-	if !isValid {
-		apiError = error
+	if err := ValidateRequest(collection); err != nil {
+		apiError = err
 	} else {
-		apiError = wh.wdbClient.AddCollection(model.Identifier(databaseName), model.Identifier(collection.Name), collection.Schema)
+		isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
+		if !isValid {
+			apiError = error
+		} else {
+			apiError = wh.wdbClient.AddCollection(model.Identifier(databaseName), model.Identifier(collection.Name), collection.Schema)
+		}
 	}
 
 	resp := response.Format(privilege, apiError, nil)
