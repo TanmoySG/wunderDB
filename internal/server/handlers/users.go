@@ -22,15 +22,19 @@ type newUser struct {
 
 func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 	privilege := privileges.CreateUser
+	var apiError *er.WdbError
 
 	u := new(newUser)
-
 	if err := c.BodyParser(u); err != nil {
 		return err
 	}
 
-	error := wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
-	resp := response.Format(privilege, error, nil)
+	if err := ValidateRequest(u); err != nil {
+		apiError = err
+	} else {
+		apiError = wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
+	}
+	resp := response.Format(privilege, apiError, nil)
 
 	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
