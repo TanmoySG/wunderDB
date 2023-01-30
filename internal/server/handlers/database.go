@@ -9,7 +9,7 @@ import (
 )
 
 type database struct {
-	Name string `json:"name" xml:"name" form:"name"`
+	Name string `json:"name" xml:"name" form:"name" validate:"required"`
 }
 
 func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
@@ -22,13 +22,16 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 		return err
 	}
 
-	isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
-	if !isValid {
-		apiError = error
+	if err := ValidateRequest(d); err != nil {
+		apiError = err
 	} else {
-		apiError = wh.wdbClient.AddDatabase(model.Identifier(d.Name))
+		isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
+		if !isValid {
+			apiError = error
+		} else {
+			apiError = wh.wdbClient.AddDatabase(model.Identifier(d.Name))
+		}
 	}
-
 	resp := response.Format(privilege, apiError, nil)
 
 	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
