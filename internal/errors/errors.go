@@ -121,4 +121,11 @@ var (
 		ErrMessage:     "error encoding/decoding filter",
 		HttpStatusCode: 406,
 	}
+
+	// Request validation Error
+	ValidationError = WdbError{
+		ErrCode:        "requestValidationFailed",
+		ErrMessage:     "request validation failed",
+		HttpStatusCode: 400,
+	}
 )
