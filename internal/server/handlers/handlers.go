@@ -3,8 +3,10 @@ package handlers
 import (
 	"fmt"
 
+	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	w "github.com/TanmoySG/wunderDB/pkg/wdb"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -59,4 +61,14 @@ func SendResponse(c *fiber.Ctx, marshaledResponse []byte, statusCode int) error 
 	c.Set(ContentType, ApplicationJson)
 	c.Send(marshaledResponse)
 	return c.SendStatus(statusCode)
+}
+
+func ValidateRequest(request any) *er.WdbError {
+	validate := validator.New()
+
+	err := validate.Struct(request)
+	if err != nil {
+		return &er.ValidationError
+	}
+	return nil
 }
