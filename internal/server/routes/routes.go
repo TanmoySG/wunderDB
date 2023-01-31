@@ -1,9 +1,9 @@
 package routes
 
 const (
-	CreateDatabaseRoute = "/api/databases"
-	FetchDatabaseRoute  = "/api/databases/:database"
-	DeleteDatabase      = "/api/databases/:database"
+	CreateDatabase = "/api/databases"
+	FetchDatabase  = "/api/databases/:database"
+	DeleteDatabase = "/api/databases/:database"
 
 	// Collection Routes
 	CreateCollection = "/api/databases/:database/collections"
