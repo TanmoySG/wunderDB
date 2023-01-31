@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"strconv"
 
 	er "github.com/TanmoySG/wunderDB/internal/errors"
@@ -23,15 +24,11 @@ type newUser struct {
 func (wh wdbHandlers) LoginUser(c *fiber.Ctx) error {
 	privilege := privileges.LoginUser
 
-	var data map[string]interface{}
+	data := "user not logged-in"
 
 	username, isValidated, apiError := wh.handleAuthentication(c)
 	if isValidated {
-		data = map[string]interface{}{
-			"userId":  username,
-			"status":  authSuccessful,
-			"message": "user logged in", // remove hardcoded
-		}
+		data = fmt.Sprintf("%s logged-in", *username)
 	}
 
 	resp := response.Format(privilege, apiError, data)
