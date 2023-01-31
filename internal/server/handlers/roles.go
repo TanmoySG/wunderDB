@@ -10,8 +10,8 @@ import (
 )
 
 type role struct {
-	Role    string   `json:"role" xml:"role" form:"role"`
-	Allowed []string `json:"allowed" xml:"allowed" form:"allowed"`
+	Role    string   `json:"role" xml:"role" form:"role" validate:"required"`
+	Allowed []string `json:"allowed" xml:"allowed" form:"allowed" validate:"required"`
 	Denied  []string `json:"denied" xml:"denied" form:"denied"`
 }
 
@@ -25,13 +25,16 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 		return err
 	}
 
-	isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
-	if !isValid {
-		apiError = error
+	if err := ValidateRequest(r); err != nil {
+		apiError = err
 	} else {
-		apiError = wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied)
+		isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
+		if !isValid {
+			apiError = error
+		} else {
+			apiError = wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied)
+		}
 	}
-
 	resp := response.Format(privilege, apiError, nil)
 
 	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)

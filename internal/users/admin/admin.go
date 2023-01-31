@@ -1,13 +1,15 @@
 package admin
 
 import (
+	"encoding/base64"
+
 	p "github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
 const (
-	DEFAULT_ADMIN_USERID   = "admin"
-	DEFAULT_ADMIN_PASSWORD = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"
+	DEFAULT_ADMIN_USERID          = "admin"
+	BASE64_DEFAULT_ADMIN_PASSWORD = "YWRtaW4="
 
 	DEFAULT_ADMIN_ROLE = "wdb_super_admin_role"
 )
@@ -15,7 +17,7 @@ const (
 var (
 	ALLOWED_ADMIN_PRIVILEGES = getAllowedRole()
 	DENIED_ADMIN_PRIVILEGES  = []string{}
-
+	DEFAULT_ADMIN_PASSWORD   = decodeDefaultPassword(BASE64_DEFAULT_ADMIN_PASSWORD)
 	DEFAULT_ADMIN_PERMISSION = getPermission()
 
 	WILDCARD = "*"
@@ -39,4 +41,12 @@ func getPermission() model.Permissions {
 			Collections: &WILDCARD,
 		},
 	}
+}
+
+func decodeDefaultPassword(base64Password string) string {
+	data, err := base64.StdEncoding.DecodeString(base64Password)
+	if err != nil {
+		return ""
+	}
+	return string(data)
 }

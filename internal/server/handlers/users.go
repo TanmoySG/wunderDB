@@ -11,27 +11,30 @@ import (
 )
 
 type userPermissions struct {
-	Username   string            `json:"username" xml:"username" form:"username"`
-	Permission model.Permissions `json:"permissions" xml:"permissions" form:"permissions"`
+	Username   string            `json:"username" xml:"username" form:"username" validate:"required"`
+	Permission model.Permissions `json:"permissions" xml:"permissions" form:"permissions" validate:"required,dive"`
 }
 
 type newUser struct {
-	Username string `json:"username" xml:"username" form:"username"`
-	Password string `json:"password" xml:"password" form:"password"`
-	// HashingAlgorithm string `json:"hashingAlgorithm" xml:"hashingAlgorithm" form:"hashingAlgorithm"`
+	Username string `json:"username" xml:"username" form:"username" validate:"required"`
+	Password string `json:"password" xml:"password" form:"password" validate:"required"`
 }
 
 func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 	privilege := privileges.CreateUser
+	var apiError *er.WdbError
 
 	u := new(newUser)
-
 	if err := c.BodyParser(u); err != nil {
 		return err
 	}
 
-	error := wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
-	resp := response.Format(privilege, error, nil)
+	if err := ValidateRequest(u); err != nil {
+		apiError = err
+	} else {
+		apiError = wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
+	}
+	resp := response.Format(privilege, apiError, nil)
 
 	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
@@ -42,22 +45,26 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 	var data map[string]interface{}
 	var apiError *er.WdbError
 
-	u := new(userPermissions)
+	up := new(userPermissions)
 
-	if err := c.BodyParser(u); err != nil {
+	if err := c.BodyParser(up); err != nil {
 		return err
 	}
 
-	entities := model.Entities{
-		Databases:   u.Permission.On.Databases,
-		Collections: u.Permission.On.Collections,
-	}
-
-	isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
-	if !isValid {
-		apiError = error
+	if err := ValidateRequest(up); err != nil {
+		apiError = err
 	} else {
-		apiError = wh.wdbClient.GrantRoles(model.Identifier(u.Username), u.Permission)
+		entities := model.Entities{
+			Databases:   up.Permission.On.Databases,
+			Collections: up.Permission.On.Collections,
+		}
+
+		isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
+		if !isValid {
+			apiError = error
+		} else {
+			apiError = wh.wdbClient.GrantRoles(model.Identifier(up.Username), up.Permission)
+		}
 	}
 
 	resp := response.Format(privilege, apiError, data)
