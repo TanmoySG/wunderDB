@@ -72,6 +72,13 @@ var (
 		HttpStatusCode: 404,
 	}
 
+	// auth error
+	AuthenticatingUserDoesNotExist = WdbError{
+		ErrCode:        "authenticatingUserNotFound",
+		ErrMessage:     "auth failure, user trying to authenticate doesn't exist",
+		HttpStatusCode: 404,
+	}
+
 	// Credential Error
 	InvalidCredentialsError = WdbError{
 		ErrCode:        "invalidCredentials",
