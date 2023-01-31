@@ -22,5 +22,6 @@ const (
 
 	// User Routes
 	CreateUser = "/api/users"
+	LoginUser  = "/api/users/login"
 	GrantRoles = "/api/users/grant"
 )
