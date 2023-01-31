@@ -12,9 +12,10 @@ const (
 
 const (
 	CreateUser = "createUser"
+	GrantRole  = "grantRole"
+	LoginUser  = "loginUser"
 
 	CreateRole = "createRole"
-	GrantRole  = "grantRole"
 	UpdateRole = "updateRole"
 	ListRole   = "listRole"
 )
