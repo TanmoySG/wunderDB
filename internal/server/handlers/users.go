@@ -20,6 +20,25 @@ type newUser struct {
 	Password string `json:"password" xml:"password" form:"password" validate:"required"`
 }
 
+func (wh wdbHandlers) LoginUser(c *fiber.Ctx) error {
+	privilege := privileges.LoginUser
+
+	var data map[string]interface{}
+
+	username, isValidated, apiError := wh.handleAuthentication(c)
+	if isValidated {
+		data = map[string]interface{}{
+			"userId":  username,
+			"status":  authSuccessful,
+			"message": "user logged in", // remove hardcoded
+		}
+	}
+
+	resp := response.Format(privilege, apiError, data)
+
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+}
+
 func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 	privilege := privileges.CreateUser
 	var apiError *er.WdbError
