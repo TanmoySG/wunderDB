@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"strconv"
 
 	er "github.com/TanmoySG/wunderDB/internal/errors"
@@ -18,6 +19,21 @@ type userPermissions struct {
 type newUser struct {
 	Username string `json:"username" xml:"username" form:"username" validate:"required"`
 	Password string `json:"password" xml:"password" form:"password" validate:"required"`
+}
+
+func (wh wdbHandlers) LoginUser(c *fiber.Ctx) error {
+	privilege := privileges.LoginUser
+
+	data := "user not logged-in"
+
+	username, isValidated, apiError := wh.handleAuthentication(c)
+	if isValidated {
+		data = fmt.Sprintf("%s logged-in", *username)
+	}
+
+	resp := response.Format(privilege, apiError, data)
+
+	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
 
 func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {

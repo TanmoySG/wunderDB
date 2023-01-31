@@ -107,7 +107,6 @@ Each wdb instance has an **administrator** user, with WDB Super-Admin Role `wdb_
 
 While starting a wdb instance an `admin` user profile can be created by setting the required credentials, refer to the [configuration details](#configuration) for more. If no configuration is set for admin, the default admin credentials - username and password are set as `admin` and `admin`, respectively.
 
-
 ### Create User
 
 Make POST request to the `/api/users` endpoint, passing username and password to create user.
@@ -121,6 +120,18 @@ Content-Type: application/json
     "password": "password"
 }
 ```
+
+### Login User
+
+To login use the following route with GET request.
+
+```http
+GET /api/users/login HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
+
+If right credentials are passed it returns `success`, otherwise returns `failure` status and details of error.
 
 ### Grant Role to User
 
@@ -369,7 +380,7 @@ The `code` field contains the error code. While the `stack` contains the stack o
 
 #### Data
 
-The `data` field contains the data/response returned by the particular action. Like the `getData` action would return the list of records in the `data` field. 
+The `data` field contains the data/response returned by the particular action. Like the `getData` action would return the list of records in the `data` field.
 
 Each action has its own format of returning data/messages in the `data` field. Read more about data returned in the API Documentation or Postman Collection examples.
 
@@ -381,7 +392,7 @@ Read more about the error in the errors documentation.
 
 ## API Documentation
 
-Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s8Z6yXtAq#92ca810f-9f7d-4d65-8e2e-7941bb1990d0) for more details on the wunderDb API, examples, known errors, and API responses. We've also added the Postman Collection JSON, that can be loaded onto Postman for ease of use.
+Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s8Z6yXtAq#92ca810f-9f7d-4d65-8e2e-7941bb1990d0) for more details on the wunderDb API, examples, known errors, and API responses. The Postman Collection JSON, can be downloaded from the API Doc page and can be loaded onto Postman for ease of use.
 
 ## Privileges
 
@@ -427,4 +438,3 @@ Some of the Privileges available for use in wunderDb and associated actions.
 | readData         | collection privileges | read/fetch data from collection    |
 | updateData       | collection privileges | update data in collection          |
 | deleteData       | collection privileges | delete data from collection        |
-

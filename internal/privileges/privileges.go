@@ -4,6 +4,7 @@ var (
 	PrivilegeScope = map[string]string{
 		CreateRole:       GlobalPrivileges,
 		CreateDatabase:   GlobalPrivileges,
+		LoginUser:        GlobalPrivileges,
 		ListRole:         GlobalPrivileges,
 		GrantRole:        DatabasePrivileges,
 		UpdateRole:       DatabasePrivileges,

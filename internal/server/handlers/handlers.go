@@ -35,6 +35,7 @@ type Client interface {
 	// User Handlers
 	CreateUser(c *fiber.Ctx) error
 	GrantRoles(c *fiber.Ctx) error
+	LoginUser(c *fiber.Ctx) error
 	// CheckPermissions(c *fiber.Ctx) error
 
 }
