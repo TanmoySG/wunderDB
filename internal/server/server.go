@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/TanmoySG/wunderDB/internal/server/handlers"
+	"github.com/TanmoySG/wunderDB/internal/server/routes"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -56,6 +57,7 @@ func (ws wdbServer) Start() {
 	// User Routes
 	app.Post("/api/users", ws.handler.CreateUser)
 	app.Post("/api/users/grant", ws.handler.GrantRoles)
+	app.Get(routes.LoginUser, ws.handler.LoginUser)
 	// app.Get("/api/users/permission", ws.handler.CheckPermissions)
 
 	err := app.Listen(ws.port)
