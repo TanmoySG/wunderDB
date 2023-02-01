@@ -3,8 +3,8 @@ package wdbClient
 import (
 	c "github.com/TanmoySG/wunderDB/internal/collections"
 	d "github.com/TanmoySG/wunderDB/internal/data"
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/internal/identities"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 
 	"github.com/TanmoySG/wunderDB/model"
 )

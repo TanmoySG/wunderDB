@@ -3,10 +3,10 @@ package roles
 import (
 	"encoding/json"
 
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	p "github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 const (

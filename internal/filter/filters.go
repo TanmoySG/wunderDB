@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 const (

@@ -1,9 +1,9 @@
 package wdbClient
 
 import (
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.WdbError {

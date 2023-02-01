@@ -1,11 +1,11 @@
 package data
 
 import (
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/internal/filter"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/TanmoySG/wunderDB/pkg/schema"
 	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 type Data struct {

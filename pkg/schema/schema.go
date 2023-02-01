@@ -3,8 +3,8 @@ package schema
 import (
 	"encoding/json"
 
-	er "github.com/TanmoySG/wunderDB/internal/errors"
 	"github.com/TanmoySG/wunderDB/model"
+	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	jsonschema "github.com/xeipuuv/gojsonschema"
 )
 
