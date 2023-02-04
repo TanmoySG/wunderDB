@@ -1,7 +1,7 @@
 # smaller size ~15MB , but no shell
 # FROM scratch 
 
-FROM alpine:3.14
+FROM --platform=linux/amd64 alpine:3.14
 
 WORKDIR /app
 
