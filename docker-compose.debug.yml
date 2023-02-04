@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  wunderdb:
+    image: wunderdb
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: wunderDb
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+      - PERSISTANT_STORAGE_PATH=/wfs
+      - ADMIN_ID=${ADMIN_ID}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    volumes:
+      - ./wdb/wfs:/wfs
+      - ./wdb/config:/root/wdb/configs
