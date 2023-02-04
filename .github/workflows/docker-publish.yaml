@@ -67,4 +67,4 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/arm64, linux/amd64, linux/amd64/v2, darwin
+          platforms: linux/arm64, linux/amd64, linux/amd64/v2 
