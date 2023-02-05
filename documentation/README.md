@@ -18,7 +18,7 @@ curl --location --request GET 'localhost:8086/api'
 
 This should send back a 200 response status and a `✋ hello` message.
 
-## wunderDB Container
+### wunderDB Container
 
 To run wunderDB on docker use the official [wunderDB Image](https://github.com/TanmoySG/wunderDB/pkgs/container/wunderdb), that is just ~11MB in size!
 
@@ -38,7 +38,7 @@ Other compose files that can be used as `docker compose up -f <filename>`
 - [`docker-compose.source.yml`](./../docker-compose.source.yml) - use this to build and run a container from the code in the repository. Great for development purposes.
 <!-- - [`docker-compose.source.yml`](./../docker-compose.source.yml) - use this to debug/run container in debug mode (currently not ) -->
 
-## `wdbctl` - CLI Tool for wunderDb
+### `wdbctl` - CLI Tool for wunderDb
 
 The `wdbctl` tool is a command-line tool to control the wdb-server. Use brew to install the binary (or download the `wdbctl` release binaries), and run the `wdbctl` command followed by `start` to spin up the wdb server with default configurations.
 
