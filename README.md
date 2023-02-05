@@ -1,6 +1,7 @@
 # wunderDB
 
-wunderDb is a JSON-based in-memory Data Store. For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown).
+wunderDb is a JSON-based in-memory Data Store.
+<!--  For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown). -->
 
 ## Quickstart
 
@@ -10,7 +11,7 @@ To run wunderDb, download the `wunderdb` binary of the [latest release](https://
 ./wunderdb
 ```
 
-This should start a wunderDb instance. 
+This should start a wunderDb instance. For configuration documentation, check [this](./documentation/README.md#configuration).
 
 ### Running wunderDB Container
 
