@@ -20,6 +20,8 @@ To run wunderDB on docker, use the [docker-compose](docker-compose.yml) to start
 docker compose up
 ```
 
+For more details refer to [this](./documentation/README.md#wunderdb-container)
+
 ### wdbctl - CLI Tool
 
 For ease of use, we've also developed a command-line tool for wunderDb - `wdbctl`. 
