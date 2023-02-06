@@ -1,6 +1,6 @@
 # wunderDb
 
-wunderDb is a cross-platform JSON-based in-memory data store, inspired by mongoDb. wdb APIs are completely RESTful and eay to communicate to using HTTP requests.
+wunderDb is a cross-platform JSON-based in-memory data store, inspired by mongoDb. wdb APIs are completely RESTful and easy to communicate to using HTTP requests.
 
 ## Getting Started
 
