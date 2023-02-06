@@ -1,8 +1,9 @@
 # wunderDB
 
-wunderDb is a JSON-based in-memory Data Store. For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown).
+wunderDb is a JSON-based in-memory Data Store.
+<!--  For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown). -->
 
-## Setup
+## Quickstart
 
 To run wunderDb, download the `wunderdb` binary of the [latest release](https://github.com/TanmoySG/wunderDB/releases) based on your OS and Architecture. Once downloaded, run the binary to start wunderdb.
 
@@ -10,34 +11,36 @@ To run wunderDb, download the `wunderdb` binary of the [latest release](https://
 ./wunderdb
 ```
 
-This should start a wunderDb instance. For ease of used move the binaries to your bin directory.
+This should start a wunderDb instance. For configuration documentation, check [this](./documentation/README.md#configuration).
 
-Configurations can also be passed using environment variables. Refer [documentation]() for details.
+### Running wunderDB Container
+
+To run wunderDB on docker, use the [docker-compose](docker-compose.yml) to start wunderDB with basic configurations.
+```shell
+docker compose up
+```
+
+For more details refer to [this](./documentation/README.md#wunderdb-container).
 
 ### wdbctl - CLI Tool
 
-For ease of use, we've also developed a command-line tool for wunderDb - `wdbctl`. Install it using homebrew or download the `wdbctl` binary of the latest release.
+For ease of use, we've also developed a command-line tool for wunderDb - `wdbctl`. 
 
 ```sh
+# install wdbctl
 brew tap TanmoySG/TanmoySG
 brew install wdbctl
-```
 
-To start the wunderDb server using wdbctl, run the `start` command. It spins up an instance of wunderDb with default configurations.
-
-```shell
+# starting wunderDB
 wdbctl start
 ```
 
-To specify configuration while starting an instance, use the flags available, eg: `wdbctl start -p <port>` will start the instance on the port value passed. For more flags and how to use then, run `wdbctl start --help`.
+<!-- To specify configuration while starting an instance, use the flags available, eg: `wdbctl start -p <port>` will start the instance on the port value passed. For more flags and how to use then, run `wdbctl start --help`.
 
-Once set, configurations cant be updated with the configuration flags. To override default or existing configurations, use the override flag `-o` `--override`, followed by the configuration flags, eg: `wdbctl start -o -p 5000` will override the existing/default port and run the instance on port 5000.
+Once set, configurations cant be updated with the configuration flags. To override default or existing configurations, use the override flag `-o` `--override`, followed by the configuration flags, eg: `wdbctl start -o -p 5000` will override the existing/default port and run the instance on port 5000. -->
 
-For more about `wdbctl`, refer to the [documentation]().
-<!-- 
-### Docker
+For more about `wdbctl`, refer to the [documentation](./documentation/README.md#wdbctl).
 
-TBD -->
 
 ## Usage
 

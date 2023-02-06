@@ -1,6 +1,6 @@
 # wunderDb
 
-wunderDb is a cross-platform JSON-based in-memory data store, inspired by mongoDb. wdb APIs are completely RESTful and eay to communicate to using HTTP requests.
+wunderDb is a cross-platform JSON-based in-memory data store, inspired by mongoDb. wdb APIs are completely RESTful and easy to communicate to using HTTP requests.
 
 ## Getting Started
 
@@ -18,12 +18,31 @@ curl --location --request GET 'localhost:8086/api'
 
 This should send back a 200 response status and a `✋ hello` message.
 
-#### `wdbctl` - CLI Tool for wunderDb
+### wunderDB Container
 
-You may also use the `wdbctl` commandline tool to start the wdb-server. Use brew to install the binary (or download the `wdbctl` release binaries), and run the `wdbctl` command followed by `start` to spin up the wdb server with default configurations.
+To run wunderDB on docker use the official [wunderDB Image](https://github.com/TanmoySG/wunderDB/pkgs/container/wunderdb), that is just ~11MB in size!
+
+Start the docker container by docker pulling the image and run the container with initial configurations.
+
+```sh
+docker run ghcr.io/tanmoysg/wunderdb:v1.0.11-test
+```
+
+To run wunderDB with configurations, use the `docker compose`. Update the values of the confugurations in the compose file and run as
+```sh
+docker compose up
+```
+
+Other compose files that can be used as `docker compose up -f <filename>`
+
+- [`docker-compose.source.yml`](./../docker-compose.source.yml) - use this to build and run a container from the code in the repository. Great for development purposes.
+<!-- - [`docker-compose.source.yml`](./../docker-compose.source.yml) - use this to debug/run container in debug mode (currently not ) -->
+
+### `wdbctl` - CLI Tool for wunderDb
+
+The `wdbctl` tool is a command-line tool to control the wdb-server. Use brew to install the binary (or download the `wdbctl` release binaries), and run the `wdbctl` command followed by `start` to spin up the wdb server with default configurations.
 
 ```shell
-
 # install wdbctl
 brew tap TanmoySG/TanmoySG
 brew install wdbctl
@@ -31,39 +50,6 @@ brew install wdbctl
 # start wdb-server
 wdbctl start
 ```
-
-Find more about `wdbctl` [here.](#wdbctl---cli-tool-for-wunderdb)
-
-<!-- #### Docker -->
-
-<!-- As mentioned in the [root README](../README.md#setup), wunderDb can -->
-
-### Configuration
-
-Some of the configurations that wunderDb uses are listed below. These configs can be set up using environemt variable or wdbctl flags.
-
-| Configuration                                                 | Description                                                                             | Environment Variable     | wdbctl Flag                   | Type           | Default                |
-|---------------------------------------------------------------|-----------------------------------------------------------------------------------------|--------------------------|-------------------------------|----------------|------------------------|
-| Port                                                          | Port where instance should run                                                          | PORT                     | --port, -p  value             | number, int    | 8086                   |
-| [Persistent Storage](README.md#persisting-data) Location/Path | Path value to directory to persist data after shutdown                                  | PERSISTANT_STORAGE_PATH  | --storage, -s value           | path, string   | $HOME/wdb/wfs (on mac) |
-| Admin ID and Password                                         | Instance Admin Username and Password                                                    | ADMIN_ID, ADMIN_PASSWORD | --admin, -a username:password | string, string | admin, admin           |
-| Override Flag                                                 | Once the other config are set, this flag is used to override value as and when required | OVERRIDE_CONFIG          | --overide, -o                 | boolean        | false                  |
-
-### Persisting Data
-
-wunderDb is completely in-memory, that is, all its data read, write operatio happen from/on the runtime memory of the server. But when the server is shutdown, the same data needs to be persisted, so that its not lost between startup and shutdown cycles.
-
-Hence, the data is persisted as JSON Files on the file system. The data is loaded from the files when starting up and data in-memory is dumped while the wdb-server gracefully shuts down.
-
-The Persistent Storage path can be defined by the user, if required, but when not set, data is persisted in the user's home directory, in the `wdb/wfs/` sub-directory.
-
-## Tools
-
-Here are some of the tools built to help you run and use wunderDb.
-
-### wdbctl
-
-wdbctl is a commandline tool we built for ease of starting wunderDb server locally with the required configurations.
 
 wdbctl currently supports following commands
 
@@ -98,6 +84,27 @@ Once configurations are set, using the configuration flags to pass custom values
 ```sh
 wdbctl start -o -p 8081
 ```
+
+
+### Configuration
+
+Some of the configurations that wunderDb uses are listed below. These configs can be set up using environemt variable or wdbctl flags.
+
+| Configuration                                                 | Description                                                                             | Environment Variable     | wdbctl Flag                   | Type           | Default                |
+|---------------------------------------------------------------|-----------------------------------------------------------------------------------------|--------------------------|-------------------------------|----------------|------------------------|
+| Port                                                          | Port where instance should run                                                          | PORT                     | --port, -p  value             | number, int    | 8086                   |
+| [Persistent Storage](README.md#persisting-data) Location/Path | Path value to directory to persist data after shutdown                                  | PERSISTANT_STORAGE_PATH  | --storage, -s value           | path, string   | $HOME/wdb/wfs (on mac) |
+| Admin ID and Password                                         | Instance Admin Username and Password                                                    | ADMIN_ID, ADMIN_PASSWORD | --admin, -a username:password | string, string | admin, admin           |
+| Override Flag                                                 | Once the other config are set, this flag is used to override value as and when required | OVERRIDE_CONFIG          | --overide, -o                 | boolean        | false                  |
+
+### Persisting Data
+
+wunderDb is completely in-memory, that is, all its data read, write operatio happen from/on the runtime memory of the server. But when the server is shutdown, the same data needs to be persisted, so that its not lost between startup and shutdown cycles.
+
+Hence, the data is persisted as JSON Files on the file system. The data is loaded from the files when starting up and data in-memory is dumped while the wdb-server gracefully shuts down.
+
+The Persistent Storage path can be defined by the user, if required, but when not set, data is persisted in the user's home directory, in the `wdb/wfs/` sub-directory.
+
 
 ## Users
 
