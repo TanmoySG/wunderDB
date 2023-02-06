@@ -17,7 +17,7 @@
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
     "react-google-font-loader": "^1.1.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "5.0.1",
     "status-indicator": "^1.0.9",
     "styletron-engine-atomic": "^1.4.6",
     "styletron-react": "^5.2.7"
