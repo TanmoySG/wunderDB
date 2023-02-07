@@ -1,65 +1,74 @@
-<p align="center">
-   <img width="50%" src="https://github.com/TanmoySG/wunderDB/blob/main/showcase/wdb-complete.png">
-</p>
+# wunderDB
 
-# wunderDB - a Document Database
+wunderDb is a JSON-based in-memory Data Store.
+<!--  For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown). -->
 
-***wunderDB*** is a JSON-based micro Document DB, inspired by MongoDB.
+## Quickstart
 
-#### Deployed at [wdb.tanmoysg.com](http://wdb.tanmoysg.com)
+To run wunderDb, download the `wunderdb` binary of the [latest release](https://github.com/TanmoySG/wunderDB/releases) based on your OS and Architecture. Once downloaded, run the binary to start wunderdb.
 
-## Documentation
-
-Create a cluster and get started with wunderDB at [wdb.tanmoysg.com](http://wdb.tanmoysg.com).
-
-The cluster can be accessed using the ```Unified Actions API```. To consume this API, use the following endpoint :
-```
-wdb.tanmoysg.com/connect?cluster=<cluster-id>&token=<one-of-the-three-tokens-generated>
-```
-The operations on this API are facilitated through ```Actions``` 
-
-**Detailed documentation for wunderDB available [here](https://github.com/TanmoySG/wunderDB/blob/master/documentation/documentation.md)**
-
-## Running WDB Using Docker
-
-Download the docker-compose file and run Docker Compose Up to run wdb locally. But before that create a secrets folder and create `server-config.json`
-```
-docker-compose up
+```shell
+./wunderdb
 ```
 
-Refer to [this](./documentation/docker-doc.md) doc for more.
+This should start a wunderDb instance. For configuration documentation, check [this](./documentation/README.md#configuration).
 
-## Features
+### Running wunderDB Container
 
-- Unified API Endpoint.
-- Registration Portal for creating Cluster.
-- ***Unified Actions API*** enables performing multiple operation through a similar structured API Call.
-- **Remotely Hosted**, enabling on-the-go access of data.
-- Reduces need of self-hosted servers/databases.
-- Micro structure & Lightweight Database.
-- Supports **multiple Databases** for a single cluster.
-- Supports **multiple Collections** for each Database.
-- **C**reate, **R**ead, **U**pdate, **D**elete operations on Data.
-- **Schema Integrity Protection** for Data Creation & Updation reducing data-schema mismatch issues.
-- **Markers** ensure easy pointing to specific data.
-- **Summarised Reporting** of Databases & Collection.
+To run wunderDB on docker, use the [docker-compose](docker-compose.yml) to start wunderDB with basic configurations.
+```shell
+docker compose up
+```
 
-## Progress
+For more details refer to [this](./documentation/README.md#wunderdb-container).
 
-- [x] wunderCP, Dashboard for wunderDB -named wunderDash
-- [ ] Query Language
-- [ ] Mass Data Actions
-- [ ] Advanced data Security & Protection
-- [ ] Media Access Support
-- [x] Registration Portal for creating Cluster.
-- [x] Schema Integrity Protection
-- [x] Summarised Reporting
-- [x] Unified Actions API
+### wdbctl - CLI Tool
 
-#### Suggest/Request a feature that you want to see in wunderDB [here](mailto:tanmoysps@gmail.com)
+For ease of use, we've also developed a command-line tool for wunderDb - `wdbctl`. 
 
+```sh
+# install wdbctl
+brew tap TanmoySG/TanmoySG
+brew install wdbctl
+
+# starting wunderDB
+wdbctl start
+```
+
+<!-- To specify configuration while starting an instance, use the flags available, eg: `wdbctl start -p <port>` will start the instance on the port value passed. For more flags and how to use then, run `wdbctl start --help`.
+
+Once set, configurations cant be updated with the configuration flags. To override default or existing configurations, use the override flag `-o` `--override`, followed by the configuration flags, eg: `wdbctl start -o -p 5000` will override the existing/default port and run the instance on port 5000. -->
+
+For more about `wdbctl`, refer to the [documentation](./documentation/README.md#wdbctl).
 
 
-Project by ***[Tanmoy Sen Gupta](https://www.tanmoysg.com)***
+## Usage
 
+<!-- Once wunderDb instance is running, use the [Admin]() credentials to perform any operations required. For additional security, we recommend creating delegate user(s) with coarse-grained access, to perform the actions. -->
 
+wunderDb APIs are completely RESTful and all actions can be performed using simple HTTP Requests. Feel free to browse the documentation for usage instructions and other important concepts used in wunderDb.
+
+<!-- Here's an outline of some of the topics in the documentations. -->
+
+- [Get Started](./documentation/README.md#getting-started)
+  - [Persistence of Data](./documentation/README.md#persisting-data)
+  - [Configurations](./documentation/README.md#configuration)
+- [Tools - `wdbctl`](./documentation/README.md#wdbctl)
+- Users, Roles and Access Control
+  - [Users](./documentation/README.md#users)
+  - [Roles and RBAC](./documentation/README.md#roles)
+  - [Privileges](./documentation/README.md#privileges)
+- Databases, Collections
+  - [Databases](./documentation/README.md#database)
+  - [Collections](./documentation/README.md#collections)
+- [Data](./documentation/README.md#data)
+  - [Filter](./documentation/README.md#filters)
+  - [Schema](./documentation/README.md#schema)
+
+## wunderDB-Retro
+
+The first version, based on Python Flask will not be phased out any time soon. To keep it accessible and so that the version 1 doesn't get lost in the version list, I have moved the v1 to a new repository here - [wdb-retro](https://github.com/TanmoySG/wdb-retro).
+
+The wdb-retro repo has all the version 1 code as well as the Docker Image with the new name - so that when I publish the wunderDB v2 Docker Images are published the v1 Image doesnt get lost and anyone planning to use that still can. The version 1 will not be actively maintained.
+
+Check out the final release of v1 <https://github.com/TanmoySG/wdb-retro/releases/tag/v1.1.0>

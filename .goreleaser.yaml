@@ -1,0 +1,66 @@
+builds:
+  - id: wdbctl
+    main: cmd/wdbctl/cli.go
+    binary: wdbctl
+    goos: [windows, darwin, linux]
+    goarch: [amd64, arm, arm64]
+    ignore:
+      - goos: windows
+        goarch: arm
+      - goos: darwin
+        goarch: arm
+    env:
+      - CGO_ENABLED=0
+  - id: wunderdb
+    main: cmd/wunderdb/wdb.go
+    binary: wunderdb
+    goos: [windows, darwin, linux]
+    goarch: [amd64, arm, arm64]
+    ignore:
+      - goos: windows
+        goarch: arm
+      - goos: darwin
+        goarch: arm
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - id: wdbctl
+    builds: [wdbctl]
+    format: tar.gz
+    files:
+      - README.md
+      # - CHANGELOG.md
+      - LICENSE
+  - id: wunderdb
+    builds: [wunderdb]
+    format: tar.gz
+    files:
+      - README.md
+      # - CHANGELOG.md
+      - LICENSE
+
+dist: target/dist
+brews:
+  - name: wdbctl
+    homepage: "https://github.com/TanmoySG/wunderDB"
+    tap:
+      owner: TanmoySG
+      name: homebrew-TanmoySG
+    commit_author:
+      name: TanmoySG
+      email: tanmoysps@gmail.com
+  # - name: wunderdb
+  #   homepage: "https://github.com/TanmoySG/wunderDB"
+  #   tap:
+  #     owner: TanmoySG
+  #     name: homebrew-TanmoySG
+  #   commit_author:
+  #     name: TanmoySG
+  #     email: tanmoysps@gmail.com
+release:
+  github:
+    owner: TanmoySG
+    name: wunderDB
+  prerelease: auto
+  disable: false

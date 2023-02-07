@@ -1,20 +1,12 @@
-FROM python:3.8-slim
-
-EXPOSE 5002
-
-# Keeps Python from generating .pyc files in the container
-ENV PYTHONDONTWRITEBYTECODE=1
-
-# Turns off buffering for easier container logging
-ENV PYTHONUNBUFFERED=1
-
-# Install pip requirements
-COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
-
+# Build wdb binary based on OS and Arch
+FROM --platform=$BUILDPLATFORM golang:1.19-alpine3.16 AS builder
 WORKDIR /app
-COPY . /app
+ARG TARGETOS TARGETARCH
+COPY . /app/
+RUN  GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /bin/wdb_docker ./cmd/wunderdb/wdb.go
 
-# Entrypoint to the App
-ENTRYPOINT ["sh", "/app/scripts/entrypoint.sh"]
-# CMD ["app.py"]
+# Load only binary from builder to lightweight alpine base-image
+FROM alpine:3.16
+WORKDIR /app
+COPY --from=builder /bin/wdb_docker /app/
+ENTRYPOINT [ "/app/wdb_docker" ]
