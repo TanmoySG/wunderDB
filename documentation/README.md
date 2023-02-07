@@ -167,7 +167,7 @@ This action requires authentication, as well as autorization - the user commitin
 
 ## Roles
 
-A role grants [privileges](#privileges) to perform a specified actions on a [resource](). To ensure security and fine-grained access control, wdb uses [RBAC or Role-based Access Control](). A user is granted one or more roles that controls the user's access to a resource.
+A role grants [privileges](#privileges) to perform a specified actions on a [resource](#resources). To ensure security and fine-grained access control, wdb uses [RBAC or Role-based Access Control](https://en.wikipedia.org/wiki/Role-based_access_control). A user is granted one or more roles that controls the user's access to a resource.
 
 ### Creating a Role
 

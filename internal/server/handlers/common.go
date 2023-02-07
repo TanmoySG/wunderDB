@@ -3,8 +3,8 @@ package handlers
 import (
 	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
-	"github.com/go-playground/validator/v10"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
