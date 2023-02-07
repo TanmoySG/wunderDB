@@ -44,6 +44,8 @@ archives:
 dist: target/dist
 brews:
   - name: wdbctl
+    ids:
+      - "wdbctl"
     homepage: "https://github.com/TanmoySG/wunderDB"
     tap:
       owner: TanmoySG
