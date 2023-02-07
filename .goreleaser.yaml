@@ -33,6 +33,7 @@ archives:
       # - CHANGELOG.md
       - LICENSE
   - id: wunderdb
+    name_template: "{{.Binary}}_{{.Version}}_{{.Os}}_{{.Arch}}"
     builds: [wunderdb]
     format: tar.gz
     files:
