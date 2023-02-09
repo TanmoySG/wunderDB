@@ -26,6 +26,7 @@ builds:
 
 archives:
   - id: wdbctl
+    name_template: "{{.Binary}}_{{.Version}}_{{.Os}}_{{.Arch}}"
     builds: [wdbctl]
     format: tar.gz
     files:
