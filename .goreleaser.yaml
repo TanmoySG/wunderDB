@@ -26,6 +26,7 @@ builds:
 
 archives:
   - id: wdbctl
+    name_template: "{{.Binary}}_{{.Version}}_{{.Os}}_{{.Arch}}"
     builds: [wdbctl]
     format: tar.gz
     files:
@@ -33,6 +34,7 @@ archives:
       # - CHANGELOG.md
       - LICENSE
   - id: wunderdb
+    name_template: "{{.Binary}}_{{.Version}}_{{.Os}}_{{.Arch}}"
     builds: [wunderdb]
     format: tar.gz
     files:
@@ -43,6 +45,8 @@ archives:
 dist: target/dist
 brews:
   - name: wdbctl
+    ids:
+      - "wdbctl"
     homepage: "https://github.com/TanmoySG/wunderDB"
     tap:
       owner: TanmoySG
