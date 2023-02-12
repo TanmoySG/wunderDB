@@ -66,6 +66,5 @@ release:
   github:
     owner: TanmoySG
     name: wunderDB
-  prerelease: auto
   disable: false
   target_commitish: '{{ .Commit }}'
