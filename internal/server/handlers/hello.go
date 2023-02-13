@@ -15,8 +15,6 @@ func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
 		"user-agent": ua,
 	}
 
-	fmt.Println(ua)
-
 	resp := response.Format("ping", nil, msg)
 	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
