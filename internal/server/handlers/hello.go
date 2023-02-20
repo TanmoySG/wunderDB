@@ -8,9 +8,13 @@ import (
 )
 
 func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
+	ua := c.Get("User-Agent")
+
 	msg := map[string]string{
-		"message": fmt.Sprintf("✋ %s", "hello"),
+		"message":    fmt.Sprintf("✋ %s", "hello"),
+		"user-agent": ua,
 	}
+
 	resp := response.Format("ping", nil, msg)
 	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
 }
