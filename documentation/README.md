@@ -25,7 +25,7 @@ To run wunderDB on docker use the official [wunderDB Image](https://github.com/T
 Start the docker container by docker pulling the image and run the container with initial configurations.
 
 ```sh
-docker run ghcr.io/tanmoysg/wunderdb:v1.0.11-test
+docker run ghcr.io/tanmoysg/wunderdb:latest
 ```
 
 To run wunderDB with configurations, use the `docker compose`. Update the values of the confugurations in the compose file and run as
