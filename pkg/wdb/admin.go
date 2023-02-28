@@ -7,30 +7,44 @@ import (
 	"github.com/TanmoySG/wunderDB/model"
 )
 
+// TODO: handle individual errors from methods. eg: line 48
 func (wdb wdbClient) InitializeAdmin(config *config.Config) {
 	var userID, userPassword string
-	if wdb.Configurations.Admin == nil {
-		if config.AdminID == "" {
-			userID = admin.DEFAULT_ADMIN_USERID
-			// if config.AdminPassword == "" {
-			// 	userPassword = admin.DEFAULT_ADMIN_PASSWORD
-			// } else {
-			// 	userPassword = authentication.Hash(config.AdminPassword, authentication.SHA256)
-			// }
-			userPassword = authentication.Hash(config.AdminPassword, authentication.SHA256)
-		} else {
-			userID = config.AdminID
-			userPassword = authentication.Hash(config.AdminPassword, authentication.SHA256)
-		}
-		wdb.processAdmin(userID, userPassword)
+	if config.AdminID == "" {
+		userID = admin.DEFAULT_ADMIN_USERID
+		userPassword = authentication.Hash(config.AdminPassword, authentication.SHA256)
+	} else {
+		userID = config.AdminID
+		userPassword = authentication.Hash(config.AdminPassword, authentication.SHA256)
 	}
+	wdb.createAdminRole()
+	wdb.processAdmin(userID, userPassword)
 }
 
 func (wdb wdbClient) processAdmin(userID, userPassword string) {
-	userExists, _ := wdb.Users.CheckIfExists(model.Identifier(userID))
+	userExists, userDetails := wdb.Users.CheckIfExists(model.Identifier(userID))
 	if !userExists {
 		wdb.Users.CreateUser(model.Identifier(userID), userPassword, authentication.SHA256, model.Metadata{})
-		wdb.Roles.CreateRole(model.Identifier(admin.DEFAULT_ADMIN_ROLE), admin.ALLOWED_ADMIN_PRIVILEGES, admin.DENIED_ADMIN_PRIVILEGES)
+	}
+
+	// check if admin already has access to super admin role
+	hasSuperAdminAccess := false
+	for _, permission := range userDetails.Permissions {
+		if permission.Role == admin.DEFAULT_ADMIN_PERMISSION.Role {
+			hasSuperAdminAccess = true
+			break
+		}
+	}
+
+	// grant access to super admin role if not exists
+	if !hasSuperAdminAccess {
 		wdb.Users.GrantRole(model.Identifier(userID), admin.DEFAULT_ADMIN_PERMISSION)
+	}
+}
+
+func (wdb wdbClient) createAdminRole() {
+	roleExists, _ := wdb.Roles.CheckIfExists(model.Identifier(admin.DEFAULT_ADMIN_ROLE))
+	if !roleExists {
+		_ = wdb.Roles.CreateRole(model.Identifier(admin.DEFAULT_ADMIN_ROLE), admin.ALLOWED_ADMIN_PRIVILEGES, admin.DENIED_ADMIN_PRIVILEGES)
 	}
 }
