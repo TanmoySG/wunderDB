@@ -29,10 +29,13 @@ func (wdb wdbClient) processAdmin(userID, userPassword string) {
 
 	// check if admin already has access to super admin role
 	hasSuperAdminAccess := false
-	for _, permission := range userDetails.Permissions {
-		if permission.Role == admin.DEFAULT_ADMIN_PERMISSION.Role {
-			hasSuperAdminAccess = true
-			break
+
+	if userDetails != nil && userDetails.Permissions != nil {
+		for _, permission := range userDetails.Permissions {
+			if permission.Role == admin.DEFAULT_ADMIN_PERMISSION.Role {
+				hasSuperAdminAccess = true
+				break
+			}
 		}
 	}
 
