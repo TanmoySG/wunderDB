@@ -90,6 +90,7 @@ func (r Roles) Check(permissions []model.Permissions, privilege string, on *mode
 					userPrivileges := role.Grants.UserPrivileges
 					return checkPermission(privilege, *userPrivileges)
 				}
+				return denied
 			}
 			return denied
 		} else if privilegeCategory == p.DatabasePrivileges {
