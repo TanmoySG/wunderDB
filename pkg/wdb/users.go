@@ -23,6 +23,11 @@ func (wdb wdbClient) GrantRoles(userID model.Identifier, permission model.Permis
 		return &er.UserDoesNotExistError
 	}
 
+	// initialize permission entities if not present
+	if permission.On == nil {
+		permission.On = &model.Entities{}
+	}
+
 	// add wildcard (all) users if none is specified
 	if permission.On.Users == nil {
 		permission.On.Users = &wildcard

@@ -59,7 +59,7 @@ type User struct {
 
 type Permissions struct {
 	Role Identifier `json:"role" validate:"required"`
-	On   *Entities  `json:"on,omitempty" validate:"required,dive"`
+	On   *Entities  `json:"on,omitempty"`
 }
 
 type Role struct {

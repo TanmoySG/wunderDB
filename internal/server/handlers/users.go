@@ -70,9 +70,13 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 	if err := ValidateRequest(up); err != nil {
 		apiError = err
 	} else {
-		entities := model.Entities{
-			Databases:   up.Permission.On.Databases,
-			Collections: up.Permission.On.Collections,
+		var entities model.Entities
+
+		if up.Permission.On != nil {
+			entities = model.Entities{
+				Databases:   up.Permission.On.Databases,
+				Collections: up.Permission.On.Collections,
+			}
 		}
 
 		isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
