@@ -68,10 +68,36 @@ func (r Roles) Check(permissions []model.Permissions, privilege string, on *mode
 		if privilegeCategory == p.GlobalPrivileges {
 			globalPrivileges := role.Grants.GlobalPrivileges
 			return checkPermission(privilege, *globalPrivileges)
+		} else if privilegeCategory == p.UserPrivileges {
+			if userPermission.On.Users != nil {
+				// add condition *on.Users == *userPermission.On.Users
+				if *userPermission.On.Users == p.Wildcard {
+					if on.Databases != nil {
+						if on.Collections != nil {
+							if *on.Collections == *userPermission.On.Collections || *userPermission.On.Collections == p.Wildcard {
+								collectionPrivileges := role.Grants.CollectionPrivileges
+								return checkPermission(privilege, *collectionPrivileges)
+							}
+							return denied
+						}
+
+						if *on.Databases == *userPermission.On.Databases || *userPermission.On.Databases == p.Wildcard {
+							databasePrivileges := role.Grants.DatabasePrivileges
+							return checkPermission(privilege, *databasePrivileges)
+						}
+						return denied
+					}
+					userPrivileges := role.Grants.UserPrivileges
+					return checkPermission(privilege, *userPrivileges)
+				}
+			}
+			return denied
 		} else if privilegeCategory == p.DatabasePrivileges {
-			if *on.Databases == *userPermission.On.Databases || *userPermission.On.Databases == p.Wildcard {
-				databasePrivileges := role.Grants.DatabasePrivileges
-				return checkPermission(privilege, *databasePrivileges)
+			if on.Databases != nil && userPermission.On.Databases != nil {
+				if *on.Databases == *userPermission.On.Databases || *userPermission.On.Databases == p.Wildcard {
+					databasePrivileges := role.Grants.DatabasePrivileges
+					return checkPermission(privilege, *databasePrivileges)
+				}
 			}
 			return denied
 		} else if privilegeCategory == p.CollectionPrivileges {
@@ -105,6 +131,11 @@ func getPrivileges(allowedActions, deniedActions []string) (*model.Grants, error
 	allowedGrantsMap := sortPrivileges(allowedActions, p.Allowed)
 	deniedGrantsMap := sortPrivileges(deniedActions, p.Denied)
 
+	userPrivileges, err := mergeGrantMaps(maps.Marshal(allowedGrantsMap.UserPrivileges), maps.Marshal(deniedGrantsMap.UserPrivileges))
+	if err != nil {
+		return nil, err
+	}
+
 	globalPrivileges, err := mergeGrantMaps(maps.Marshal(allowedGrantsMap.GlobalPrivileges), maps.Marshal(deniedGrantsMap.GlobalPrivileges))
 	if err != nil {
 		return nil, err
@@ -123,6 +154,7 @@ func getPrivileges(allowedActions, deniedActions []string) (*model.Grants, error
 	grants.GlobalPrivileges = globalPrivileges
 	grants.DatabasePrivileges = databasePrivileges
 	grants.CollectionPrivileges = collectionPrivileges
+	grants.UserPrivileges = userPrivileges
 
 	return &grants, nil
 
@@ -131,6 +163,7 @@ func getPrivileges(allowedActions, deniedActions []string) (*model.Grants, error
 func sortPrivileges(actions []string, assignedPermission bool) model.Grants {
 	var privilegeGrants model.Grants
 
+	userPrivileges := model.Privileges{}
 	globalPrivileges := model.Privileges{}
 	databasePrivileges := model.Privileges{}
 	collectionPrivileges := model.Privileges{}
@@ -145,10 +178,13 @@ func sortPrivileges(actions []string, assignedPermission bool) model.Grants {
 				collectionPrivileges[action] = assignedPermission
 			case p.GlobalPrivileges:
 				globalPrivileges[action] = assignedPermission
+			case p.UserPrivileges:
+				userPrivileges[action] = assignedPermission
 			}
 		}
 	}
 
+	privilegeGrants.UserPrivileges = &userPrivileges
 	privilegeGrants.GlobalPrivileges = &globalPrivileges
 	privilegeGrants.DatabasePrivileges = &databasePrivileges
 	privilegeGrants.CollectionPrivileges = &collectionPrivileges
