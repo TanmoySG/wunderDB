@@ -45,7 +45,9 @@ fi
 
 git add $VERSION_JSON_PATH $VERSION_GO_PATH
 git commit -m "$COMMIT_MESSAGE"
-git tag $TARGET_VERSION main
 git push
+
+git tag $TARGET_VERSION main
+git push --tags
 
 echo "$TARGET_VERSION - Tag Released"
