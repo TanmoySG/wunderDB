@@ -39,6 +39,7 @@ echo $genGoCode >$VERSION_GO_PATH
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 if [[ "$BRANCH" != "main" ]]; then
     echo 'Aborting Commit, Tag, Push...'
+    sleep 5
     git restore $VERSION_JSON_PATH $VERSION_GO_PATH
     exit 1
 fi
