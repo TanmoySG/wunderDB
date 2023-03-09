@@ -37,6 +37,7 @@ func getPermission() model.Permissions {
 	return model.Permissions{
 		Role: DEFAULT_ADMIN_ROLE,
 		On: &model.Entities{
+			Users:       &WILDCARD,
 			Databases:   &WILDCARD,
 			Collections: &WILDCARD,
 		},

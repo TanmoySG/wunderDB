@@ -1,9 +1,10 @@
 package privileges
 
 const (
+	UserPrivileges       = "userPrivilege"
+	GlobalPrivileges     = "globalPrivilege"
 	DatabasePrivileges   = "databasePrivilege"
 	CollectionPrivileges = "collectionPrivilege"
-	GlobalPrivileges     = "globalPrivilege"
 )
 
 const (

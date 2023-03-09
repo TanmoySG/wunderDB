@@ -29,6 +29,7 @@ docker run ghcr.io/tanmoysg/wunderdb:latest
 ```
 
 To run wunderDB with configurations, use the `docker compose`. Update the values of the confugurations in the compose file and run as
+
 ```sh
 docker compose up
 ```
@@ -85,13 +86,12 @@ Once configurations are set, using the configuration flags to pass custom values
 wdbctl start -o -p 8081
 ```
 
-
 ### Configuration
 
 Some of the configurations that wunderDb uses are listed below. These configs can be set up using environemt variable or wdbctl flags.
 
 | Configuration                                                 | Description                                                                             | Environment Variable     | wdbctl Flag                   | Type           | Default                |
-|---------------------------------------------------------------|-----------------------------------------------------------------------------------------|--------------------------|-------------------------------|----------------|------------------------|
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ | ----------------------------- | -------------- | ---------------------- |
 | Port                                                          | Port where instance should run                                                          | PORT                     | --port, -p  value             | number, int    | 8086                   |
 | [Persistent Storage](README.md#persisting-data) Location/Path | Path value to directory to persist data after shutdown                                  | PERSISTANT_STORAGE_PATH  | --storage, -s value           | path, string   | $HOME/wdb/wfs (on mac) |
 | Admin ID and Password                                         | Instance Admin Username and Password                                                    | ADMIN_ID, ADMIN_PASSWORD | --admin, -a username:password | string, string | admin, admin           |
@@ -104,7 +104,6 @@ wunderDb is completely in-memory, that is, all its data read, write operatio hap
 Hence, the data is persisted as JSON Files on the file system. The data is loaded from the files when starting up and data in-memory is dumped while the wdb-server gracefully shuts down.
 
 The Persistent Storage path can be defined by the user, if required, but when not set, data is persisted in the user's home directory, in the `wdb/wfs/` sub-directory.
-
 
 ## Users
 
@@ -161,7 +160,9 @@ Content-Type: application/json
 }
 ```
 
-Passing wildcard (`*`) resource in databases or collections grants the user the role on any database or collection.
+Passing wildcard (`*`) resource in databases or collections grants the user the role on any database or collection. 
+
+If you want to scope the permission to just users, i.e the permissions only apply on users, then you can skip the `on` section in the request body. 
 
 This action requires authentication, as well as autorization - the user commiting this action must have the `grantRole` privilege.
 
@@ -412,6 +413,10 @@ In wunderDb privileges are categorized based on their scope.
 - Global Privilege
   
   Some privileges don't need an associated resource, they have global scoped, that is, wdb doesn't check if the privilege is granted on a resource or not. Example: the `listRole` privilege is a global privilege, when a user runs the query for listing roles, wdb only checks if the associated privilege is granted on the user or not.
+
+- User Privilege
+  
+  Some privileges are scoped to user(s). Eg, grantRole is an user privilege.
   
 - Database Privilege
   
@@ -428,12 +433,12 @@ A resource is a database, collection, set of databases and collections, or more 
 Some of the Privileges available for use in wunderDb and associated actions.
 
 | Privilege        | Category              | Action                             |
-|------------------|-----------------------|------------------------------------|
+| ---------------- | --------------------- | ---------------------------------- |
 | createUser       | global privilege      | create user                        |
 | createRole       | global privilege      | create roles                       |
 | listRole         | global privilege      | list roles in wdb                  |
 | createDatabase   | global privilege      | create database                    |
-| grantRole        | database privileges   | grant role to user                 |
+| grantRole        | user privileges       | grant role to user                 |
 | readDatabase     | database privileges   | read/fetch database                |
 | updateDatabase   | database privileges   | update database                    |
 | deleteDatabase   | database privileges   | delete existing database           |

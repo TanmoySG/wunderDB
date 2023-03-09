@@ -1,10 +1,13 @@
 package wdbClient
 
 import (
+	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
+
+var wildcard = privileges.Wildcard
 
 func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.WdbError {
 	if exists, _ := wdb.Users.CheckIfExists(userID); exists {
@@ -18,6 +21,16 @@ func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.Wd
 func (wdb wdbClient) GrantRoles(userID model.Identifier, permission model.Permissions) *er.WdbError {
 	if exists, _ := wdb.Users.CheckIfExists(userID); !exists {
 		return &er.UserDoesNotExistError
+	}
+
+	// initialize permission entities if not present
+	if permission.On == nil {
+		permission.On = &model.Entities{}
+	}
+
+	// add wildcard (all) users if none is specified
+	if permission.On.Users == nil {
+		permission.On.Users = &wildcard
 	}
 
 	validRole, _ := wdb.Roles.CheckIfExists(permission.Role)

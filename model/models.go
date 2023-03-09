@@ -59,7 +59,7 @@ type User struct {
 
 type Permissions struct {
 	Role Identifier `json:"role" validate:"required"`
-	On   *Entities  `json:"on,omitempty" validate:"required,dive"`
+	On   *Entities  `json:"on,omitempty"`
 }
 
 type Role struct {
@@ -68,13 +68,15 @@ type Role struct {
 }
 
 type Grants struct {
+	UserPrivileges       *Privileges `json:"userPrivileges,omitempty"`
 	GlobalPrivileges     *Privileges `json:"globalPrivileges,omitempty"`
 	DatabasePrivileges   *Privileges `json:"databasePrivileges,omitempty"`
 	CollectionPrivileges *Privileges `json:"collectionPrivileges,omitempty"`
 }
 
 type Entities struct {
-	Databases   *string `json:"databases,omitempty" validate:"required"` // currently required, but would change in future
+	Users       *string `json:"users,omitempty"`
+	Databases   *string `json:"databases,omitempty"`
 	Collections *string `json:"collections,omitempty"`
 }
 
