@@ -40,6 +40,9 @@ CTL_VERSION=$(cat $VERSION_JSON_PATH | jq -r ".wdbctl_version")
 
 genGoCode="package version\n\nconst WDB_VERSION = \"$TARGET_VERSION\"\nconst CLI_VERSION = \"$CTL_VERSION\""
 
+tmp=$(mktemp)
+jq --arg v "$TARGET_VERSION" '.wdb_version = $v' $VERSION_JSON_PATH >"$tmp" && mv "$tmp" $VERSION_JSON_PATH
+
 echo $genGoCode >$VERSION_GO_PATH
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
