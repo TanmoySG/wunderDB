@@ -1,3 +1,9 @@
+# Shell script to generate wdb version.go and release tag
+#
+# Usage: sh ./scripts/tag.sh 1.1.4
+#        Do not add 'v' before the tag, it is added in the script itself.
+#        Generates version.go file, git commit, tags and pushes only if current branch is main
+
 rx='^([0-9]+\.){0,2}(\*|[0-9]+)$'
 if [[ $1 =~ $rx ]]; then
     echo "Creating Tag..."
