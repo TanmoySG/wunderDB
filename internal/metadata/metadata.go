@@ -32,9 +32,16 @@ func (m metadata) BasicUpdateTimestampMetadata(optionalMetadata ...any) metadata
 	currentTime := time.Now()
 	currentTimestamp := currentTime.Unix() // second precisioned timestamp
 
+	createdAtTimestamp, createdAtExists := m[CreatedAt]
+	if !createdAtExists {
+		createdAtTimestamp = currentTimestamp
+	}
+
+	updatedAtTimestamp := currentTimestamp
+
 	return metadata{
-		CreatedAt: m[CreatedAt],
-		UpdatedAt: currentTimestamp,
+		CreatedAt: createdAtTimestamp,
+		UpdatedAt: updatedAtTimestamp,
 	}
 }
 
