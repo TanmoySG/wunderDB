@@ -13,38 +13,25 @@ const (
 	UpdatedAt = "updated_at"
 )
 
-// type changeTimeMetadata struct {
-// 	CreatedAt string `json:"created_at"`
-// 	UpdatedAt string `json:"updated_at"`
-// }
-
-func BasicCreateTimestampMetadata(optionalMetadata ...any) metadata {
-	currentTime := time.Now()
-	currentTimestamp := currentTime.Unix() // second precisioned timestamp
-
-	return metadata{
-		CreatedAt: currentTimestamp,
-		UpdatedAt: currentTimestamp,
-	}
+func Use(m model.Metadata) metadata {
+	return metadata(m)
 }
 
-func (m metadata) BasicUpdateTimestampMetadata(optionalMetadata ...any) metadata {
+func New() metadata {
+	return metadata{}
+}
+
+func (m metadata) BasicChangeMetadata(optionalMetadata ...any) model.Metadata {
 	currentTime := time.Now()
-	currentTimestamp := currentTime.Unix() // second precisioned timestamp
+	updatedAtTimestamp := currentTime.Unix() // second precisioned timestamp
 
 	createdAtTimestamp, createdAtExists := m[CreatedAt]
 	if !createdAtExists {
-		createdAtTimestamp = currentTimestamp
+		createdAtTimestamp = updatedAtTimestamp
 	}
 
-	updatedAtTimestamp := currentTimestamp
-
-	return metadata{
+	return model.Metadata{
 		CreatedAt: createdAtTimestamp,
 		UpdatedAt: updatedAtTimestamp,
 	}
-}
-
-func (m metadata) Commit() model.Metadata {
-	return model.Metadata(m)
 }
