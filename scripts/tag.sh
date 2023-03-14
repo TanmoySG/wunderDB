@@ -36,6 +36,8 @@ if [[ "$BRANCH" != "main" ]]; then
     exit 1
 fi
 
+go fmt ./...
+
 git add $VERSION_JSON_PATH $VERSION_GO_PATH
 git commit -m "$COMMIT_MESSAGE"
 git push

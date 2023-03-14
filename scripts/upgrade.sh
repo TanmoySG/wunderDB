@@ -48,6 +48,3 @@ jq --arg v "$TARGET_VERSION" '.wdb_version = $v' $VERSION_JSON_PATH &&
     mv "$tmp" $VERSION_JSON_PATH
 
 echo $genGoCode >$VERSION_GO_PATH
-
-cd ../
-go fmt ./...
