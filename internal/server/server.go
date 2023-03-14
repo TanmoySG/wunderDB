@@ -8,6 +8,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/server/routes"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
 type wdbServer struct {
@@ -32,7 +33,7 @@ func (ws wdbServer) Start() {
 		DisableStartupMessage: true, // fiber box disable
 	})
 
-	// app.Use(logger.New())
+	app.Use(logger.New())
 
 	api := app.Group("/api")
 
