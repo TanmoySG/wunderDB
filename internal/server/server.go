@@ -29,35 +29,41 @@ func NewWdbServer(wdbClient wdbClient.Client, port string) Client {
 
 func (ws wdbServer) Start() {
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		DisableStartupMessage: true, // fiber box disable
+	})
+
 	app.Use(logger.New())
 
-	app.Get("/api", ws.handler.Hello)
+	api := app.Group("/api")
+
+	// api home route
+	api.Get("/", ws.handler.Hello)
 
 	// Database Routes
-	app.Post(routes.CreateDatabase, ws.handler.CreateDatabase)
-	app.Get(routes.FetchDatabase, ws.handler.FetchDatabase)
-	app.Delete(routes.DeleteDatabase, ws.handler.DeleteDatabase)
+	api.Post(routes.CreateDatabase, ws.handler.CreateDatabase)
+	api.Get(routes.FetchDatabase, ws.handler.FetchDatabase)
+	api.Delete(routes.DeleteDatabase, ws.handler.DeleteDatabase)
 
 	// Collection Routes
-	app.Post(routes.CreateCollection, ws.handler.CreateCollection)
-	app.Get(routes.FetchCollection, ws.handler.FetchCollection)
-	app.Delete(routes.DeleteCollection, ws.handler.DeleteCollection)
+	api.Post(routes.CreateCollection, ws.handler.CreateCollection)
+	api.Get(routes.FetchCollection, ws.handler.FetchCollection)
+	api.Delete(routes.DeleteCollection, ws.handler.DeleteCollection)
 
 	// Data Routes
-	app.Post(routes.AddData, ws.handler.AddData)
-	app.Get(routes.ReadData, ws.handler.ReadData)
-	app.Delete(routes.DeleteData, ws.handler.DeleteData)
-	app.Patch(routes.UpdateData, ws.handler.UpdateData)
+	api.Post(routes.AddData, ws.handler.AddData)
+	api.Get(routes.ReadData, ws.handler.ReadData)
+	api.Delete(routes.DeleteData, ws.handler.DeleteData)
+	api.Patch(routes.UpdateData, ws.handler.UpdateData)
 
 	// Role Routes
-	app.Post(routes.CreateRole, ws.handler.CreateRole)
-	app.Get(routes.ListRoles, ws.handler.ListRoles)
+	api.Post(routes.CreateRole, ws.handler.CreateRole)
+	api.Get(routes.ListRoles, ws.handler.ListRoles)
 
 	// User Routes
-	app.Post(routes.CreateUser, ws.handler.CreateUser)
-	app.Post(routes.GrantRoles, ws.handler.GrantRoles)
-	app.Get(routes.LoginUser, ws.handler.LoginUser)
+	api.Post(routes.CreateUser, ws.handler.CreateUser)
+	api.Post(routes.GrantRoles, ws.handler.GrantRoles)
+	api.Get(routes.LoginUser, ws.handler.LoginUser)
 	// app.Get("/api/users/permission", ws.handler.CheckPermissions)
 
 	err := app.Listen(ws.port)

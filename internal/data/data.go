@@ -2,6 +2,7 @@ package data
 
 import (
 	"github.com/TanmoySG/wunderDB/internal/filter"
+	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/TanmoySG/wunderDB/pkg/schema"
 	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
@@ -31,16 +32,17 @@ func (d Data) Add(dataId model.Identifier, data interface{}) *er.WdbError {
 		return err
 	}
 
-	if isValid {
-		d.Data[dataId] = &model.Datum{
-			Identifier: model.Identifier(dataId),
-			Data:       data,
-			Metadata:   model.Metadata{},
-		}
-		return nil
-	} else {
+	if !isValid {
 		return &er.SchemaValidationFailed
 	}
+
+	d.Data[dataId] = &model.Datum{
+		Identifier: model.Identifier(dataId),
+		Data:       data,
+		Metadata:   metadata.New().BasicChangeMetadata(),
+	}
+
+	return nil
 }
 
 func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Datum, *er.WdbError) {
@@ -83,6 +85,7 @@ func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError 
 				isValid, err := schema.Validate(data)
 				if err == nil && isValid {
 					d.Data[identifier].Data = &data
+					d.Data[identifier].Metadata = metadata.Use(d.Data[identifier].Metadata).BasicChangeMetadata()
 				}
 				iterError = err
 			}

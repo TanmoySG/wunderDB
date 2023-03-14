@@ -1,27 +1,27 @@
 package routes
 
 const (
-	CreateDatabase = "/api/databases"
-	FetchDatabase  = "/api/databases/:database"
-	DeleteDatabase = "/api/databases/:database"
+	CreateDatabase = "/databases"
+	FetchDatabase  = "/databases/:database"
+	DeleteDatabase = "/databases/:database"
 
 	// Collection Routes
-	CreateCollection = "/api/databases/:database/collections"
-	FetchCollection  = "/api/databases/:database/collections/:collection"
-	DeleteCollection = "/api/databases/:database/collections/:collection"
+	CreateCollection = "/databases/:database/collections"
+	FetchCollection  = "/databases/:database/collections/:collection"
+	DeleteCollection = "/databases/:database/collections/:collection"
 
 	// Data Routes
-	AddData    = "/api/databases/:database/collections/:collection/data"
-	ReadData   = "/api/databases/:database/collections/:collection/data"
-	DeleteData = "/api/databases/:database/collections/:collection/data"
-	UpdateData = "/api/databases/:database/collections/:collection/data"
+	AddData    = "/databases/:database/collections/:collection/data"
+	ReadData   = "/databases/:database/collections/:collection/data"
+	DeleteData = "/databases/:database/collections/:collection/data"
+	UpdateData = "/databases/:database/collections/:collection/data"
 
 	// Role Routes
-	CreateRole = "/api/roles"
-	ListRoles  = "/api/roles"
+	CreateRole = "/roles"
+	ListRoles  = "/roles"
 
 	// User Routes
-	CreateUser = "/api/users"
-	LoginUser  = "/api/users/login"
-	GrantRoles = "/api/users/grant"
+	CreateUser = "/users"
+	LoginUser  = "/users/login"
+	GrantRoles = "/users/grant"
 )
