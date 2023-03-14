@@ -4,7 +4,23 @@
 #        Do not add 'v' before the tag, it is added in the script itself.
 #        Generates version.go file, git commit, tags and pushes only if current branch is main
 
-TARGET_VERSION=$1
+rx='^([0-9]+\.){0,2}(\*|[0-9]+)$'
+if [[ $1 =~ $rx ]]; then
+    echo "Creating Tag..."
+else
+    echo "ERROR:not semver compliant: '$1'"
+    exit 1
+fi
+
+if [[ $1 != v* ]]; then
+    TARGET_VERSION=v$1
+else
+    TARGET_VERSION=$1
+fi
+
+VERSION_JSON_PATH="../internal/version/version.json"
+VERSION_GO_PATH="../internal/version/version.go"
+COMMIT_MESSAGE="pre-tag: updated wdb version: $TARGET_VERSION"
 
 parent_path=$(
     cd "$(dirname "${BASH_SOURCE[0]}")"

@@ -20,7 +20,6 @@ fi
 
 VERSION_JSON_PATH="../internal/version/version.json"
 VERSION_GO_PATH="../internal/version/version.go"
-COMMIT_MESSAGE="pre-tag: updated wdb version: $TARGET_VERSION"
 
 echo "TARGET VERSION: $TARGET_VERSION"
 
