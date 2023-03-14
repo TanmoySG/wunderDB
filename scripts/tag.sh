@@ -4,46 +4,14 @@
 #        Do not add 'v' before the tag, it is added in the script itself.
 #        Generates version.go file, git commit, tags and pushes only if current branch is main
 
-rx='^([0-9]+\.){0,2}(\*|[0-9]+)$'
-if [[ $1 =~ $rx ]]; then
-    echo "Creating Tag..."
-else
-    echo "ERROR:not semver compliant: '$1'"
-    exit 1
-fi
-
-if [[ $1 != v* ]]; then
-    TARGET_VERSION=v$1
-else
-    TARGET_VERSION=$1
-fi
-
-VERSION_JSON_PATH="../internal/version/version.json"
-VERSION_GO_PATH="../internal/version/version.go"
-COMMIT_MESSAGE="pre-tag: updated wdb version: $TARGET_VERSION"
-
-echo "TARGET VERSION: $TARGET_VERSION"
+TARGET_VERSION=$1
 
 parent_path=$(
     cd "$(dirname "${BASH_SOURCE[0]}")"
     pwd -P
 )
 
-if [[ -z "$TARGET_VERSION" ]]; then
-    # $var is empty, do what you want
-    echo "version not provided"
-fi
-
-cd "$parent_path"
-WDB_VERSION=$(cat $VERSION_JSON_PATH | jq -r ".wdb_version")
-CTL_VERSION=$(cat $VERSION_JSON_PATH | jq -r ".wdbctl_version")
-
-genGoCode="package version\n\nconst WDB_VERSION = \"$TARGET_VERSION\"\nconst CLI_VERSION = \"$CTL_VERSION\""
-
-tmp=$(mktemp)
-jq --arg v "$TARGET_VERSION" '.wdb_version = $v' $VERSION_JSON_PATH >"$tmp" && mv "$tmp" $VERSION_JSON_PATH
-
-echo $genGoCode >$VERSION_GO_PATH
+sh $parent_path/upgrade.sh $TARGET_VERSION
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 if [[ "$BRANCH" != "main" ]]; then
