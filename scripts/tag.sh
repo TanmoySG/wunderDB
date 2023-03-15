@@ -20,14 +20,33 @@ fi
 
 VERSION_JSON_PATH="../internal/version/version.json"
 VERSION_GO_PATH="../internal/version/version.go"
-COMMIT_MESSAGE="pre-tag: updated wdb version: $TARGET_VERSION"
+COMMIT_MESSAGE="pre-tag-commit: updated wdb version: $TARGET_VERSION"
+
+echo "TARGET VERSION: $TARGET_VERSION"
 
 parent_path=$(
     cd "$(dirname "${BASH_SOURCE[0]}")"
     pwd -P
 )
 
-sh $parent_path/upgrade.sh $TARGET_VERSION
+if [[ -z "$TARGET_VERSION" ]]; then
+    # $var is empty, do what you want
+    echo "version not provided"
+fi
+
+cd "$parent_path"
+WDB_VERSION=$(cat $VERSION_JSON_PATH | jq -r ".wdb_version")
+CTL_VERSION=$(cat $VERSION_JSON_PATH | jq -r ".wdbctl_version")
+WDB_BUILD_DATE=$(cat $VERSION_JSON_PATH | jq -r ".wdb_build_date")
+
+TARGET_BUILD_DATE=$(date +%F_%T)
+
+genGoCode="package version\n\nconst (\n\tWDB_VERSION = \"$TARGET_VERSION\"\n\tCLI_VERSION = \"$CTL_VERSION\"\n\tBUILD_DATE = \"$TARGET_BUILD_DATE\"\n)"
+
+tmp=$(mktemp)
+jq --arg v "$TARGET_VERSION" '.wdb_version = $v' $VERSION_JSON_PATH &&
+    jq --arg b "$TARGET_BUILD_DATE" '.wdb_build_date = $b' $VERSION_JSON_PATH >"$tmp" >"$tmp" &&
+    mv "$tmp" $VERSION_JSON_PATH
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 if [[ "$BRANCH" != "main" ]]; then
@@ -35,8 +54,6 @@ if [[ "$BRANCH" != "main" ]]; then
     git restore $VERSION_JSON_PATH $VERSION_GO_PATH
     exit 1
 fi
-
-go fmt ./...
 
 git add $VERSION_JSON_PATH $VERSION_GO_PATH
 git commit -m "$COMMIT_MESSAGE"
