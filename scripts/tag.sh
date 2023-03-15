@@ -44,9 +44,11 @@ TARGET_BUILD_DATE=$(date +%F_%T)
 genGoCode="package version\n\nconst (\n\tWDB_VERSION = \"$TARGET_VERSION\"\n\tCLI_VERSION = \"$CTL_VERSION\"\n\tBUILD_DATE = \"$TARGET_BUILD_DATE\"\n)"
 
 tmp=$(mktemp)
-jq --arg v "$TARGET_VERSION" '.wdb_version = $v' $VERSION_JSON_PATH &&
-    jq --arg b "$TARGET_BUILD_DATE" '.wdb_build_date = $b' $VERSION_JSON_PATH >"$tmp" >"$tmp" &&
-    mv "$tmp" $VERSION_JSON_PATH
+jq --arg v "$TARGET_VERSION" '.wdb_version = $v' $VERSION_JSON_PATH >"$tmp" && mv "$tmp" $VERSION_JSON_PATH
+jq --arg b "$TARGET_BUILD_DATE" '.wdb_build_date = $b' $VERSION_JSON_PATH >"$tmp" && mv "$tmp" $VERSION_JSON_PATH
+rm "$tmp"
+
+echo $genGoCode >$VERSION_GO_PATH
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 if [[ "$BRANCH" != "main" ]]; then
