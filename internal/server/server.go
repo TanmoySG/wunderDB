@@ -6,6 +6,7 @@ import (
 
 	"github.com/TanmoySG/wunderDB/internal/server/handlers"
 	"github.com/TanmoySG/wunderDB/internal/server/routes"
+	"github.com/TanmoySG/wunderDB/pkg/recovery"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -33,7 +34,13 @@ func (ws wdbServer) Start() {
 		DisableStartupMessage: true, // fiber box disable
 	})
 
+	// recovery configuration
+	recoveryConf := recovery.DefaultConfig
+	recoveryConf.EnableStackTrace = true
+	recoveryConf.SendMessage = true
+
 	app.Use(logger.New())
+	app.Use(recovery.New(recoveryConf))
 
 	api := app.Group("/api")
 

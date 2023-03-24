@@ -3,3 +3,6 @@ build:
 
 build-cli:
 	go build -o bin/wdbctl ./cmd/wdbctl/cli.go
+
+run:
+	go run ./cmd/wunderdb/wdb.go
