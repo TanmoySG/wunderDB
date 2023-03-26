@@ -12,6 +12,10 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
+var (
+	defaultPanicMessage = "wunderDB panicked on request"
+)
+
 type wdbServer struct {
 	port    string
 	handler handlers.Client
@@ -34,8 +38,12 @@ func (ws wdbServer) Start() {
 		DisableStartupMessage: true, // fiber box disable
 	})
 
+	// recovery configuration
+	recoveryConf := recovery.DefaultConfig
+	recoveryConf.Message = &defaultPanicMessage
+
 	app.Use(logger.New())
-	app.Use(recovery.New())
+	app.Use(recovery.New(recoveryConf))
 
 	api := app.Group("/api")
 

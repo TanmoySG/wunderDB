@@ -31,7 +31,7 @@ type Config struct {
 	SendMessage      bool
 	Message          *string
 	EnableStackTrace bool
-	ExitHandler      func(c *fiber.Ctx)
+	RecoveryHandler  func(c *fiber.Ctx)
 }
 
 // ConfigDefault is the default config
@@ -40,7 +40,7 @@ var DefaultConfig = Config{
 	SendMessage:      true,
 	Message:          &defaultMessage,
 	EnableStackTrace: true,
-	ExitHandler:      nil,
+	RecoveryHandler:  nil,
 }
 
 // Helper function to set default values
@@ -85,7 +85,7 @@ func New(config ...Config) fiber.Handler {
 					c.Status(http.StatusInternalServerError)
 					c.Send(r.Marshal())
 
-					cfg.ExitHandler(c)
+					cfg.RecoveryHandler(c)
 				}
 			}
 		}()
