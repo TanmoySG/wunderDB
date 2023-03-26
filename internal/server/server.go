@@ -5,8 +5,8 @@ import (
 	"log"
 
 	"github.com/TanmoySG/wunderDB/internal/server/handlers"
+	"github.com/TanmoySG/wunderDB/internal/server/middlewares/recovery"
 	"github.com/TanmoySG/wunderDB/internal/server/routes"
-	"github.com/TanmoySG/wunderDB/pkg/recovery"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"

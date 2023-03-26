@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
+	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -13,6 +14,7 @@ var (
 )
 
 type recoveryMessage struct {
+	Status  string  `json:"status,omitempty"`
 	Message *string `json:"message,omitempty"`
 	Stack   *string `json:"stack,omitempty"`
 }
@@ -79,13 +81,18 @@ func New(config ...Config) fiber.Handler {
 					}
 
 					r := recoveryMessage{
+						Status:  response.StatusFailure,
 						Message: cfg.Message,
 						Stack:   stackTrace,
 					}
+
 					c.Status(http.StatusInternalServerError)
 					c.Send(r.Marshal())
 
-					cfg.RecoveryHandler(c)
+					// extra recovery handler
+					if cfg.RecoveryHandler != nil {
+						cfg.RecoveryHandler(c)
+					}
 				}
 			}
 		}()
