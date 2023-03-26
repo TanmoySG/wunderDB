@@ -34,13 +34,8 @@ func (ws wdbServer) Start() {
 		DisableStartupMessage: true, // fiber box disable
 	})
 
-	// recovery configuration
-	recoveryConf := recovery.DefaultConfig
-	recoveryConf.EnableStackTrace = true
-	recoveryConf.SendMessage = true
-
 	app.Use(logger.New())
-	app.Use(recovery.New(recoveryConf))
+	app.Use(recovery.New())
 
 	api := app.Group("/api")
 
