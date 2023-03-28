@@ -5,10 +5,15 @@ import (
 	"log"
 
 	"github.com/TanmoySG/wunderDB/internal/server/handlers"
+	"github.com/TanmoySG/wunderDB/internal/server/middlewares/recovery"
 	"github.com/TanmoySG/wunderDB/internal/server/routes"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+)
+
+var (
+	defaultPanicMessage = "wunderDB panicked on request"
 )
 
 type wdbServer struct {
@@ -33,7 +38,12 @@ func (ws wdbServer) Start() {
 		DisableStartupMessage: true, // fiber box disable
 	})
 
+	// recovery configuration
+	recoveryConf := recovery.DefaultConfig
+	recoveryConf.Message = &defaultPanicMessage
+
 	app.Use(logger.New())
+	app.Use(recovery.New(recoveryConf))
 
 	api := app.Group("/api")
 
