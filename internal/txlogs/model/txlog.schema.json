@@ -1,0 +1,122 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Schema for TxLogs",
+    "type": "object",
+    "properties": {
+        "action": {
+            "description": "action performed on entity, pick from permissions",
+            "type": "string"
+        },
+        "entity_type": {
+            "description": "type of entity",
+            "type": "string"
+        },
+        "entity_path": {
+            "description": "action performed on entity, pick from permissions",
+            "type": "object",
+            "properties": {
+                "database": {
+                    "description": "database name",
+                    "type": "string"
+                },
+                "collection": {
+                    "description": "collection name, must also have database",
+                    "type": "string"
+                }
+            },
+            "required": []
+        },
+        "status": {
+            "description": "status of transaction",
+            "type": "string",
+            "enum": [
+                "SUCCESS",
+                "FAILED"
+            ]
+        },
+        "timestamp": {
+            "description": "timestamp of transaction",
+            "type": "number"
+        },
+        "actor": {
+            "description": "actor of transaction",
+            "type": "string"
+        },
+        "transaction_details": {
+            "description": "HTTP details of transaction",
+            "type": "object",
+            "properties": {
+                "url_endpoint": {
+                    "description": "transaction endpoint/url",
+                    "type": "string"
+                },
+                "method": {
+                    "description": "HTTP method of transaction",
+                    "type": "string",
+                    "enum": [
+                        "POST",
+                        "GET",
+                        "DELETE",
+                        "PATCH"
+                    ]
+                },
+                "request": {
+                    "description": "request details of transaction",
+                    "type": "object",
+                    "properties": {
+                        "user-agent": {
+                            "description": "user-agent of http transaction",
+                            "type": "object",
+                            "properties": {}
+                        },
+                        "is_authenticated": {
+                            "description": "check if actor is authenticated",
+                            "type": "boolean"
+                        },
+                        "payload": {
+                            "description": "payload of HTTP transaction",
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "required": [
+                        "is_authenticated"
+                    ]
+                },
+                "response": {
+                    "description": "response details of transaction",
+                    "type": "object",
+                    "properties": {
+                        "http_status": {
+                            "description": "response HTTP status of transaction",
+                            "type": "string"
+                        },
+                        "response_body": {
+                            "description": "response payload/body of transaction",
+                            "type": "object",
+                            "properties": {}
+                        }
+                    },
+                    "required": [
+                        "http_status",
+                        "response_body"
+                    ]
+                }
+            },
+            "required": [
+                "url_endpoint",
+                "method",
+                "request",
+                "response"
+            ]
+        }
+    },
+    "required": [
+        "entity_type",
+        "action",
+        "entity_path",
+        "status",
+        "timestamp",
+        "transaction_details"
+    ]
+}
