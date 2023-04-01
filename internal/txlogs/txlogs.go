@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	txlModel "github.com/TanmoySG/wunderDB/internal/txlogs/model"
 	"github.com/gofiber/fiber/v2"
@@ -32,7 +33,6 @@ func (tl *TransactionLogs) Log(c *fiber.Ctx) {
 }
 
 func CreateTxLog(txnAction, txnActor string, txnRequestStatus string, txnEntities txlModel.TxlogSchemaJsonEntityPath, txnDetails txlModel.TxlogSchemaJsonTransactionDetails) txlModel.TxlogSchemaJson {
-
 	return txlModel.TxlogSchemaJson{
 		Action:             txnAction,
 		Actor:              &txnActor,
@@ -45,7 +45,6 @@ func CreateTxLog(txnAction, txnActor string, txnRequestStatus string, txnEntitie
 }
 
 func GetTxnHttpDetails(c fiber.Ctx) txlModel.TxlogSchemaJsonTransactionDetails {
-
 	txnHttpUrl, txnUserAgent, txnRequestIP := c.Path(), c.Get("User-Agent"), c.IP()
 
 	txnRequestHttpMethod := txlModel.TxlogSchemaJsonTransactionDetailsMethod(c.Method())
@@ -70,6 +69,14 @@ func GetTxnHttpDetails(c fiber.Ctx) txlModel.TxlogSchemaJsonTransactionDetails {
 			ResponseBody: txnResponsePayload,
 		},
 	}
+}
+
+// only write actions are loggable
+func IsTxnLoggable(txnAction string) bool {
+	if txnType := privileges.GetPrivilegeType(txnAction); txnType == privileges.WritePrivilege {
+		return true
+	}
+	return false
 }
 
 func getEntityType(txnEntities txlModel.TxlogSchemaJsonEntityPath) txlModel.TxlogSchemaJsonEntityType {
