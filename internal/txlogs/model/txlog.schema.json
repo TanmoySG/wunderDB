@@ -94,7 +94,7 @@
                     "properties": {
                         "http_status": {
                             "description": "response HTTP status of transaction",
-                            "type": "string"
+                            "type": "integer"
                         },
                         "response_body": {
                             "description": "response payload/body of transaction",

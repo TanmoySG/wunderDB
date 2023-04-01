@@ -232,7 +232,7 @@ type TxlogSchemaJsonTransactionDetailsRequestUserAgent map[string]interface{}
 // response details of transaction
 type TxlogSchemaJsonTransactionDetailsResponse struct {
 	// response HTTP status of transaction
-	HttpStatus string `json:"http_status"`
+	HttpStatus int `json:"http_status"`
 
 	// response payload/body of transaction
 	ResponseBody string `json:"response_body"`

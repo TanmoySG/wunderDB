@@ -66,7 +66,7 @@ func GetTxnHttpDetails(c fiber.Ctx) txlModel.TxlogSchemaJsonTransactionDetails {
 			},
 		},
 		Response: txlModel.TxlogSchemaJsonTransactionDetailsResponse{
-			HttpStatus:   fmt.Sprint(txnResponseHttpStatusCode),
+			HttpStatus:   txnResponseHttpStatusCode,
 			ResponseBody: txnResponsePayload,
 		},
 	}
