@@ -9,7 +9,11 @@
         },
         "entity_type": {
             "description": "type of entity",
-            "type": "string"
+            "type": "string",
+            "enum": [
+                "DATABASE",
+                "COLLECTION"
+            ]
         },
         "entity_path": {
             "description": "action performed on entity, pick from permissions",
@@ -24,7 +28,9 @@
                     "type": "string"
                 }
             },
-            "required": []
+            "required": [
+                "database"
+            ]
         },
         "status": {
             "description": "status of transaction",
@@ -75,8 +81,7 @@
                         },
                         "payload": {
                             "description": "payload of HTTP transaction",
-                            "type": "object",
-                            "properties": {}
+                            "type": "string"
                         }
                     },
                     "required": [
@@ -93,8 +98,7 @@
                         },
                         "response_body": {
                             "description": "response payload/body of transaction",
-                            "type": "object",
-                            "properties": {}
+                            "type": "string"
                         }
                     },
                     "required": [

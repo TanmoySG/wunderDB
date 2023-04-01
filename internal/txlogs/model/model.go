@@ -3,51 +3,8 @@
 package txlModel
 
 import "fmt"
-import "reflect"
 import "encoding/json"
-
-// UnmarshalJSON implements json.Unmarshaler.
-func (j *TxlogSchemaJsonTransactionDetailsRequest) UnmarshalJSON(b []byte) error {
-	var raw map[string]interface{}
-	if err := json.Unmarshal(b, &raw); err != nil {
-		return err
-	}
-	if v, ok := raw["is_authenticated"]; !ok || v == nil {
-		return fmt.Errorf("field is_authenticated: required")
-	}
-	type Plain TxlogSchemaJsonTransactionDetailsRequest
-	var plain Plain
-	if err := json.Unmarshal(b, &plain); err != nil {
-		return err
-	}
-	*j = TxlogSchemaJsonTransactionDetailsRequest(plain)
-	return nil
-}
-
-type TxlogSchemaJsonStatus string
-
-type TxlogSchemaJson struct {
-	// action performed on entity, pick from permissions
-	Action string `json:"action"`
-
-	// actor of transaction
-	Actor *string `json:"actor,omitempty"`
-
-	// action performed on entity, pick from permissions
-	EntityPath TxlogSchemaJsonEntityPath `json:"entity_path"`
-
-	// type of entity
-	EntityType string `json:"entity_type"`
-
-	// status of transaction
-	Status TxlogSchemaJsonStatus `json:"status"`
-
-	// timestamp of transaction
-	Timestamp float64 `json:"timestamp"`
-
-	// HTTP details of transaction
-	TransactionDetails TxlogSchemaJsonTransactionDetails `json:"transaction_details"`
-}
+import "reflect"
 
 // UnmarshalJSON implements json.Unmarshaler.
 func (j *TxlogSchemaJsonStatus) UnmarshalJSON(b []byte) error {
@@ -69,10 +26,46 @@ func (j *TxlogSchemaJsonStatus) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-const TxlogSchemaJsonStatusSUCCESS TxlogSchemaJsonStatus = "SUCCESS"
-const TxlogSchemaJsonStatusFAILED TxlogSchemaJsonStatus = "FAILED"
+// UnmarshalJSON implements json.Unmarshaler.
+func (j *TxlogSchemaJsonEntityPath) UnmarshalJSON(b []byte) error {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return err
+	}
+	if v, ok := raw["database"]; !ok || v == nil {
+		return fmt.Errorf("field database: required")
+	}
+	type Plain TxlogSchemaJsonEntityPath
+	var plain Plain
+	if err := json.Unmarshal(b, &plain); err != nil {
+		return err
+	}
+	*j = TxlogSchemaJsonEntityPath(plain)
+	return nil
+}
 
-type TxlogSchemaJsonTransactionDetailsMethod string
+type TxlogSchemaJson struct {
+	// action performed on entity, pick from permissions
+	Action string `json:"action"`
+
+	// actor of transaction
+	Actor *string `json:"actor,omitempty"`
+
+	// action performed on entity, pick from permissions
+	EntityPath TxlogSchemaJsonEntityPath `json:"entity_path"`
+
+	// type of entity
+	EntityType TxlogSchemaJsonEntityType `json:"entity_type"`
+
+	// status of transaction
+	Status TxlogSchemaJsonStatus `json:"status"`
+
+	// timestamp of transaction
+	Timestamp float64 `json:"timestamp"`
+
+	// HTTP details of transaction
+	TransactionDetails TxlogSchemaJsonTransactionDetails `json:"transaction_details"`
+}
 
 // UnmarshalJSON implements json.Unmarshaler.
 func (j *TxlogSchemaJsonTransactionDetails) UnmarshalJSON(b []byte) error {
@@ -102,50 +95,23 @@ func (j *TxlogSchemaJsonTransactionDetails) UnmarshalJSON(b []byte) error {
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (j *TxlogSchemaJsonTransactionDetailsMethod) UnmarshalJSON(b []byte) error {
+func (j *TxlogSchemaJsonEntityType) UnmarshalJSON(b []byte) error {
 	var v string
 	if err := json.Unmarshal(b, &v); err != nil {
 		return err
 	}
 	var ok bool
-	for _, expected := range enumValues_TxlogSchemaJsonTransactionDetailsMethod {
+	for _, expected := range enumValues_TxlogSchemaJsonEntityType {
 		if reflect.DeepEqual(v, expected) {
 			ok = true
 			break
 		}
 	}
 	if !ok {
-		return fmt.Errorf("invalid value (expected one of %#v): %#v", enumValues_TxlogSchemaJsonTransactionDetailsMethod, v)
+		return fmt.Errorf("invalid value (expected one of %#v): %#v", enumValues_TxlogSchemaJsonEntityType, v)
 	}
-	*j = TxlogSchemaJsonTransactionDetailsMethod(v)
+	*j = TxlogSchemaJsonEntityType(v)
 	return nil
-}
-
-// HTTP details of transaction
-type TxlogSchemaJsonTransactionDetails struct {
-	// HTTP method of transaction
-	Method TxlogSchemaJsonTransactionDetailsMethod `json:"method"`
-
-	// request details of transaction
-	Request TxlogSchemaJsonTransactionDetailsRequest `json:"request"`
-
-	// response details of transaction
-	Response TxlogSchemaJsonTransactionDetailsResponse `json:"response"`
-
-	// transaction endpoint/url
-	UrlEndpoint string `json:"url_endpoint"`
-}
-
-const TxlogSchemaJsonTransactionDetailsMethodGET TxlogSchemaJsonTransactionDetailsMethod = "GET"
-const TxlogSchemaJsonTransactionDetailsMethodDELETE TxlogSchemaJsonTransactionDetailsMethod = "DELETE"
-
-// action performed on entity, pick from permissions
-type TxlogSchemaJsonEntityPath struct {
-	// collection name, must also have database
-	Collection *string `json:"collection,omitempty"`
-
-	// database name
-	Database *string `json:"database,omitempty"`
 }
 
 // UnmarshalJSON implements json.Unmarshaler.
@@ -169,6 +135,82 @@ func (j *TxlogSchemaJsonTransactionDetailsResponse) UnmarshalJSON(b []byte) erro
 	return nil
 }
 
+// UnmarshalJSON implements json.Unmarshaler.
+func (j *TxlogSchemaJsonTransactionDetailsRequest) UnmarshalJSON(b []byte) error {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return err
+	}
+	if v, ok := raw["is_authenticated"]; !ok || v == nil {
+		return fmt.Errorf("field is_authenticated: required")
+	}
+	type Plain TxlogSchemaJsonTransactionDetailsRequest
+	var plain Plain
+	if err := json.Unmarshal(b, &plain); err != nil {
+		return err
+	}
+	*j = TxlogSchemaJsonTransactionDetailsRequest(plain)
+	return nil
+}
+
+// UnmarshalJSON implements json.Unmarshaler.
+func (j *TxlogSchemaJsonTransactionDetailsMethod) UnmarshalJSON(b []byte) error {
+	var v string
+	if err := json.Unmarshal(b, &v); err != nil {
+		return err
+	}
+	var ok bool
+	for _, expected := range enumValues_TxlogSchemaJsonTransactionDetailsMethod {
+		if reflect.DeepEqual(v, expected) {
+			ok = true
+			break
+		}
+	}
+	if !ok {
+		return fmt.Errorf("invalid value (expected one of %#v): %#v", enumValues_TxlogSchemaJsonTransactionDetailsMethod, v)
+	}
+	*j = TxlogSchemaJsonTransactionDetailsMethod(v)
+	return nil
+}
+
+// action performed on entity, pick from permissions
+type TxlogSchemaJsonEntityPath struct {
+	// collection name, must also have database
+	Collection *string `json:"collection,omitempty"`
+
+	// database name
+	Database string `json:"database"`
+}
+
+type TxlogSchemaJsonEntityType string
+
+const TxlogSchemaJsonEntityTypeCOLLECTION TxlogSchemaJsonEntityType = "COLLECTION"
+const TxlogSchemaJsonEntityTypeDATABASE TxlogSchemaJsonEntityType = "DATABASE"
+
+type TxlogSchemaJsonStatus string
+
+const TxlogSchemaJsonStatusFAILED TxlogSchemaJsonStatus = "FAILED"
+const TxlogSchemaJsonStatusSUCCESS TxlogSchemaJsonStatus = "SUCCESS"
+
+// HTTP details of transaction
+type TxlogSchemaJsonTransactionDetails struct {
+	// HTTP method of transaction
+	Method TxlogSchemaJsonTransactionDetailsMethod `json:"method"`
+
+	// request details of transaction
+	Request TxlogSchemaJsonTransactionDetailsRequest `json:"request"`
+
+	// response details of transaction
+	Response TxlogSchemaJsonTransactionDetailsResponse `json:"response"`
+
+	// transaction endpoint/url
+	UrlEndpoint string `json:"url_endpoint"`
+}
+
+type TxlogSchemaJsonTransactionDetailsMethod string
+
+const TxlogSchemaJsonTransactionDetailsMethodDELETE TxlogSchemaJsonTransactionDetailsMethod = "DELETE"
+const TxlogSchemaJsonTransactionDetailsMethodGET TxlogSchemaJsonTransactionDetailsMethod = "GET"
 const TxlogSchemaJsonTransactionDetailsMethodPATCH TxlogSchemaJsonTransactionDetailsMethod = "PATCH"
 const TxlogSchemaJsonTransactionDetailsMethodPOST TxlogSchemaJsonTransactionDetailsMethod = "POST"
 
@@ -178,14 +220,11 @@ type TxlogSchemaJsonTransactionDetailsRequest struct {
 	IsAuthenticated bool `json:"is_authenticated"`
 
 	// payload of HTTP transaction
-	Payload TxlogSchemaJsonTransactionDetailsRequestPayload `json:"payload,omitempty"`
+	Payload *string `json:"payload,omitempty"`
 
 	// user-agent of http transaction
 	UserAgent TxlogSchemaJsonTransactionDetailsRequestUserAgent `json:"user-agent,omitempty"`
 }
-
-// payload of HTTP transaction
-type TxlogSchemaJsonTransactionDetailsRequestPayload map[string]interface{}
 
 // user-agent of http transaction
 type TxlogSchemaJsonTransactionDetailsRequestUserAgent map[string]interface{}
@@ -196,12 +235,13 @@ type TxlogSchemaJsonTransactionDetailsResponse struct {
 	HttpStatus string `json:"http_status"`
 
 	// response payload/body of transaction
-	ResponseBody TxlogSchemaJsonTransactionDetailsResponseResponseBody `json:"response_body"`
+	ResponseBody string `json:"response_body"`
 }
 
-// response payload/body of transaction
-type TxlogSchemaJsonTransactionDetailsResponseResponseBody map[string]interface{}
-
+var enumValues_TxlogSchemaJsonEntityType = []interface{}{
+	"DATABASE",
+	"COLLECTION",
+}
 var enumValues_TxlogSchemaJsonStatus = []interface{}{
 	"SUCCESS",
 	"FAILED",
