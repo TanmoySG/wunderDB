@@ -7,6 +7,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	txlModel "github.com/TanmoySG/wunderDB/internal/txlogs/model"
+	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -69,6 +70,15 @@ func GetTxnHttpDetails(c fiber.Ctx) txlModel.TxlogSchemaJsonTransactionDetails {
 			ResponseBody: txnResponsePayload,
 		},
 	}
+}
+
+func GetTxnActor(authString string) string {
+	username, _, err := authentication.HandleUserCredentials(authString)
+	if err != nil {
+		return ""
+	}
+
+	return *username
 }
 
 // only write actions are loggable

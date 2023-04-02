@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"fmt"
-
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/internal/txlogs"
 	txlModel "github.com/TanmoySG/wunderDB/internal/txlogs/model"
@@ -20,6 +18,10 @@ var (
 const (
 	authSuccessful = true
 	authFailure    = false
+)
+
+const (
+	AuthorizationHeader = "Authorization"
 )
 
 func (wh wdbHandlers) handleAuthenticationAndAuthorization(c *fiber.Ctx, entities model.Entities, privilege string) (bool, *er.WdbError) {
@@ -100,25 +102,27 @@ func ValidateRequest(request any) *er.WdbError {
 func HandleTransactions(c *fiber.Ctx, apiResponse response.ApiResponse, entities model.Entities) error {
 	if txlogs.IsTxnLoggable(apiResponse.Response.Action) {
 		if apiResponse.Response.Status == response.StatusSuccess {
-			var databaseEntity string
+			databaseEntity := *entities.Databases
 			if entities.Databases == nil {
 				databaseEntity = ""
 			}
 
+			txnActor := txlogs.GetTxnActor(c.Get(AuthorizationHeader))
 			txnAction := apiResponse.Response.Action
+
 			txnHttpDetails := txlogs.GetTxnHttpDetails(*c)
 			txnEntityPath := txlModel.TxlogSchemaJsonEntityPath{
 				Database:   databaseEntity,
 				Collection: entities.Collections,
 			}
 
-			txnLog := txlogs.CreateTxLog(txnAction, "", apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
-			txn, err := txnLog.Marshal()
+			txnLog := txlogs.CreateTxLog(txnAction, txnActor, apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
+			_, err := txnLog.Marshal()
 			if err != nil {
 				return err
 			}
 
-			fmt.Println(string(txn))
+			// fmt.Println(string(txn))
 		}
 	}
 	return nil
