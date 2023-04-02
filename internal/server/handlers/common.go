@@ -1,6 +1,11 @@
 package handlers
 
 import (
+	"fmt"
+
+	"github.com/TanmoySG/wunderDB/internal/server/response"
+	"github.com/TanmoySG/wunderDB/internal/txlogs"
+	txlModel "github.com/TanmoySG/wunderDB/internal/txlogs/model"
 	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
@@ -65,10 +70,21 @@ func (wh wdbHandlers) handleAuthorization(username string, entity model.Entities
 	return authSuccessful, nil
 }
 
-func SendResponse(c *fiber.Ctx, marshaledResponse []byte, statusCode int) error {
+func SendResponse(c *fiber.Ctx, apiResponse response.ApiResponse) error {
 	c.Set(ContentType, ApplicationJson)
-	c.Send(marshaledResponse)
-	return c.SendStatus(statusCode)
+
+	marshaledResponse := apiResponse.Marshal()
+	err := c.Send(marshaledResponse)
+	if err != nil {
+		return err
+	}
+
+	err = c.SendStatus(apiResponse.HttpStatusCode)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func ValidateRequest(request any) *er.WdbError {
@@ -77,6 +93,27 @@ func ValidateRequest(request any) *er.WdbError {
 	err := validate.Struct(request)
 	if err != nil {
 		return &er.ValidationError
+	}
+	return nil
+}
+
+func HandleTransactions(c *fiber.Ctx, apiResponse response.ApiResponse, entities model.Entities) error {
+	if txlogs.IsTxnLoggable(apiResponse.Response.Action) {
+		// TODO: add check to only allow SUCCESS requests to pass
+		var databaseEntity string
+		if entities.Databases == nil {
+			databaseEntity = ""
+		}
+
+		txnAction := apiResponse.Response.Action
+		txnHttpDetails := txlogs.GetTxnHttpDetails(*c)
+		txnEntityPath := txlModel.TxlogSchemaJsonEntityPath{
+			Database:   databaseEntity,
+			Collection: entities.Collections,
+		}
+
+		txnLog := txlogs.CreateTxLog(txnAction, "", apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
+		fmt.Println(txnLog)
 	}
 	return nil
 }
