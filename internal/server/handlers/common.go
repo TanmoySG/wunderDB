@@ -99,21 +99,27 @@ func ValidateRequest(request any) *er.WdbError {
 
 func HandleTransactions(c *fiber.Ctx, apiResponse response.ApiResponse, entities model.Entities) error {
 	if txlogs.IsTxnLoggable(apiResponse.Response.Action) {
-		// TODO: add check to only allow SUCCESS requests to pass
-		var databaseEntity string
-		if entities.Databases == nil {
-			databaseEntity = ""
-		}
+		if apiResponse.Response.Status == response.StatusSuccess {
+			var databaseEntity string
+			if entities.Databases == nil {
+				databaseEntity = ""
+			}
 
-		txnAction := apiResponse.Response.Action
-		txnHttpDetails := txlogs.GetTxnHttpDetails(*c)
-		txnEntityPath := txlModel.TxlogSchemaJsonEntityPath{
-			Database:   databaseEntity,
-			Collection: entities.Collections,
-		}
+			txnAction := apiResponse.Response.Action
+			txnHttpDetails := txlogs.GetTxnHttpDetails(*c)
+			txnEntityPath := txlModel.TxlogSchemaJsonEntityPath{
+				Database:   databaseEntity,
+				Collection: entities.Collections,
+			}
 
-		txnLog := txlogs.CreateTxLog(txnAction, "", apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
-		fmt.Println(txnLog)
+			txnLog := txlogs.CreateTxLog(txnAction, "", apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
+			txn, err := txnLog.Marshal()
+			if err != nil {
+				return err
+			}
+
+			fmt.Println(string(txn))
+		}
 	}
 	return nil
 }

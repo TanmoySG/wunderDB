@@ -42,8 +42,15 @@ func (ws wdbServer) Start() {
 	recoveryConf := recovery.DefaultConfig
 	recoveryConf.Message = &defaultPanicMessage
 
+	// transaction logging configuration
+	// transactionLoggingConfig := transactionLogging.DefaultConfig
+	// transactionLoggingConfig.Skip = func(c *fiber.Ctx) bool {
+	// 	return false
+	// }
+
 	app.Use(logger.New())
-	app.Use(recovery.New(recoveryConf))
+	// app.Use(recovery.New(recoveryConf))
+	// app.Use(transactionLogging.New(transactionLoggingConfig))
 
 	api := app.Group("/api")
 
@@ -81,3 +88,20 @@ func (ws wdbServer) Start() {
 		log.Fatalf("exiting wdb: %s", err)
 	}
 }
+
+// func getRequestAction(c fiber.Ctx) string {
+// 	var responseBody map[string]interface{}
+
+// 	responseBodyBytes := c.Response().Body()
+
+// 	err := json.Unmarshal(responseBodyBytes, &responseBody)
+// 	if err != nil {
+// 		return ""
+// 	}
+
+// 	if _, ok := responseBody["action"]; ok {
+// 		return responseBody["action"].(string)
+// 	}
+
+// 	return ""
+// }
