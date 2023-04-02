@@ -14,12 +14,15 @@ type database struct {
 
 func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 	privilege := privileges.CreateDatabase
-
 	var apiError *er.WdbError
 
 	database := new(database)
 	if err := c.BodyParser(database); err != nil {
 		return err
+	}
+
+	entities := model.Entities{
+		Databases: &database.Name,
 	}
 
 	if err := ValidateRequest(database); err != nil {
@@ -34,7 +37,15 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 	}
 	resp := response.Format(privilege, apiError, nil)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := SendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := HandleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
@@ -57,7 +68,15 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedDatabase)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := SendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := HandleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
@@ -79,5 +98,13 @@ func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := SendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := HandleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }
