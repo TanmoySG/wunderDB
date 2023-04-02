@@ -1,11 +1,12 @@
 package privileges
 
 // TODO: merge PrivilegeScope and PrivilegeType maps
-// 		 into on map/struct and use same everywhere, eg:
-//       map[string]struct{
-//		 	Scope PrivilegeScopeType
-//			Type  PrivilegeActionType
-// 		 } 
+// into on map/struct and use same everywhere, eg:
+//
+//	map[string]struct{
+//		Scope PrivilegeScopeType
+//		Type  PrivilegeActionType
+//	}
 var PrivilegeScope = map[string]string{
 	CreateRole:       GlobalPrivileges,
 	CreateDatabase:   GlobalPrivileges,

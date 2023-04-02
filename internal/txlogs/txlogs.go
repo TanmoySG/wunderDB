@@ -81,8 +81,11 @@ func IsTxnLoggable(txnAction string) bool {
 
 func getEntityType(txnEntities txlModel.TxlogSchemaJsonEntityPath) txlModel.TxlogSchemaJsonEntityType {
 	if txnEntities.Database != "" {
-		if txnEntities.Collection != nil || *(txnEntities.Collection) != "" {
-			return txlModel.TxlogSchemaJsonEntityTypeCOLLECTION
+		if txnEntities.Collection != nil {
+			if *txnEntities.Collection != "" {
+				return txlModel.TxlogSchemaJsonEntityTypeCOLLECTION
+			}
+			return txlModel.TxlogSchemaJsonEntityTypeDATABASE // is required ?
 		}
 		return txlModel.TxlogSchemaJsonEntityTypeDATABASE
 	}
