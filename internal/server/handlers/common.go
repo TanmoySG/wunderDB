@@ -116,7 +116,6 @@ func (wh wdbHandlers) handleTransactions(c *fiber.Ctx, apiResponse response.ApiR
 
 			txnLog := txlogs.CreateTxLog(txnAction, txnActor, apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
 
-			// dotTxLogs := txlogs.UseDotTxLog(".") // move to config/init
 			err := wh.wdbTxLogs.Log(txnLog)
 			if err != nil {
 				return err
