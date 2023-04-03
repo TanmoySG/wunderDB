@@ -13,10 +13,14 @@ type DotTxLog struct {
 	transactionLogs TransactionLogs
 }
 
+// return error too : if createTxLogBase returns error
+// UseDotTxLog should also return error and fail
 func UseDotTxLog(wunderDbBasePath string) DotTxLog {
-	wdbLogBasePath := fmt.Sprintf(WDB_DOT_TX_LOG_BASEPATH, wunderDbBasePath)
+	wdbTxLogBasePath := fmt.Sprintf(WDB_DOT_TX_LOG_BASEPATH, wunderDbBasePath)
+	createTxLogBase(wdbTxLogBasePath)
+
 	return DotTxLog{
-		txLogFilepath: fmt.Sprintf(WDB_DOT_TX_LOG_FILEPATH, wdbLogBasePath, wdbDotTxLogFilename),
+		txLogFilepath: fmt.Sprintf(WDB_DOT_TX_LOG_FILEPATH, wdbTxLogBasePath, wdbDotTxLogFilename),
 	}
 }
 
@@ -31,18 +35,33 @@ func (dotTxL *DotTxLog) Commit() error {
 
 func (dotTxL *DotTxLog) Log(newLog txlModel.TxlogSchemaJson) error {
 	dotTxLFilepath := dotTxL.txLogFilepath
-	if fs.CheckFileExists(dotTxLFilepath) {
-		previousTxLogBytes, err := fs.ReadFile(dotTxLFilepath)
+	if !fs.CheckFileExists(dotTxLFilepath) {
+		err := fs.CreateFile(dotTxLFilepath)
 		if err != nil {
 			return err
 		}
 
-		err = json.Unmarshal(previousTxLogBytes, &dotTxL.transactionLogs)
+		err = fs.WriteToFile(dotTxLFilepath, []byte("{}"))
 		if err != nil {
 			return err
 		}
-
-		dotTxL.transactionLogs.Logs = append(dotTxL.transactionLogs.Logs, &newLog)
 	}
+
+	previousTxLogBytes, err := fs.ReadFile(dotTxLFilepath)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(previousTxLogBytes, &dotTxL.transactionLogs)
+	if err != nil {
+		return err
+	}
+
+	dotTxL.transactionLogs.Logs = append(dotTxL.transactionLogs.Logs, &newLog)
+
 	return nil
+}
+
+func createTxLogBase(dirPath string) {
+	_ = fs.CreateDirectory(dirPath)
 }
