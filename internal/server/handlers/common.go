@@ -11,17 +11,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var (
-	noEntities = model.Entities{}
-)
-
 const (
+	AuthorizationHeader = "Authorization"
+
 	authSuccessful = true
 	authFailure    = false
 )
 
-const (
-	AuthorizationHeader = "Authorization"
+var (
+	noEntities = model.Entities{}
 )
 
 func (wh wdbHandlers) handleAuthenticationAndAuthorization(c *fiber.Ctx, entities model.Entities, privilege string) (bool, *er.WdbError) {
@@ -117,12 +115,16 @@ func HandleTransactions(c *fiber.Ctx, apiResponse response.ApiResponse, entities
 			}
 
 			txnLog := txlogs.CreateTxLog(txnAction, txnActor, apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
-			_, err := txnLog.Marshal()
+
+			dotTxLogs := txlogs.UseDotTxLog(".") // move to config/init
+			err := dotTxLogs.Log(txnLog)
 			if err != nil {
 				return err
 			}
-
-			// fmt.Println(string(txn))
+			err = dotTxLogs.Commit()
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil
