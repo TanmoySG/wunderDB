@@ -37,7 +37,7 @@ func (wh wdbHandlers) LoginUser(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, noEntities); err != nil {
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
 		return err
 	}
 
@@ -65,7 +65,7 @@ func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, noEntities); err != nil {
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
 		return err
 	}
 
@@ -108,7 +108,7 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, noEntities); err != nil {
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
 		return err
 	}
 
@@ -136,7 +136,7 @@ func (wh wdbHandlers) CheckPermissions(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, entities); err != nil {
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
 		return err
 	}
 

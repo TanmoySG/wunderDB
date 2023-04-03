@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	tx "github.com/TanmoySG/wunderDB/internal/txlogs"
 	w "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
 )
 
 type wdbHandlers struct {
 	wdbClient w.Client
+	wdbTxLogs tx.DotTxLog
 }
 
 type Client interface {

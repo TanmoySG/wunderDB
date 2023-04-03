@@ -43,7 +43,7 @@ func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, entities); err != nil {
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
 		return err
 	}
 
@@ -88,7 +88,7 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, entities); err != nil {
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
 		return err
 	}
 
@@ -133,7 +133,7 @@ func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, entities); err != nil {
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
 		return err
 	}
 
@@ -183,7 +183,7 @@ func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, entities); err != nil {
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
 		return err
 	}
 

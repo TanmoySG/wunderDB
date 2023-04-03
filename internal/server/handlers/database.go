@@ -41,7 +41,7 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, entities); err != nil {
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
 		return err
 	}
 
@@ -72,7 +72,7 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, entities); err != nil {
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
 		return err
 	}
 
@@ -102,7 +102,7 @@ func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, entities); err != nil {
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
 		return err
 	}
 

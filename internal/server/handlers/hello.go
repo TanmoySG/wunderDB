@@ -25,7 +25,7 @@ func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := HandleTransactions(c, resp, noEntities); err != nil {
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
 		return err
 	}
 
