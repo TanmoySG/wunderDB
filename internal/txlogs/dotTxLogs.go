@@ -2,6 +2,7 @@ package txlogs
 
 import (
 	"encoding/json"
+	"fmt"
 
 	txlModel "github.com/TanmoySG/wunderDB/internal/txlogs/model"
 	"github.com/TanmoySG/wunderDB/pkg/fs"
@@ -12,9 +13,10 @@ type DotTxLog struct {
 	transactionLogs TransactionLogs
 }
 
-func UseDotTxLog(filepath string) DotTxLog {
+func UseDotTxLog(wunderDbBasePath string) DotTxLog {
+	wdbLogBasePath := fmt.Sprintf(WDB_DOT_TX_LOG_BASEPATH, wunderDbBasePath)
 	return DotTxLog{
-		txLogFilepath: filepath,
+		txLogFilepath: fmt.Sprintf(WDB_DOT_TX_LOG_FILEPATH, wdbLogBasePath, wdbDotTxLogFilename),
 	}
 }
 
