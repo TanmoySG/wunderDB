@@ -55,6 +55,6 @@ func Start(w *model.WDB, c *config.Config) {
 	wdbc := wdbClient.NewWdbClient(wdbClientConfigurations, w.Databases, w.Roles, w.Users, authentication.MD5)
 	wdbc.InitializeAdmin(c)
 
-	server := wdbs.NewWdbServer(wdbc, c.Port, c.RootDirectoryPath)
+	server := wdbs.NewWdbServer(wdbc, c.RootDirectoryPath, c.Port)
 	server.Start()
 }
