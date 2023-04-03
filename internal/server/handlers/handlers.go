@@ -11,6 +11,13 @@ type wdbHandlers struct {
 	wdbTxLogs tx.DotTxLog
 }
 
+func NewHandlers(client w.Client, wdbBasePath string) Client {
+	return wdbHandlers{
+		wdbClient: client,
+		wdbTxLogs: tx.UseDotTxLog(wdbBasePath),
+	}
+}
+
 type Client interface {
 	Hello(c *fiber.Ctx) error
 
@@ -40,10 +47,4 @@ type Client interface {
 	LoginUser(c *fiber.Ctx) error
 	// CheckPermissions(c *fiber.Ctx) error
 
-}
-
-func NewHandlers(client w.Client) Client {
-	return wdbHandlers{
-		wdbClient: client,
-	}
 }

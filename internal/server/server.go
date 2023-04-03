@@ -25,10 +25,10 @@ type Client interface {
 	Start()
 }
 
-func NewWdbServer(wdbClient wdbClient.Client, port string) Client {
+func NewWdbServer(wdbClient wdbClient.Client, wdbBasePath, port string) Client {
 	return wdbServer{
 		port:    fmt.Sprintf(":%s", port),
-		handler: handlers.NewHandlers(wdbClient),
+		handler: handlers.NewHandlers(wdbClient, wdbBasePath),
 	}
 }
 
