@@ -1,7 +1,7 @@
 package txlogs
 
 import (
-	"fmt"
+	"encoding/json"
 	"time"
 
 	"github.com/TanmoySG/wunderDB/internal/privileges"
@@ -11,26 +11,19 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-type TxnEntityType string
-
-type TransactionLogs struct {
-	Logs []*txlModel.TxlogSchemaJson
-}
-
 var (
 	DatabaseTxnEntity   TxnEntityType = "database"
 	CollectionTxnEntity TxnEntityType = "collection"
 )
 
-func Use() TransactionLogs {
-	return TransactionLogs{}
+type TxnEntityType string
+
+type TransactionLogs struct {
+	Logs []*txlModel.TxlogSchemaJson `json:"txn_logs"`
 }
 
-func (tl *TransactionLogs) Log(c *fiber.Ctx) {
-	entityPath := c.Path()
-	fmt.Println(entityPath)
-	newLog := txlModel.TxlogSchemaJson{}
-	tl.Logs = append(tl.Logs, &newLog)
+func (tl *TransactionLogs) Marshal() ([]byte, error) {
+	return json.Marshal(tl)
 }
 
 func CreateTxLog(txnAction, txnActor string, txnRequestStatus string, txnEntities txlModel.TxlogSchemaJsonEntityPath, txnDetails txlModel.TxlogSchemaJsonTransactionDetails) txlModel.TxlogSchemaJson {
@@ -61,7 +54,7 @@ func GetTxnHttpDetails(c fiber.Ctx) txlModel.TxlogSchemaJsonTransactionDetails {
 			IsAuthenticated: true, // make it dynamic based on auth
 			Payload:         &txnRequestPayload,
 			UserAgent: txlModel.TxlogSchemaJsonTransactionDetailsRequestUserAgent{
-				"userAgent": txnUserAgent,
+				"userAgent": txnUserAgent, // remove hard coded keys
 				"requestIP": txnRequestIP,
 			},
 		},
