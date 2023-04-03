@@ -8,6 +8,7 @@ const (
 	PORT                    = "PORT"
 	PERSISTANT_STORAGE_PATH = "PERSISTANT_STORAGE_PATH"
 	OVERRIDE_CONFIG         = "OVERRIDE_CONFIG"
+	ROOT_DIR_PATH           = "ROOT_DIR_PATH"
 )
 
 var defaultValues = map[string]string{
