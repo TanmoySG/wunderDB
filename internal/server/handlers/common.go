@@ -70,7 +70,7 @@ func (wh wdbHandlers) handleAuthorization(username string, entity model.Entities
 	return authSuccessful, nil
 }
 
-func SendResponse(c *fiber.Ctx, apiResponse response.ApiResponse) error {
+func sendResponse(c *fiber.Ctx, apiResponse response.ApiResponse) error {
 	c.Set(ContentType, ApplicationJson)
 
 	marshaledResponse := apiResponse.Marshal()
@@ -87,7 +87,7 @@ func SendResponse(c *fiber.Ctx, apiResponse response.ApiResponse) error {
 	return nil
 }
 
-func ValidateRequest(request any) *er.WdbError {
+func validateRequest(request any) *er.WdbError {
 	validate := validator.New()
 
 	err := validate.Struct(request)

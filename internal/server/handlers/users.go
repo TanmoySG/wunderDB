@@ -33,7 +33,7 @@ func (wh wdbHandlers) LoginUser(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, data)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
@@ -53,7 +53,7 @@ func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := ValidateRequest(u); err != nil {
+	if err := validateRequest(u); err != nil {
 		apiError = err
 	} else {
 		apiError = wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
@@ -61,7 +61,7 @@ func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
@@ -85,7 +85,7 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := ValidateRequest(up); err != nil {
+	if err := validateRequest(up); err != nil {
 		apiError = err
 	} else {
 		if up.Permission.On != nil {
@@ -104,7 +104,7 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 	}
 
 	resp := response.Format(privilege, apiError, data)
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
@@ -132,7 +132,7 @@ func (wh wdbHandlers) CheckPermissions(c *fiber.Ctx) error {
 	}
 	resp := response.Format("", error, data)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 

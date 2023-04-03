@@ -25,7 +25,7 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 		Databases: &database.Name,
 	}
 
-	if err := ValidateRequest(database); err != nil {
+	if err := validateRequest(database); err != nil {
 		apiError = err
 	} else {
 		isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
@@ -37,7 +37,7 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 	}
 	resp := response.Format(privilege, apiError, nil)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
@@ -68,7 +68,7 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedDatabase)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
@@ -98,7 +98,7 @@ func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 

@@ -25,7 +25,7 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := ValidateRequest(r); err != nil {
+	if err := validateRequest(r); err != nil {
 		apiError = err
 	} else {
 		isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
@@ -38,7 +38,7 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
@@ -64,7 +64,7 @@ func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, roleList)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 

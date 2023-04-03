@@ -30,7 +30,7 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 		Collections: &collection.Name, // check
 	}
 
-	if err := ValidateRequest(collection); err != nil {
+	if err := validateRequest(collection); err != nil {
 		apiError = err
 	} else {
 		isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
@@ -43,7 +43,7 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
@@ -77,7 +77,7 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedDatabase)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
@@ -110,7 +110,7 @@ func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 

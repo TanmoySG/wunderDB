@@ -21,7 +21,7 @@ func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
 	}
 
 	resp := response.Format("ping", nil, msg)
-	if err := SendResponse(c, resp); err != nil {
+	if err := sendResponse(c, resp); err != nil {
 		return err
 	}
 
