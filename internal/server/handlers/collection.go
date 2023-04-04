@@ -26,10 +26,11 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 	}
 
 	entities := model.Entities{
-		Databases: &databaseName,
+		Databases:   &databaseName,
+		Collections: &collection.Name, // check
 	}
 
-	if err := ValidateRequest(collection); err != nil {
+	if err := validateRequest(collection); err != nil {
 		apiError = err
 	} else {
 		isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
@@ -42,7 +43,15 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
@@ -68,7 +77,15 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedDatabase)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
@@ -93,5 +110,13 @@ func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }

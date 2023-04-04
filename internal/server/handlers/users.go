@@ -33,7 +33,15 @@ func (wh wdbHandlers) LoginUser(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, data)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
@@ -45,19 +53,29 @@ func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := ValidateRequest(u); err != nil {
+	if err := validateRequest(u); err != nil {
 		apiError = err
 	} else {
 		apiError = wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
 	}
+
 	resp := response.Format(privilege, apiError, nil)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 	privilege := privileges.GrantRole
 
+	var entities model.Entities
 	var data map[string]interface{}
 	var apiError *er.WdbError
 
@@ -67,11 +85,9 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := ValidateRequest(up); err != nil {
+	if err := validateRequest(up); err != nil {
 		apiError = err
 	} else {
-		var entities model.Entities
-
 		if up.Permission.On != nil {
 			entities = model.Entities{
 				Databases:   up.Permission.On.Databases,
@@ -88,7 +104,15 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 	}
 
 	resp := response.Format(privilege, apiError, data)
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) CheckPermissions(c *fiber.Ctx) error {
@@ -108,5 +132,13 @@ func (wh wdbHandlers) CheckPermissions(c *fiber.Ctx) error {
 	}
 	resp := response.Format("", error, data)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }

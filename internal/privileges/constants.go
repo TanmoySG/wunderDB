@@ -1,10 +1,28 @@
 package privileges
 
+// Scope of Privilege Type
+// TODO: Use for below Privileges (ref. L14-21)
+type PrivilegeScopeType string
+
 const (
 	UserPrivileges       = "userPrivilege"
 	GlobalPrivileges     = "globalPrivilege"
 	DatabasePrivileges   = "databasePrivilege"
 	CollectionPrivileges = "collectionPrivilege"
+)
+
+// Read, Write, Wildcard Action Type
+type PrivilegeActionType string
+
+var (
+	WildcardPrivilege PrivilegeActionType = "wildcardPrivilege"
+	WritePrivilege    PrivilegeActionType = "writePrivilege"
+	ReadPrivilege     PrivilegeActionType = "readPrivilege"
+)
+
+const (
+	Allowed = true
+	Denied  = false
 )
 
 const (
@@ -36,9 +54,4 @@ const (
 	ReadData   = "readData"
 	UpdateData = "updateData"
 	DeleteData = "deleteData"
-)
-
-const (
-	Allowed = true
-	Denied  = false
 )

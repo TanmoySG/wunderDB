@@ -14,7 +14,6 @@ type database struct {
 
 func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 	privilege := privileges.CreateDatabase
-
 	var apiError *er.WdbError
 
 	database := new(database)
@@ -22,7 +21,11 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := ValidateRequest(database); err != nil {
+	entities := model.Entities{
+		Databases: &database.Name,
+	}
+
+	if err := validateRequest(database); err != nil {
 		apiError = err
 	} else {
 		isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
@@ -34,7 +37,15 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 	}
 	resp := response.Format(privilege, apiError, nil)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
@@ -57,7 +68,15 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, fetchedDatabase)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
@@ -79,5 +98,13 @@ func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, nil)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, entities); err != nil {
+		return err
+	}
+
+	return nil
 }

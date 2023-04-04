@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"github.com/TanmoySG/wunderDB/internal/server/response"
+	"github.com/TanmoySG/wunderDB/internal/txlogs"
+	txlModel "github.com/TanmoySG/wunderDB/internal/txlogs/model"
 	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
@@ -8,13 +11,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var (
-	noEntities = model.Entities{}
-)
-
 const (
+	AuthorizationHeader = "Authorization"
+
 	authSuccessful = true
 	authFailure    = false
+)
+
+var (
+	noEntities = model.Entities{}
 )
 
 func (wh wdbHandlers) handleAuthenticationAndAuthorization(c *fiber.Ctx, entities model.Entities, privilege string) (bool, *er.WdbError) {
@@ -65,18 +70,61 @@ func (wh wdbHandlers) handleAuthorization(username string, entity model.Entities
 	return authSuccessful, nil
 }
 
-func SendResponse(c *fiber.Ctx, marshaledResponse []byte, statusCode int) error {
+func sendResponse(c *fiber.Ctx, apiResponse response.ApiResponse) error {
 	c.Set(ContentType, ApplicationJson)
-	c.Send(marshaledResponse)
-	return c.SendStatus(statusCode)
+
+	marshaledResponse := apiResponse.Marshal()
+	err := c.Send(marshaledResponse)
+	if err != nil {
+		return err
+	}
+
+	err = c.SendStatus(apiResponse.HttpStatusCode)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func ValidateRequest(request any) *er.WdbError {
+func validateRequest(request any) *er.WdbError {
 	validate := validator.New()
 
 	err := validate.Struct(request)
 	if err != nil {
 		return &er.ValidationError
+	}
+	return nil
+}
+
+func (wh wdbHandlers) handleTransactions(c *fiber.Ctx, apiResponse response.ApiResponse, entities model.Entities) error {
+	if txlogs.IsTxnLoggable(apiResponse.Response.Action) {
+		if apiResponse.Response.Status == response.StatusSuccess {
+			databaseEntity := *entities.Databases
+			if entities.Databases == nil {
+				databaseEntity = ""
+			}
+
+			txnActor := txlogs.GetTxnActor(c.Get(AuthorizationHeader))
+			txnAction := apiResponse.Response.Action
+
+			txnHttpDetails := txlogs.GetTxnHttpDetails(*c)
+			txnEntityPath := txlModel.TxlogSchemaJsonEntityPath{
+				Database:   databaseEntity,
+				Collection: entities.Collections,
+			}
+
+			txnLog := txlogs.CreateTxLog(txnAction, txnActor, apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
+
+			err := wh.wdbTxLogs.Log(txnLog)
+			if err != nil {
+				return err
+			}
+			err = wh.wdbTxLogs.Commit()
+			if err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }

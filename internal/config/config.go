@@ -26,6 +26,7 @@ const (
 )
 
 type Config struct {
+	RootDirectoryPath     string `json:"ROOT_DIR_PATH"`
 	AdminID               string `json:"ADMIN_ID"`
 	AdminPassword         string `json:"-"`
 	Port                  string `json:"PORT"`
@@ -69,6 +70,7 @@ func Load() (*Config, error) {
 	}
 
 	c := &Config{
+		RootDirectoryPath:     wdbRootDirectory,
 		AdminID:               configMap.getValue(ADMIN_ID, override),
 		AdminPassword:         configMap.getValue(ADMIN_PASSWORD, override),
 		Port:                  configMap.getValue(PORT, override),

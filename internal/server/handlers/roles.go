@@ -25,7 +25,7 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := ValidateRequest(r); err != nil {
+	if err := validateRequest(r); err != nil {
 		apiError = err
 	} else {
 		isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
@@ -35,9 +35,18 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 			apiError = wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied)
 		}
 	}
+
 	resp := response.Format(privilege, apiError, nil)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
@@ -55,5 +64,13 @@ func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
 
 	resp := response.Format(privilege, apiError, roleList)
 
-	return SendResponse(c, resp.Marshal(), resp.HttpStatusCode)
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	if err := wh.handleTransactions(c, resp, noEntities); err != nil {
+		return err
+	}
+
+	return nil
 }

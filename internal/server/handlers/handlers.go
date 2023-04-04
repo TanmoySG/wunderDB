@@ -1,12 +1,21 @@
 package handlers
 
 import (
+	tx "github.com/TanmoySG/wunderDB/internal/txlogs"
 	w "github.com/TanmoySG/wunderDB/pkg/wdb"
 	"github.com/gofiber/fiber/v2"
 )
 
 type wdbHandlers struct {
 	wdbClient w.Client
+	wdbTxLogs tx.DotTxLog
+}
+
+func NewHandlers(client w.Client, wdbBasePath string) Client {
+	return wdbHandlers{
+		wdbClient: client,
+		wdbTxLogs: tx.UseDotTxLog(wdbBasePath),
+	}
 }
 
 type Client interface {
@@ -38,10 +47,4 @@ type Client interface {
 	LoginUser(c *fiber.Ctx) error
 	// CheckPermissions(c *fiber.Ctx) error
 
-}
-
-func NewHandlers(client w.Client) Client {
-	return wdbHandlers{
-		wdbClient: client,
-	}
 }
