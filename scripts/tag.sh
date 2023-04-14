@@ -48,7 +48,7 @@ jq --arg v "$TARGET_VERSION" '.wdb_version = $v' $VERSION_JSON_PATH >"$tmp" && m
 jq --arg b "$TARGET_BUILD_DATE" '.wdb_build_date = $b' $VERSION_JSON_PATH >"$tmp" && mv "$tmp" $VERSION_JSON_PATH
 rm "$tmp"
 
-echo $genGoCode >$VERSION_GO_PATH
+echo $genGoCode > $VERSION_GO_PATH
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 if [[ "$BRANCH" != "main" ]]; then
@@ -57,6 +57,7 @@ if [[ "$BRANCH" != "main" ]]; then
     exit 1
 fi
 
+go fmt ./...
 git add $VERSION_JSON_PATH $VERSION_GO_PATH
 git commit -m "$COMMIT_MESSAGE"
 git push
