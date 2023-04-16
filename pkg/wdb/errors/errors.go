@@ -129,6 +129,25 @@ var (
 		HttpStatusCode: 406,
 	}
 
+	// Safe Name Error
+	CollectionNameFormatError = WdbError{
+		ErrCode:        "entityNameFormatError",
+		ErrMessage:     "name is not of valid format. only alphanumeric, non-leading hyphen, underscore, period allowed",
+		HttpStatusCode: 400,
+	}
+
+	DatabaseNameFormatError = WdbError{
+		ErrCode:        "databaseNameFormatError",
+		ErrMessage:     "name is not of valid format. only alphanumeric, non-leading hyphen, underscore, period allowed",
+		HttpStatusCode: 400,
+	}
+
+	EntityNameFormatError = WdbError{
+		ErrCode:        "entityNameFormatError",
+		ErrMessage:     "name is not of valid format. only alphanumeric, non-leading hyphen, underscore, period allowed",
+		HttpStatusCode: 400,
+	}
+
 	// Request validation Error
 	ValidationError = WdbError{
 		ErrCode:        "requestValidationFailed",
