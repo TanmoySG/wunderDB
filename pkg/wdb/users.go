@@ -10,6 +10,10 @@ import (
 var wildcard = privileges.Wildcard
 
 func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.WdbError {
+	if ! wdb.safeName.Check(userID.String()) {
+		return &er.EntityNameFormatError
+	}
+
 	if exists, _ := wdb.Users.CheckIfExists(userID); exists {
 		return &er.UserAlreadyExistsError
 	}
@@ -19,6 +23,10 @@ func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.Wd
 }
 
 func (wdb wdbClient) GrantRoles(userID model.Identifier, permission model.Permissions) *er.WdbError {
+	if ! wdb.safeName.Check(userID.String()) {
+		return &er.EntityNameFormatError
+	}
+
 	if exists, _ := wdb.Users.CheckIfExists(userID); !exists {
 		return &er.UserDoesNotExistError
 	}
@@ -44,6 +52,10 @@ func (wdb wdbClient) GrantRoles(userID model.Identifier, permission model.Permis
 }
 
 func (wdb wdbClient) AuthenticateUser(userID model.Identifier, password string) (bool, *er.WdbError) {
+	if ! wdb.safeName.Check(userID.String()) {
+		return authentication.InvalidUser, &er.EntityNameFormatError
+	}
+
 	if exists, _ := wdb.Users.CheckIfExists(userID); !exists {
 		return authentication.InvalidUser, &er.AuthenticatingUserDoesNotExist
 	}
