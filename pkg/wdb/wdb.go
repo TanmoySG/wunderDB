@@ -12,9 +12,8 @@ import (
 )
 
 const (
-	// only alphanumeric, non-leading hyphen,
-	// underscore and period allowed
-	safeNamePattern = "[a-zA-Z0-9-_.]+.*[^-_.]$"
+	// only alphanumeric, hyphen, underscore and period allowed
+	safeNamePattern = "^[a-zA-Z0-9-_.]+$"
 )
 
 type wdbClient struct {
