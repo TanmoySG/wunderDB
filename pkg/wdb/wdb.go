@@ -7,7 +7,14 @@ import (
 	u "github.com/TanmoySG/wunderDB/internal/users"
 
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/pkg/utils/safename"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
+)
+
+const (
+	// only alphanumeric, non-leading hyphen,
+	// underscore and period allowed
+	safeNamePattern = "[a-zA-Z0-9-_.]+.*[^-_.]$"
 )
 
 type wdbClient struct {
@@ -16,6 +23,7 @@ type wdbClient struct {
 	Roles            r.Roles
 	Users            u.Users
 	Configurations   model.Configurations
+	safeName         safename.SafeNameClient
 }
 
 type Client interface {
@@ -54,5 +62,8 @@ func NewWdbClient(configurations model.Configurations, databases d.Databases, ro
 		Roles:            roles,
 		Users:            users,
 		Configurations:   configurations,
+		// safeNamePattern will always compile safely. Replace
+		// with UsePattern when NewWdbClient returns error too.
+		safeName: safename.MustUsePattern(safeNamePattern),
 	}
 }
