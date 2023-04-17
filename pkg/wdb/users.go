@@ -10,7 +10,7 @@ import (
 var wildcard = privileges.Wildcard
 
 func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.WdbError {
-	if ! wdb.safeName.Check(userID.String()) {
+	if !wdb.safeName.Check(userID.String()) {
 		return &er.EntityNameFormatError
 	}
 
@@ -23,7 +23,7 @@ func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.Wd
 }
 
 func (wdb wdbClient) GrantRoles(userID model.Identifier, permission model.Permissions) *er.WdbError {
-	if ! wdb.safeName.Check(userID.String()) {
+	if !wdb.safeName.Check(userID.String()) {
 		return &er.EntityNameFormatError
 	}
 
@@ -52,7 +52,7 @@ func (wdb wdbClient) GrantRoles(userID model.Identifier, permission model.Permis
 }
 
 func (wdb wdbClient) AuthenticateUser(userID model.Identifier, password string) (bool, *er.WdbError) {
-	if ! wdb.safeName.Check(userID.String()) {
+	if !wdb.safeName.Check(userID.String()) {
 		return authentication.InvalidUser, &er.EntityNameFormatError
 	}
 

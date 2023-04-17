@@ -2,6 +2,7 @@ package safename
 
 import (
 	"fmt"
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -21,6 +22,10 @@ func Test_UsePattern(t *testing.T) {
 			inputPattern:  "!![]",
 			expectedError: fmt.Errorf("failed to compile pattern: error parsing regexp: missing closing ]: `[]`"),
 		},
+		{
+			inputPattern:  "^[a-zA-Z0-9-_.]+$",
+			expectedError: nil,
+		},
 	}
 
 	for _, tc := range testData {
@@ -32,7 +37,7 @@ func Test_UsePattern(t *testing.T) {
 
 func Test_Check(t *testing.T) {
 
-	usePattern := "[a-zA-Z0-9-_.]+.*[^-_.]$"
+	usePattern := "(?misU)^[a-zA-Z0-9-_.@]+$"
 	patternClient, err := UsePattern(usePattern)
 	assert.Nil(t, err)
 
@@ -50,17 +55,31 @@ func Test_Check(t *testing.T) {
 		},
 		{
 			inputString:     "abc_",
-			expectedIsValid: false,
+			expectedIsValid: true,
 		},
 		{
 			inputString:     "john@doe.com",
 			expectedIsValid: true,
 		},
+		{
+			inputString:     "a b",
+			expectedIsValid: false,
+		},
+		{
+			inputString:     "a-b",
+			expectedIsValid: true,
+		},
+		{
+			inputString:     "abc/",
+			expectedIsValid: false,
+		},
 	}
 
 	for _, tc := range testData {
 		isValid := patternClient.Check(tc.inputString)
-		assert.Equal(t, tc.expectedIsValid, isValid)
+		if !assert.Equal(t, tc.expectedIsValid, isValid) {
+			log.Printf("test failed for input string [%s], expected [%v], got [%v]", tc.inputString, isValid, tc.expectedIsValid)
+		}
 	}
 
 }
