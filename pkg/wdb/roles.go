@@ -14,6 +14,10 @@ var (
 )
 
 func (wdb wdbClient) CreateRole(roleID model.Identifier, allowed []string, denied []string) *er.WdbError {
+	if !wdb.safeName.Check(roleID.String()) {
+		return &er.EntityNameFormatError
+	}
+
 	if exists, _ := wdb.Roles.CheckIfExists(roleID); exists {
 		return &er.RoleAlreadyExistsError
 	}
@@ -25,6 +29,10 @@ func (wdb wdbClient) ListRole() roles.Roles {
 }
 
 func (wdb wdbClient) CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError) {
+	if !wdb.safeName.Check(userID.String()) {
+		return Denied, &er.EntityNameFormatError
+	}
+
 	if exists, _ := wdb.Users.CheckIfExists(userID); !exists {
 		return Denied, &er.UserDoesNotExistError
 	}

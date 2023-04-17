@@ -7,12 +7,20 @@ import (
 )
 
 func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, schema model.Schema) *er.WdbError {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return &er.DatabaseNameFormatError
+	}
+
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
 		return &er.DatabaseDoesNotExistsError
 	}
 
 	collections := c.UseDatabase(*database)
+
+	if !wdb.safeName.Check(collectionId.String()) {
+		return &er.CollectionNameFormatError
+	}
 
 	if exists, _ := collections.CheckIfExists(collectionId); exists {
 		return &er.CollectionAlreadyExistsError
@@ -23,12 +31,20 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 }
 
 func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*model.Collection, *er.WdbError) {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return nil, &er.DatabaseNameFormatError
+	}
+
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
 		return nil, &er.DatabaseDoesNotExistsError
 	}
 
 	collections := c.UseDatabase(*database)
+
+	if !wdb.safeName.Check(collectionId.String()) {
+		return nil, &er.CollectionNameFormatError
+	}
 
 	if exists, _ := collections.CheckIfExists(collectionId); !exists {
 		return nil, &er.CollectionDoesNotExistsError
@@ -38,15 +54,23 @@ func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*
 }
 
 func (wdb wdbClient) DeleteCollection(databaseId, collectionId model.Identifier) *er.WdbError {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return &er.DatabaseNameFormatError
+	}
+
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
-		return &er.CollectionDoesNotExistsError
+		return &er.DatabaseDoesNotExistsError
 	}
 
 	collections := c.UseDatabase(*database)
 
+	if !wdb.safeName.Check(collectionId.String()) {
+		return &er.CollectionNameFormatError
+	}
+
 	if exists, _ := collections.CheckIfExists(collectionId); !exists {
-		return &er.CollectionAlreadyExistsError
+		return &er.CollectionDoesNotExistsError
 	}
 
 	collections.DeleteCollection(collectionId)

@@ -6,6 +6,10 @@ import (
 )
 
 func (wdb wdbClient) AddDatabase(databaseId model.Identifier) *er.WdbError {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return &er.DatabaseNameFormatError
+	}
+
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); exists {
 		return &er.DatabaseAlreadyExistsError
 	}
@@ -14,6 +18,10 @@ func (wdb wdbClient) AddDatabase(databaseId model.Identifier) *er.WdbError {
 }
 
 func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, *er.WdbError) {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return nil, &er.DatabaseNameFormatError
+	}
+
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
 		return nil, &er.DatabaseDoesNotExistsError
 	}
@@ -21,6 +29,10 @@ func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, 
 }
 
 func (wdb wdbClient) DeleteDatabase(databaseId model.Identifier) *er.WdbError {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return &er.DatabaseNameFormatError
+	}
+
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
 		return &er.DatabaseDoesNotExistsError
 	}

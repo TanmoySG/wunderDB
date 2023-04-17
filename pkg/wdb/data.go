@@ -10,13 +10,20 @@ import (
 )
 
 func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputData interface{}) *er.WdbError {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return &er.DatabaseNameFormatError
+	}
+
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
 		return &er.DatabaseDoesNotExistsError
 	}
 
-	collections := c.UseDatabase(*database)
+	if !wdb.safeName.Check(collectionId.String()) {
+		return &er.CollectionNameFormatError
+	}
 
+	collections := c.UseDatabase(*database)
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return &er.CollectionDoesNotExistsError
@@ -29,9 +36,17 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 }
 
 func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Datum, *er.WdbError) {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return nil, &er.DatabaseNameFormatError
+	}
+
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
 		return nil, &er.DatabaseDoesNotExistsError
+	}
+
+	if !wdb.safeName.Check(collectionId.String()) {
+		return nil, &er.CollectionNameFormatError
 	}
 
 	collections := c.UseDatabase(*database)
@@ -52,9 +67,17 @@ func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters 
 }
 
 func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updatedData, filters interface{}) *er.WdbError {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return &er.DatabaseNameFormatError
+	}
+
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
 		return &er.DatabaseDoesNotExistsError
+	}
+
+	if !wdb.safeName.Check(collectionId.String()) {
+		return &er.CollectionNameFormatError
 	}
 
 	collections := c.UseDatabase(*database)
@@ -75,9 +98,17 @@ func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updat
 }
 
 func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filters interface{}) *er.WdbError {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return &er.DatabaseNameFormatError
+	}
+
 	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
 	if !dbExists {
 		return &er.DatabaseDoesNotExistsError
+	}
+
+	if !wdb.safeName.Check(collectionId.String()) {
+		return &er.CollectionNameFormatError
 	}
 
 	collections := c.UseDatabase(*database)

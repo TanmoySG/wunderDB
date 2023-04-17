@@ -42,7 +42,6 @@ func (ws wdbServer) Start() {
 	recoveryConf := recovery.DefaultConfig
 	recoveryConf.Message = &defaultPanicMessage
 
-
 	app.Use(logger.New())
 	app.Use(recovery.New(recoveryConf))
 
