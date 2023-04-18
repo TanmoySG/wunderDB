@@ -13,7 +13,7 @@ func (wdb wdbClient) AddDatabase(databaseId model.Identifier) *er.WdbError {
 	if exists, _ := wdb.Databases.CheckIfExists(databaseId); exists {
 		return &er.DatabaseAlreadyExistsError
 	}
-	wdb.Databases.CreateDatabase(databaseId, model.Metadata{}, model.Access{})
+	wdb.Databases.CreateDatabase(databaseId, model.Access{})
 	return nil
 }
 

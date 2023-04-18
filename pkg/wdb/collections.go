@@ -26,7 +26,7 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 		return &er.CollectionAlreadyExistsError
 	}
 
-	collections.CreateCollection(collectionId, schema, model.Metadata{}, model.Access{})
+	collections.CreateCollection(collectionId, schema, model.Access{})
 	return nil
 }
 

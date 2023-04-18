@@ -1,6 +1,7 @@
 package collections
 
 import (
+	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
@@ -24,11 +25,11 @@ func (c Collections) CheckIfExists(collectionID model.Identifier) (bool, *model.
 	}
 }
 
-func (c Collections) CreateCollection(collectionID model.Identifier, schema model.Schema, metadata model.Metadata, access model.Access) {
+func (c Collections) CreateCollection(collectionID model.Identifier, schema model.Schema, access model.Access) {
 	c[collectionID] = &model.Collection{
 		Data:     map[model.Identifier]*model.Datum{},
 		Schema:   schema,
-		Metadata: metadata,
+		Metadata: metadata.New().BasicChangeMetadata(),
 		Access:   map[model.Identifier]*model.Access{},
 	}
 }
@@ -39,4 +40,8 @@ func (c Collections) GetCollection(collectionID model.Identifier) *model.Collect
 
 func (c Collections) DeleteCollection(collectionID model.Identifier) {
 	delete(c, collectionID)
+}
+
+func (c Collections) UpdateMetadata(collectionID model.Identifier) {
+	c[collectionID].Metadata = metadata.Use(c[collectionID].Metadata).BasicChangeMetadata()
 }
