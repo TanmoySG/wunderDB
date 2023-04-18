@@ -22,7 +22,7 @@ func New() metadata {
 }
 
 func (m metadata) BasicChangeMetadata(optionalMetadata ...any) model.Metadata {
-	currentTime := time.Now()
+	currentTime := time.Now().UTC()
 	updatedAtTimestamp := currentTime.Unix() // second precisioned timestamp
 
 	createdAtTimestamp, createdAtExists := m[CreatedAt]
