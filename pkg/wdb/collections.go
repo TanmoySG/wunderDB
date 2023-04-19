@@ -27,6 +27,8 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 	}
 
 	collections.CreateCollection(collectionId, schema, model.Access{})
+
+	wdb.updateParentMetadata(&databaseId, nil)
 	return nil
 }
 
@@ -74,5 +76,6 @@ func (wdb wdbClient) DeleteCollection(databaseId, collectionId model.Identifier)
 	}
 
 	collections.DeleteCollection(collectionId)
+	wdb.updateParentMetadata(&databaseId, nil)
 	return nil
 }

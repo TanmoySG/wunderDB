@@ -29,10 +29,15 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 		return &er.CollectionDoesNotExistsError
 	}
 
-	dataId := identities.GenerateID()
 	data := d.UseCollection(*collection)
+	dataId := identities.GenerateID()
+	err := data.Add(model.Identifier(dataId), inputData)
+	if err != nil {
+		return err
+	}
 
-	return data.Add(model.Identifier(dataId), inputData)
+	wdb.updateParentMetadata(&databaseId, &collectionId)
+	return nil
 }
 
 func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Datum, *er.WdbError) {
@@ -88,12 +93,12 @@ func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updat
 	}
 
 	data := d.UseCollection(*collection)
-
 	err := data.Update(updatedData, filters)
 	if err != nil {
 		return err
 	}
 
+	wdb.updateParentMetadata(&databaseId, &collectionId)
 	return nil
 }
 
@@ -125,5 +130,6 @@ func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filte
 		return err
 	}
 
+	wdb.updateParentMetadata(&databaseId, &collectionId)
 	return nil
 }

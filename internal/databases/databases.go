@@ -20,9 +20,9 @@ func (d Databases) CheckIfExists(databaseID model.Identifier) (bool, *model.Data
 	database, dbExists := d[databaseID]
 	if dbExists {
 		return databaseExists, database
-	} else {
-		return databaseDoesNotExist, database
 	}
+
+	return databaseDoesNotExist, database
 }
 
 func (d Databases) CreateDatabase(databaseID model.Identifier, access model.Access) {
