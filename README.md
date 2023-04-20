@@ -66,7 +66,7 @@ wunderDb APIs are completely RESTful and all actions can be performed using simp
 
 ## Client Libraries
 
-- `wdb-go` Go client library for wunderDb. [[Documentation](https://github.com/TanmoySG/wdb-go)]
+- [`wdb-go`](https://github.com/TanmoySG/wdb-go) Go client library for wunderDb. [ [Documentation](https://github.com/TanmoySG/wdb-go#readme) ]
 
 ## wunderDB-Retro
 
