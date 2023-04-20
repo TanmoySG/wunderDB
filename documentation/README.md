@@ -160,9 +160,9 @@ Content-Type: application/json
 }
 ```
 
-Passing wildcard (`*`) resource in databases or collections grants the user the role on any database or collection. 
+Passing wildcard (`*`) resource in databases or collections grants the user the role on any database or collection.
 
-If you want to scope the permission to just users, i.e the permissions only apply on users, then you can skip the `on` section in the request body. 
+If you want to scope the permission to just users, i.e the permissions only apply on users, then you can skip the `on` section in the request body.
 
 This action requires authentication, as well as autorization - the user commiting this action must have the `grantRole` privilege.
 

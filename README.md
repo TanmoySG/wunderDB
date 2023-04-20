@@ -41,7 +41,6 @@ Once set, configurations cant be updated with the configuration flags. To overri
 
 For more about `wdbctl`, refer to the [documentation](./documentation/README.md#wdbctl).
 
-
 ## Usage
 
 <!-- Once wunderDb instance is running, use the [Admin]() credentials to perform any operations required. For additional security, we recommend creating delegate user(s) with coarse-grained access, to perform the actions. -->
@@ -64,6 +63,10 @@ wunderDb APIs are completely RESTful and all actions can be performed using simp
 - [Data](./documentation/README.md#data)
   - [Filter](./documentation/README.md#filters)
   - [Schema](./documentation/README.md#schema)
+
+## Client Libraries
+
+- [`wdb-go`](https://github.com/TanmoySG/wdb-go) Go client library for wunderDb. [ [Documentation](https://github.com/TanmoySG/wdb-go#readme) ]
 
 ## wunderDB-Retro
 

@@ -1,6 +1,7 @@
 package databases
 
 import (
+	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
 )
 
@@ -19,16 +20,16 @@ func (d Databases) CheckIfExists(databaseID model.Identifier) (bool, *model.Data
 	database, dbExists := d[databaseID]
 	if dbExists {
 		return databaseExists, database
-	} else {
-		return databaseDoesNotExist, database
 	}
+
+	return databaseDoesNotExist, database
 }
 
-func (d Databases) CreateDatabase(databaseID model.Identifier, metadata model.Metadata, access model.Access) {
+func (d Databases) CreateDatabase(databaseID model.Identifier, access model.Access) {
 	d[databaseID] = &model.Database{
 		Collections: map[model.Identifier]*model.Collection{},
-		Metadata:    metadata,
 		Access:      map[model.Identifier]*model.Access{},
+		Metadata:    metadata.New().BasicChangeMetadata(),
 	}
 }
 
@@ -38,4 +39,8 @@ func (d Databases) GetDatabase(databaseID model.Identifier) *model.Database {
 
 func (d Databases) DeleteDatabase(databaseID model.Identifier) {
 	delete(d, databaseID)
+}
+
+func (d Databases) UpdateMetadata(databaseID model.Identifier) {
+	d[databaseID].Metadata = metadata.Use(d[databaseID].Metadata).BasicChangeMetadata()
 }
