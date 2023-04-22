@@ -108,6 +108,6 @@ func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
 		return err
 	}
 
-	go  wh.handleTransactions(c, resp, entities)
+	go wh.handleTransactions(c, resp, entities)
 	return nil
 }

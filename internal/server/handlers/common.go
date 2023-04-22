@@ -99,7 +99,6 @@ func validateRequest(request any) *er.WdbError {
 }
 
 func (wh wdbHandlers) handleTransactions(c *fiber.Ctx, apiResponse response.ApiResponse, entities model.Entities) {
-	var err error
 	if txlogs.IsTxnLoggable(apiResponse.Response.Action) {
 		if apiResponse.Response.Status == response.StatusSuccess {
 			databaseEntity := *entities.Databases
@@ -117,12 +116,15 @@ func (wh wdbHandlers) handleTransactions(c *fiber.Ctx, apiResponse response.ApiR
 			}
 
 			txnLog := txlogs.CreateTxLog(txnAction, txnActor, apiResponse.Response.Status, txnEntityPath, txnHttpDetails)
-			err = wh.wdbTxLogs.Log(txnLog)
+			err := wh.wdbTxLogs.Log(txnLog)
+			if err != nil {
+				log.Errorf("error logging transaction: %s", err)
+			}
+			
 			err = wh.wdbTxLogs.Commit()
-
+			if err != nil {
+				log.Errorf("error logging transaction: %s", err)
+			}
 		}
-	}
-	if err != nil {
-		log.Errorf("error logging transaction: %s", err)
 	}
 }
