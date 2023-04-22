@@ -47,10 +47,7 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := wh.handleTransactions(c, resp, entities); err != nil {
-		return err
-	}
-
+	go wh.handleTransactions(c, resp, entities)
 	return nil
 }
 
@@ -81,10 +78,7 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := wh.handleTransactions(c, resp, entities); err != nil {
-		return err
-	}
-
+	go wh.handleTransactions(c, resp, entities)
 	return nil
 }
 
@@ -114,9 +108,6 @@ func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
 		return err
 	}
 
-	if err := wh.handleTransactions(c, resp, entities); err != nil {
-		return err
-	}
-
+	go  wh.handleTransactions(c, resp, entities)
 	return nil
 }
