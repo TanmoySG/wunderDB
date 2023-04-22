@@ -11,11 +11,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var (
-	DatabaseTxnEntity   TxnEntityType = "database"
-	CollectionTxnEntity TxnEntityType = "collection"
-)
-
 type TxnEntityType string
 
 type TransactionLogs struct {
@@ -33,7 +28,7 @@ func CreateTxLog(txnAction, txnActor string, txnRequestStatus string, txnEntitie
 		EntityPath:         txnEntities,
 		EntityType:         getEntityType(txnEntities),
 		Status:             getTxnStatus(txnRequestStatus),
-		Timestamp:          float64(time.Now().Unix()),
+		Timestamp:          float64(time.Now().UTC().Unix()),
 		TransactionDetails: txnDetails,
 	}
 }
