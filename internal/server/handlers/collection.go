@@ -47,7 +47,7 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 		return err
 	}
 
-	go wh.handleTransactions(c, resp, entities)
+	wh.handleTransactions(c, resp, entities)
 	return nil
 }
 
@@ -78,7 +78,7 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 		return err
 	}
 
-	go wh.handleTransactions(c, resp, entities)
+	wh.handleTransactions(c, resp, entities)
 	return nil
 }
 
@@ -108,6 +108,6 @@ func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
 		return err
 	}
 
-	go wh.handleTransactions(c, resp, entities)
+	wh.handleTransactions(c, resp, entities)
 	return nil
 }
