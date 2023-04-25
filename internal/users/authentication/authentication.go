@@ -70,7 +70,7 @@ func HandleUserCredentials(authorizationHeaderString string) (*string, *string, 
 	return &username, &password, nil
 }
 
-//TODO: use auth string instead of fiber context
+// TODO: use auth string instead of fiber context
 func GetActor(c *fiber.Ctx) string {
 	username, _, err := HandleUserCredentials(c.Get(Authorization))
 	if err != nil {

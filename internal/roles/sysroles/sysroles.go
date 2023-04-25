@@ -1,4 +1,4 @@
-package roles
+package sysroles
 
 import "github.com/TanmoySG/wunderDB/internal/privileges"
 

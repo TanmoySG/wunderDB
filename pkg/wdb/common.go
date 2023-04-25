@@ -2,7 +2,7 @@ package wdbClient
 
 import (
 	"github.com/TanmoySG/wunderDB/internal/collections"
-	"github.com/TanmoySG/wunderDB/internal/roles"
+	"github.com/TanmoySG/wunderDB/internal/roles/sysroles"
 	"github.com/TanmoySG/wunderDB/model"
 	wdbErrors "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
@@ -19,7 +19,7 @@ func (wdb wdbClient) updateParentMetadata(databaseId, collectionId *model.Identi
 	}
 }
 
-func (wdb wdbClient) grantSystemDefaultRole(userId model.Identifier, role roles.SystemDefaultRole, args ...string) *wdbErrors.WdbError {
+func (wdb wdbClient) grantSystemDefaultRole(userId model.Identifier, role sysroles.SystemDefaultRole, args ...string) *wdbErrors.WdbError {
 	if exists, _ := wdb.Roles.CheckIfExists(model.Identifier(role.RoleID)); !exists {
 		err := wdb.Roles.CreateRole(model.Identifier(role.RoleID), role.Privileges, []string{})
 		if err != nil {
