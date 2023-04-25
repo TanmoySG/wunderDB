@@ -21,6 +21,7 @@ func (wdb wdbClient) CreateRole(roleID model.Identifier, allowed []string, denie
 	if exists, _ := wdb.Roles.CheckIfExists(roleID); exists {
 		return &er.RoleAlreadyExistsError
 	}
+
 	return wdb.Roles.CreateRole(roleID, allowed, denied)
 }
 

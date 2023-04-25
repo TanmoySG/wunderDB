@@ -3,6 +3,7 @@ package handlers
 import (
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
+	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/gofiber/fiber/v2"
@@ -32,7 +33,8 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 		if !isValid {
 			apiError = error
 		} else {
-			apiError = wh.wdbClient.AddDatabase(model.Identifier(database.Name))
+			actorUserId := authentication.GetActor(c)
+			apiError = wh.wdbClient.AddDatabase(model.Identifier(database.Name), model.Identifier(actorUserId))
 		}
 	}
 	resp := response.Format(privilege, apiError, nil)
