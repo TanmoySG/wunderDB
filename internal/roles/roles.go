@@ -19,7 +19,7 @@ const (
 
 type Roles map[model.Identifier]*model.Role
 
-func Use(roles Roles) Roles {
+func From(roles Roles) Roles {
 	return roles
 }
 

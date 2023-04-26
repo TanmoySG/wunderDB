@@ -12,7 +12,7 @@ const (
 
 type Databases map[model.Identifier]*model.Database
 
-func Use(databases Databases) Databases {
+func From(databases Databases) Databases {
 	return databases
 }
 

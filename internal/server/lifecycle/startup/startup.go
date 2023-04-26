@@ -39,9 +39,9 @@ func Prepare(c config.Config) (*model.WDB, error) {
 	}
 
 	wdb := model.WDB{
-		Databases: databases.Use(loadedDatabase),
-		Roles:     roles.Use(loadedRoles),
-		Users:     users.Use(loadedUsers),
+		Databases: databases.From(loadedDatabase),
+		Roles:     roles.From(loadedRoles),
+		Users:     users.From(loadedUsers),
 	}
 
 	return &wdb, nil
