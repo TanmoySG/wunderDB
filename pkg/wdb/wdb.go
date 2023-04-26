@@ -27,7 +27,7 @@ type wdbClient struct {
 
 type Client interface {
 	// Database Methods
-	AddDatabase(databaseId model.Identifier) *er.WdbError
+	AddDatabase(databaseId model.Identifier, userId model.Identifier) *er.WdbError
 	GetDatabase(databaseId model.Identifier) (*model.Database, *er.WdbError)
 	DeleteDatabase(databaseId model.Identifier) *er.WdbError
 

@@ -120,7 +120,7 @@ func (wh wdbHandlers) handleTransactions(c *fiber.Ctx, apiResponse response.ApiR
 			if err != nil {
 				log.Errorf("error logging transaction: %s", err)
 			}
-			
+
 			err = wh.wdbTxLogs.Commit()
 			if err != nil {
 				log.Errorf("error logging transaction: %s", err)
