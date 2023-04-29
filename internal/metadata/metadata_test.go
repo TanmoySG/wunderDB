@@ -10,7 +10,8 @@ import (
 
 func Test_metadata_BasicChangeMetadata(t *testing.T) {
 	createTimestamp := time.Now().UTC().Unix()
-	// empty Metadata
+
+	// init wanted m
 	wantM := model.Metadata{
 		CreatedAt: createTimestamp,
 		UpdatedAt: createTimestamp,
@@ -29,7 +30,7 @@ func Test_metadata_BasicChangeMetadata(t *testing.T) {
 	time.Sleep(1 * time.Second)
 	updateTimestamp := createTimestamp + 1
 
-	// update want m
+	// update wanted m
 	wantM[UpdatedAt] = updateTimestamp
 
 	// Update metadata, using Use()
