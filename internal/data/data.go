@@ -52,8 +52,8 @@ func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Datum, *er.
 			return nil, err
 		}
 
-		filteredDate := f.Filter(d.Data)
-		return filteredDate, nil
+		filteredData := f.Filter(d.Data)
+		return filteredData, nil
 	}
 	return d.Data, nil
 }
