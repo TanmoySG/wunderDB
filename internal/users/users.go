@@ -14,7 +14,7 @@ const (
 
 type Users map[model.Identifier]*model.User
 
-func Use(users Users) Users {
+func From(users Users) Users {
 	return users
 }
 

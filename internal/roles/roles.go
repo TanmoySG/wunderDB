@@ -19,7 +19,7 @@ const (
 
 type Roles map[model.Identifier]*model.Role
 
-func Use(roles Roles) Roles {
+func From(roles Roles) Roles {
 	return roles
 }
 
@@ -206,7 +206,9 @@ func mergeGrantMaps(allowedPrivilegesMap, deniedPrivilegesMap map[string]interfa
 		return nil, err
 	}
 
-	json.Unmarshal(mergedGrantBytes, &privileges)
-
+	err = json.Unmarshal(mergedGrantBytes, &privileges)
+	if err != nil {
+		return nil, err
+	}
 	return &privileges, nil
 }
