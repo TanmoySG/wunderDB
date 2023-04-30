@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/TanmoySG/wunderDB/model"
+	wdbErrors "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -130,4 +131,55 @@ func Test_HappyDataFlow(t *testing.T) {
 	err = dc.Delete(testFilter)
 	assert.Nil(t, err)
 	assert.Equal(t, want, dc.Data)
+}
+
+func Test_AddData_validationError(t *testing.T) {
+	dc := UseCollection(collection)
+
+	invalidDataSample := map[string]interface{}{
+		"name": "jane",
+		"age":  28,
+	}
+
+	err := dc.Add("1", invalidDataSample)
+	assert.NotNil(t, err)
+	assert.Equal(t, &wdbErrors.SchemaValidationFailed, err)
+}
+
+func Test_filterMissingError(t *testing.T) {
+	dc := UseCollection(collection)
+
+	updateData := map[string]interface{}{
+		"name": "jane",
+	}
+
+	err := dc.Update(updateData, nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, &wdbErrors.FilterMissingError, err)
+
+	err = dc.Delete(nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, &wdbErrors.FilterMissingError, err)
+}
+
+func Test_filterDecodeError(t *testing.T) {
+	dc := UseCollection(collection)
+
+	invalidFilter := "filter"
+	updateData := map[string]interface{}{
+		"name": "jane",
+	}
+
+	fetchedData, err := dc.Read(invalidFilter)
+	assert.NotNil(t, err)
+	assert.Nil(t, fetchedData)
+	assert.Equal(t, &wdbErrors.FilterEncodeDecodeError, err)
+
+	err = dc.Update(updateData, invalidFilter)
+	assert.NotNil(t, err)
+	assert.Equal(t, &wdbErrors.FilterEncodeDecodeError, err)
+
+	err = dc.Delete(invalidFilter)
+	assert.NotNil(t, err)
+	assert.Equal(t, &wdbErrors.FilterEncodeDecodeError, err)
 }
