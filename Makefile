@@ -12,3 +12,7 @@ gen-txlog-models:
 
 instal-dev:
 	go get github.com/atombender/go-jsonschema/...
+
+coverage:
+	go test ./...  -coverpkg=./... -coverprofile ./coverage.out
+	go tool cover -func ./coverage.out
