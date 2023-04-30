@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
+	"github.com/gofiber/fiber/v2"
 )
 
 const (
@@ -27,6 +28,10 @@ const (
 
 type Authentication struct {
 	Algorithm string
+}
+
+func Authenticate(passwordHash string) bool {
+	return ValidUser
 }
 
 // Returns hex of Hash
@@ -52,19 +57,22 @@ func HandleUserCredentials(authorizationHeaderString string) (*string, *string, 
 	}
 
 	authorizationHeaders := strings.Split(authorizationHeaderString, " ")
+
 	decodedCredentials, err := base64.StdEncoding.DecodeString(authorizationHeaders[1])
 	if err != nil {
 		return nil, nil, &er.InvalidCredentialsError
 	}
 
 	credentialArray := strings.Split(string(decodedCredentials), ":")
+
 	username, password := credentialArray[0], credentialArray[1]
 
 	return &username, &password, nil
 }
 
-func GetActor(c string) string {
-	username, _, err := HandleUserCredentials(c)
+// TODO: use auth string instead of fiber context
+func GetActor(c *fiber.Ctx) string {
+	username, _, err := HandleUserCredentials(c.Get(Authorization))
 	if err != nil {
 		return ""
 	}

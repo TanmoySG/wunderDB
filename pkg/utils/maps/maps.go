@@ -20,7 +20,6 @@ func Marshal(data interface{}) map[string]interface{} {
 	return dataMap
 }
 
-// TODO: never returns error, need to remove
 func Merge(mapA, mapB map[string]interface{}) (map[string]interface{}, error) {
 	for k, v := range mapA {
 		mapB[k] = v

@@ -33,7 +33,7 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 		if !isValid {
 			apiError = error
 		} else {
-			actorUserId := authentication.GetActor(c.Get(Authorization))
+			actorUserId := authentication.GetActor(c)
 			apiError = wh.wdbClient.AddDatabase(model.Identifier(database.Name), model.Identifier(actorUserId))
 		}
 	}
