@@ -1,6 +1,8 @@
 package wdbClient
 
 import (
+	"time"
+
 	c "github.com/TanmoySG/wunderDB/internal/collections"
 	d "github.com/TanmoySG/wunderDB/internal/data"
 	"github.com/TanmoySG/wunderDB/internal/identities"
@@ -19,11 +21,15 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 		return &er.DatabaseDoesNotExistsError
 	}
 
+	database.Lock()
+	defer database.Unlock()
+	time.Sleep(20 * time.Second)
+
 	if !wdb.safeName.Check(collectionId.String()) {
 		return &er.CollectionNameFormatError
 	}
 
-	collections := c.UseDatabase(*database)
+	collections := c.UseDatabase(database)
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return &er.CollectionDoesNotExistsError
@@ -50,11 +56,14 @@ func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters 
 		return nil, &er.DatabaseDoesNotExistsError
 	}
 
+	database.Lock()
+	defer database.Unlock()
+
 	if !wdb.safeName.Check(collectionId.String()) {
 		return nil, &er.CollectionNameFormatError
 	}
 
-	collections := c.UseDatabase(*database)
+	collections := c.UseDatabase(database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
@@ -81,11 +90,14 @@ func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updat
 		return &er.DatabaseDoesNotExistsError
 	}
 
+	database.Lock()
+	defer database.Unlock()
+
 	if !wdb.safeName.Check(collectionId.String()) {
 		return &er.CollectionNameFormatError
 	}
 
-	collections := c.UseDatabase(*database)
+	collections := c.UseDatabase(database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
@@ -112,11 +124,14 @@ func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filte
 		return &er.DatabaseDoesNotExistsError
 	}
 
+	database.Lock()
+	defer database.Unlock()
+
 	if !wdb.safeName.Check(collectionId.String()) {
 		return &er.CollectionNameFormatError
 	}
 
-	collections := c.UseDatabase(*database)
+	collections := c.UseDatabase(database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {

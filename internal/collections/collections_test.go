@@ -49,7 +49,7 @@ func Test_CheckIfExists(t *testing.T) {
 	}
 
 	database := model.Database{Collections: Collections{testCollection1Name: testCollection1}}
-	collection := UseDatabase(database)
+	collection := UseDatabase(&database)
 
 	for _, tc := range testCases {
 		isExists, collection := collection.CheckIfExists(model.Identifier(tc.collectionName))
@@ -62,7 +62,7 @@ func Test_CreateCollection(t *testing.T) {
 	testCollection := Collections{testCollection1Name: testCollection1}
 	database := model.Database{Collections: testCollection}
 
-	collections := UseDatabase(database)
+	collections := UseDatabase(&database)
 	collections.CreateCollection(testCollection2Name, model.Schema{}, model.Access{})
 
 	expectedCollectionsMap := testCollection
@@ -93,7 +93,7 @@ func Test_GetCollection(t *testing.T) {
 	}
 
 	database := model.Database{Collections: Collections{testCollection1Name: testCollection1}}
-	collection := UseDatabase(database)
+	collection := UseDatabase(&database)
 
 	for _, tc := range testCases {
 		fetchedDatabase := collection.GetCollection(model.Identifier(tc.collectionName))
@@ -103,7 +103,7 @@ func Test_GetCollection(t *testing.T) {
 
 func Test_DeleteDatabase(t *testing.T) {
 	database := model.Database{Collections: Collections{testCollection1Name: testCollection1}}
-	collection := UseDatabase(database)
+	collection := UseDatabase(&database)
 	collection.DeleteCollection(testCollection1Name)
 
 	assert.Equal(t, Collections{}, collection)
@@ -122,7 +122,7 @@ func Test_UpdateMetadata(t *testing.T) {
 	}
 
 	database := model.Database{Collections: Collections{testCollection1Name: testCollection1}}
-	collection := UseDatabase(database)
+	collection := UseDatabase(&database)
 	collection.UpdateMetadata(testCollection1Name)
 
 	assert.Equal(t, expectedCollectionsChange[testCollection1Name].Metadata[metadata.CreatedAt], collection[testCollection1Name].Metadata[metadata.CreatedAt])

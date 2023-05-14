@@ -12,7 +12,7 @@ const (
 
 type Collections map[model.Identifier]*model.Collection
 
-func UseDatabase(database model.Database) Collections {
+func UseDatabase(database *model.Database) Collections {
 	return Collections(database.Collections)
 }
 

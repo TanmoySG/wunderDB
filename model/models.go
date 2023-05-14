@@ -1,5 +1,7 @@
 package model
 
+import "sync"
+
 type Identifier string
 
 type DataMap map[string]interface{}
@@ -30,6 +32,7 @@ type Database struct {
 	Collections map[Identifier]*Collection `json:"collections"`
 	Metadata    Metadata                   `json:"metadata"`
 	Access      map[Identifier]*Access     `json:"access,omitempty"`
+	sync.Mutex
 }
 
 type Collection struct {
