@@ -1,8 +1,6 @@
 package wdbClient
 
 import (
-	"time"
-
 	c "github.com/TanmoySG/wunderDB/internal/collections"
 	d "github.com/TanmoySG/wunderDB/internal/data"
 	"github.com/TanmoySG/wunderDB/internal/identities"
@@ -23,7 +21,6 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 
 	database.Lock()
 	defer database.Unlock()
-	time.Sleep(20 * time.Second)
 
 	if !wdb.safeName.Check(collectionId.String()) {
 		return &er.CollectionNameFormatError
