@@ -1,11 +1,14 @@
-# fly.toml file generated for wunderdb on 2023-04-12T02:02:18+05:30
+# fly.toml app configuration file generated for wunderdb on 2023-05-19T02:13:33+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
 app = "wunderdb"
 kill_signal = "SIGINT"
-kill_timeout = 5
+kill_timeout = "5s"
 primary_region = "hkg"
-processes = []
 
+[build]
 
 [env]
   PORT = "8080"
@@ -13,16 +16,14 @@ processes = []
 [experimental]
   auto_rollback = true
 
-[mounts]
+[[mounts]]
   destination = "/root"
   source = "wunderdb_volume"
 
 [[services]]
-  http_checks = []
   internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
-  script_checks = []
   [services.concurrency]
     hard_limit = 25
     soft_limit = 20
