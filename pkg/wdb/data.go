@@ -23,13 +23,16 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 		return &er.CollectionNameFormatError
 	}
 
-	collections := c.UseDatabase(*database)
+	collections := c.UseDatabase(database)
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return &er.CollectionDoesNotExistsError
 	}
 
-	data := d.UseCollection(*collection)
+	collection.Lock()
+	defer collection.Unlock()
+
+	data := d.UseCollection(collection)
 	dataId := identities.GenerateID()
 	err := data.Add(model.Identifier(dataId), inputData)
 	if err != nil {
@@ -54,14 +57,14 @@ func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters 
 		return nil, &er.CollectionNameFormatError
 	}
 
-	collections := c.UseDatabase(*database)
+	collections := c.UseDatabase(database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return nil, &er.CollectionDoesNotExistsError
 	}
 
-	data := d.UseCollection(*collection)
+	data := d.UseCollection(collection)
 
 	fetchedData, err := data.Read(filters)
 	if err != nil {
@@ -85,14 +88,17 @@ func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updat
 		return &er.CollectionNameFormatError
 	}
 
-	collections := c.UseDatabase(*database)
+	collections := c.UseDatabase(database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return &er.CollectionDoesNotExistsError
 	}
 
-	data := d.UseCollection(*collection)
+	collection.Lock()
+	defer collection.Unlock()
+
+	data := d.UseCollection(collection)
 	err := data.Update(updatedData, filters)
 	if err != nil {
 		return err
@@ -116,14 +122,17 @@ func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filte
 		return &er.CollectionNameFormatError
 	}
 
-	collections := c.UseDatabase(*database)
+	collections := c.UseDatabase(database)
 
 	collectionExists, collection := collections.CheckIfExists(collectionId)
 	if !collectionExists {
 		return &er.CollectionDoesNotExistsError
 	}
 
-	data := d.UseCollection(*collection)
+	collection.Lock()
+	defer collection.Unlock()
+
+	data := d.UseCollection(collection)
 
 	err := data.Delete(filters)
 	if err != nil {

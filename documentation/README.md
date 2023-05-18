@@ -437,7 +437,7 @@ Some of the Privileges available for use in wunderDb and associated actions.
 | createUser       | global privilege      | create user                        |
 | createRole       | global privilege      | create roles                       |
 | listRole         | global privilege      | list roles in wdb                  |
-| createDatabase   | global privilege      | create database                    |
+| createDatabase   | user privilege        | create database                    |
 | grantRole        | user privileges       | grant role to user                 |
 | readDatabase     | database privileges   | read/fetch database                |
 | updateDatabase   | database privileges   | update database                    |

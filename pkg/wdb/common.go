@@ -13,7 +13,7 @@ func (wdb wdbClient) updateParentMetadata(databaseId, collectionId *model.Identi
 		wdb.Databases.UpdateMetadata(*databaseId)
 		if collectionId != nil {
 			_, database := wdb.Databases.CheckIfExists(*databaseId)
-			collections := collections.UseDatabase(*database)
+			collections := collections.UseDatabase(database)
 			collections.UpdateMetadata(*collectionId)
 		}
 	}
