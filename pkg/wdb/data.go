@@ -118,9 +118,6 @@ func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filte
 		return &er.DatabaseDoesNotExistsError
 	}
 
-	database.Lock()
-	defer database.Unlock()
-
 	if !wdb.safeName.Check(collectionId.String()) {
 		return &er.CollectionNameFormatError
 	}
