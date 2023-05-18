@@ -40,6 +40,7 @@ type Collection struct {
 	Metadata Metadata               `json:"metadata"`
 	Schema   Schema                 `json:"schema"`
 	Access   map[Identifier]*Access `json:"access,omitempty"`
+	sync.Mutex
 }
 
 type Datum struct {

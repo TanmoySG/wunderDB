@@ -36,7 +36,7 @@ var (
 
 func Test_HappyDataFlow(t *testing.T) {
 
-	dc := UseCollection(collection)
+	dc := UseCollection(&collection)
 
 	datarow1Id := model.Identifier("1")
 	datarow1 := map[string]interface{}{
@@ -134,7 +134,7 @@ func Test_HappyDataFlow(t *testing.T) {
 }
 
 func Test_AddData_validationError(t *testing.T) {
-	dc := UseCollection(collection)
+	dc := UseCollection(&collection)
 
 	invalidDataSample := map[string]interface{}{
 		"name": "jane",
@@ -147,7 +147,7 @@ func Test_AddData_validationError(t *testing.T) {
 }
 
 func Test_filterMissingError(t *testing.T) {
-	dc := UseCollection(collection)
+	dc := UseCollection(&collection)
 
 	updateData := map[string]interface{}{
 		"name": "jane",
@@ -163,7 +163,7 @@ func Test_filterMissingError(t *testing.T) {
 }
 
 func Test_filterDecodeError(t *testing.T) {
-	dc := UseCollection(collection)
+	dc := UseCollection(&collection)
 
 	invalidFilter := "filter"
 	updateData := map[string]interface{}{

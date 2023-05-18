@@ -16,6 +16,9 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 		return &er.DatabaseDoesNotExistsError
 	}
 
+	database.Lock()
+	defer database.Unlock()
+
 	collections := c.UseDatabase(database)
 
 	if !wdb.safeName.Check(collectionId.String()) {
@@ -71,9 +74,13 @@ func (wdb wdbClient) DeleteCollection(databaseId, collectionId model.Identifier)
 		return &er.CollectionNameFormatError
 	}
 
-	if exists, _ := collections.CheckIfExists(collectionId); !exists {
+	exists, collection := collections.CheckIfExists(collectionId)
+	if !exists {
 		return &er.CollectionDoesNotExistsError
 	}
+
+	collection.Lock()
+	defer collection.Unlock()
 
 	collections.DeleteCollection(collectionId)
 	wdb.updateParentMetadata(&databaseId, nil)

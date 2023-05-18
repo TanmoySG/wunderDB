@@ -14,7 +14,7 @@ type Data struct {
 	Schema model.Schema
 }
 
-func UseCollection(collection model.Collection) Data {
+func UseCollection(collection *model.Collection) Data {
 	return Data{
 		Data:   collection.Data,
 		Schema: collection.Schema,

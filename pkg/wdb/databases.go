@@ -25,9 +25,11 @@ func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, 
 		return nil, &er.DatabaseNameFormatError
 	}
 
-	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
+	exists, _ := wdb.Databases.CheckIfExists(databaseId)
+	if !exists {
 		return nil, &er.DatabaseDoesNotExistsError
 	}
+
 	return wdb.Databases.GetDatabase(databaseId), nil
 }
 
@@ -36,9 +38,14 @@ func (wdb wdbClient) DeleteDatabase(databaseId model.Identifier) *er.WdbError {
 		return &er.DatabaseNameFormatError
 	}
 
-	if exists, _ := wdb.Databases.CheckIfExists(databaseId); !exists {
+	exists, database := wdb.Databases.CheckIfExists(databaseId)
+	if !exists {
 		return &er.DatabaseDoesNotExistsError
 	}
+
+	database.Lock()
+	defer database.Unlock()
+
 	wdb.Databases.DeleteDatabase(databaseId)
 	return nil
 }
