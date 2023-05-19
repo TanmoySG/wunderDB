@@ -12,7 +12,7 @@ primary_region = "hkg"
 
 [env]
   PORT = "8080"
-  ADDITIONAL_MESSAGE="BETA BUILD: wdb preview hosted on fly.io, might be unstable"
+  NOTICE="BETA BUILD: wdb preview hosted on fly.io, might be unstable"
 
 [experimental]
   auto_rollback = true

@@ -16,7 +16,7 @@ func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
 		"wunderDb": map[string]interface{}{
 			"version":    version.WDB_VERSION,
 			"build-date": version.BUILD_DATE,
-			"notice":     os.Getenv("ADDITIONAL_MESSAGE"),
+			"notice":     os.Getenv("NOTICE"),
 		},
 		"message":    fmt.Sprintf("✋ %s", "hello"),
 		"user-agent": ua,
