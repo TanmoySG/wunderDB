@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/internal/version"
@@ -15,6 +16,7 @@ func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
 		"wunderDb": map[string]interface{}{
 			"version":    version.WDB_VERSION,
 			"build-date": version.BUILD_DATE,
+			"notice":     os.Getenv("ADDITIONAL_MESSAGE"),
 		},
 		"message":    fmt.Sprintf("✋ %s", "hello"),
 		"user-agent": ua,
