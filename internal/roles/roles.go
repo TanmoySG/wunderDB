@@ -52,7 +52,13 @@ func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []st
 }
 
 func (r Roles) ListRoles() Roles {
-	return r
+	var filteredRoles = make(Roles)
+	for roleId, role := range r {
+		if !role.Hidden {
+			filteredRoles[roleId] = role
+		}
+	}
+	return filteredRoles
 }
 
 func (r Roles) Check(permissions []model.Permissions, privilege string, on *model.Entities) bool {
