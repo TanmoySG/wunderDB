@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/TanmoySG/wunderDB/pkg/fs"
+	"github.com/TanmoySG/wunderDB/pkg/tools"
 )
 
 func (w WFileSystem) LoadNamespaces() (map[model.Identifier]*model.Namespace, error) {
@@ -76,6 +78,28 @@ func (w WFileSystem) LoadRoles() (map[model.Identifier]*model.Role, error) {
 			return nil, fmt.Errorf("error reading persisted persisted file: %s", err)
 		}
 
+		updateRolesAspectFlag := os.Getenv("UPDATE_ROLE_ASPECTS")
+		if len(updateRolesAspectFlag) != 0 {
+			updateRoles, err := strconv.ParseBool(updateRolesAspectFlag)
+			if err != nil {
+				return nil, fmt.Errorf("failed to parse flag UPDATE_ROLE_ASPECTS: %s", err)
+			}
+
+			if updateRoles {
+				updateTool := os.Getenv("UPDATE_TOOL")
+				updateValue := os.Getenv("UPDATE_VALUE")
+
+				persitedRolesBytes, err = updateRoleAspect(updateTool, persitedRolesBytes, updateValue)
+				if err != nil {
+					return nil, fmt.Errorf("failed to update roles aspect: %s", err)
+				}
+
+				_ = os.Unsetenv("UPDATE_ROLE_ASPECTS")
+				_ = os.Unsetenv("UPDATE_TOOL")
+				_ = os.Unsetenv("UPDATE_VALUE")
+			}
+		}
+
 		err = json.Unmarshal(persitedRolesBytes, &roles)
 		if err != nil {
 			return nil, fmt.Errorf("error marshaling roles file: %s", err)
@@ -101,4 +125,18 @@ func loadEntity(entityPath string, entity any) (any, error) {
 	}
 
 	return entity, nil
+}
+
+func updateRoleAspect(toolToUse string, rolesFileReadBytes []byte, valueToSet string) ([]byte, error) {
+	t, err := tools.Use(toolToUse)
+	if err != nil {
+		return nil, err
+	}
+
+	out, err := t.Execute(string(rolesFileReadBytes), valueToSet)
+	if err != nil {
+		return nil, err
+	}
+
+	return out.([]byte), nil
 }
