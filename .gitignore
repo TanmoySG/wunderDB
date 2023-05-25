@@ -30,3 +30,7 @@ go.work
 bin
 build
 dist/
+
+tools
+wdb-sidekicks
+wdb
