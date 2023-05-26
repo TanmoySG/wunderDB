@@ -4,6 +4,9 @@ build:
 build-cli:
 	go build -o bin/wdbctl ./cmd/wdbctl/cli.go
 
+build-image:
+	docker build  . --tag wdb-local
+
 run:
 	go run ./cmd/wunderdb/wdb.go
 
@@ -16,6 +19,3 @@ instal-dev:
 coverage:
 	go test ./...  -coverpkg=./... -coverprofile ./coverage.out
 	go tool cover -func ./coverage.out
-
-build-image:
-	docker build  . --tag wdb-local
