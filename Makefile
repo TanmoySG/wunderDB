@@ -16,3 +16,6 @@ instal-dev:
 coverage:
 	go test ./...  -coverpkg=./... -coverprofile ./coverage.out
 	go tool cover -func ./coverage.out
+
+build-image:
+	docker build  . --tag wdb-local
