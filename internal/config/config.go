@@ -31,7 +31,6 @@ type Config struct {
 	AdminPassword         string `json:"-"`
 	Port                  string `json:"PORT"`
 	PersistantStoragePath string `json:"PERSISTANT_STORAGE_PATH"`
-	
 }
 
 type ConfigMap map[string]string

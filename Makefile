@@ -1,5 +1,5 @@
 build:
-	go build -o bin/wdb ./cmd/wunderdb/wdb.go
+	go build -o bin/wdb_server ./cmd/wunderdb/wdb.go
 
 build-cli:
 	go build -o bin/wdbctl ./cmd/wdbctl/cli.go
