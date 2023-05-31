@@ -8,7 +8,7 @@ build-image:
 	docker build  . --tag wdb-local
 
 run:
-	go run ./cmd/wunderdb/wdb.go
+	sh ./scripts/start.sh
 
 gen-txlog-models:
 	gojsonschema -p txlModel internal/txlogs/model/txlog.schema.json -o internal/txlogs/model/model.go

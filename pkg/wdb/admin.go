@@ -48,6 +48,6 @@ func (wdb wdbClient) processAdmin(userID, userPassword string) {
 func (wdb wdbClient) createAdminRole() {
 	roleExists, _ := wdb.Roles.CheckIfExists(model.Identifier(admin.DEFAULT_ADMIN_ROLE))
 	if !roleExists {
-		_ = wdb.Roles.CreateRole(model.Identifier(admin.DEFAULT_ADMIN_ROLE), admin.ALLOWED_ADMIN_PRIVILEGES, admin.DENIED_ADMIN_PRIVILEGES)
+		_ = wdb.Roles.CreateRole(model.Identifier(admin.DEFAULT_ADMIN_ROLE), admin.ALLOWED_ADMIN_PRIVILEGES, admin.DENIED_ADMIN_PRIVILEGES, admin.DEFAULT_ADMIN_ROLE_HIDDEN_STATUS)
 	}
 }

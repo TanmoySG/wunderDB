@@ -13,6 +13,7 @@ type role struct {
 	Role    string   `json:"role" xml:"role" form:"role" validate:"required"`
 	Allowed []string `json:"allowed" xml:"allowed" form:"allowed" validate:"required"`
 	Denied  []string `json:"denied" xml:"denied" form:"denied"`
+	Hidden  bool     `json:"hidden" xml:"hidden" form:"hidden"`
 }
 
 func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
@@ -32,7 +33,7 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 		if !isValid {
 			apiError = error
 		} else {
-			apiError = wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied)
+			apiError = wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied, r.Hidden)
 		}
 	}
 

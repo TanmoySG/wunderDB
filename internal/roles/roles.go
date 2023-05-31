@@ -32,7 +32,7 @@ func (r Roles) CheckIfExists(roleID model.Identifier) (bool, *model.Role) {
 	}
 }
 
-func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []string) *er.WdbError {
+func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []string, hidden bool) *er.WdbError {
 
 	grants, err := getPrivileges(allowed, denied)
 	if err != nil {
@@ -46,7 +46,9 @@ func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []st
 	r[roleID] = &model.Role{
 		RoleID: roleID,
 		Grants: *grants,
+		Hidden: hidden,
 	}
+	
 	return nil
 
 }

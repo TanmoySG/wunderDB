@@ -13,7 +13,7 @@ var (
 	Denied  bool = false
 )
 
-func (wdb wdbClient) CreateRole(roleID model.Identifier, allowed []string, denied []string) *er.WdbError {
+func (wdb wdbClient) CreateRole(roleID model.Identifier, allowed []string, denied []string, hidden bool) *er.WdbError {
 	if !wdb.safeName.Check(roleID.String()) {
 		return &er.EntityNameFormatError
 	}
@@ -22,7 +22,7 @@ func (wdb wdbClient) CreateRole(roleID model.Identifier, allowed []string, denie
 		return &er.RoleAlreadyExistsError
 	}
 
-	return wdb.Roles.CreateRole(roleID, allowed, denied)
+	return wdb.Roles.CreateRole(roleID, allowed, denied, hidden)
 }
 
 func (wdb wdbClient) ListRole() roles.Roles {
