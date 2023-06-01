@@ -172,7 +172,7 @@ A role grants [privileges](#privileges) to perform a specified actions on a [res
 
 ### Creating a Role
 
-To create a `role`, query the following endpoint passing the role name, allowed and denied actions. To perform this action, the user must have the `createRole` privilege.
+To create a `role`, query the following endpoint passing the role name, allowed and denied actions, hidden values. To perform this action, the user must have the `createRole` privilege. The hidden field if set to true would not show up in List Roles (if force is not used).
 
 ```http
 POST /api/roles HTTP/1.1
@@ -188,9 +188,12 @@ Content-Type: application/json
     ],
     "denied": [
         "addData"
-    ]
+    ],
+    "hidden": true
 }
 ```
+
+If the hidden parameter is not passed then it defaults to `false`. Roles with `hidden: true` are hidden roles and roles with `hidden: false` are global roles. Even if a role is hidden it doesn't affect the grantRole process and hidden roles can be granted too.
 
 ### List Roles
 
@@ -201,6 +204,16 @@ GET /api/roles HTTP/1.1
 Accept: application/json
 Authorization: Basic 
 ```
+
+Roles that are hidden won't show up in the results. If you want to force-list all roles (including hidden ones), pass `force=true` as below.
+
+```http
+GET /api/roles?force=true HTTP/1.1
+Accept: application/json
+Authorization: Basic 
+```
+
+**Note**: Force-List all roles is ONLY allowed if the requester is the ADMIN of the instance (and not just a user with super admin permissions).
 
 ## Database
 
