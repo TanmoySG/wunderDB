@@ -41,6 +41,10 @@ Once set, configurations cant be updated with the configuration flags. To overri
 
 For more about `wdbctl`, refer to the [documentation](./documentation/README.md#wdbctl).
 
+## Migrations
+
+Certain versions of wdb introduces model changes that need additional migrations from the wdb instance admin. See the [`MIGRATION.md`](./documentation/MIGRATION.md) documentation.
+
 ## Usage
 
 <!-- Once wunderDb instance is running, use the [Admin]() credentials to perform any operations required. For additional security, we recommend creating delegate user(s) with coarse-grained access, to perform the actions. -->
