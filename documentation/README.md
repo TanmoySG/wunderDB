@@ -413,7 +413,7 @@ Read more about the error in the errors documentation.
 
 ## API Documentation
 
-Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s8Z6yXtAq#92ca810f-9f7d-4d65-8e2e-7941bb1990d0) for more details on the wunderDb API, examples, known errors, and API responses. The Postman Collection JSON, can be downloaded from the API Doc page and can be loaded onto Postman for ease of use.
+Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s93mBxKBq) for more details on the wunderDb API, examples, known errors, and API responses. The Postman Collection JSON, can be downloaded from the API Doc page and can be loaded onto Postman for ease of use.
 
 ## Privileges
 
