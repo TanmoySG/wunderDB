@@ -69,6 +69,7 @@ type Permissions struct {
 type Role struct {
 	RoleID Identifier `json:"roleId"`
 	Grants Grants     `json:"grants"`
+	Hidden bool       `json:"hidden"`
 }
 
 type Grants struct {

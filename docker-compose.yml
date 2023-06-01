@@ -11,6 +11,9 @@ services:
       - PERSISTANT_STORAGE_PATH=/wfs
       - ADMIN_ID=${ADMIN_ID}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      # optional wdb-tools usage field - pass without quotes ("")
+      - USE_TOOL=false
+      - TOOL_INSTRUCTION=/tools/roles_hidden_field_update -f /wfs/roles/roles_persisted.json true
     volumes:
       - ./wdb/wfs:/wfs
       - ./wdb/configs:/root/wdb/configs

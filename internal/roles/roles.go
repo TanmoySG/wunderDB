@@ -32,7 +32,7 @@ func (r Roles) CheckIfExists(roleID model.Identifier) (bool, *model.Role) {
 	}
 }
 
-func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []string) *er.WdbError {
+func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []string, hidden bool) *er.WdbError {
 
 	grants, err := getPrivileges(allowed, denied)
 	if err != nil {
@@ -46,13 +46,26 @@ func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []st
 	r[roleID] = &model.Role{
 		RoleID: roleID,
 		Grants: *grants,
+		Hidden: hidden,
 	}
+
 	return nil
 
 }
 
-func (r Roles) ListRoles() Roles {
-	return r
+func (r Roles) ListRoles(forceListAllRoles bool) Roles {
+	var filteredRoles = make(Roles)
+
+	if forceListAllRoles {
+		return r
+	}
+
+	for roleId, role := range r {
+		if !role.Hidden {
+			filteredRoles[roleId] = role
+		}
+	}
+	return filteredRoles
 }
 
 func (r Roles) Check(permissions []model.Permissions, privilege string, on *model.Entities) bool {

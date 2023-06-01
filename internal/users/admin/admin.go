@@ -11,7 +11,8 @@ const (
 	DEFAULT_ADMIN_USERID          = "admin"
 	BASE64_DEFAULT_ADMIN_PASSWORD = "YWRtaW4="
 
-	DEFAULT_ADMIN_ROLE = "wdb_super_admin_role"
+	DEFAULT_ADMIN_ROLE               = "wdb_super_admin_role"
+	DEFAULT_ADMIN_ROLE_HIDDEN_STATUS = true
 )
 
 var (

@@ -21,7 +21,7 @@ func (wdb wdbClient) updateParentMetadata(databaseId, collectionId *model.Identi
 
 func (wdb wdbClient) grantSystemDefaultRole(userId model.Identifier, role sysroles.SystemDefaultRole, args ...string) *wdbErrors.WdbError {
 	if exists, _ := wdb.Roles.CheckIfExists(model.Identifier(role.RoleID)); !exists {
-		err := wdb.Roles.CreateRole(model.Identifier(role.RoleID), role.Privileges, []string{})
+		err := wdb.Roles.CreateRole(model.Identifier(role.RoleID), role.Privileges, []string{}, role.Hidden)
 		if err != nil {
 			return err
 		}

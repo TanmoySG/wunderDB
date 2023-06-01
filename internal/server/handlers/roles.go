@@ -4,6 +4,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/roles"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
+	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/gofiber/fiber/v2"
@@ -13,6 +14,7 @@ type role struct {
 	Role    string   `json:"role" xml:"role" form:"role" validate:"required"`
 	Allowed []string `json:"allowed" xml:"allowed" form:"allowed" validate:"required"`
 	Denied  []string `json:"denied" xml:"denied" form:"denied"`
+	Hidden  bool     `json:"hidden" xml:"hidden" form:"hidden"`
 }
 
 func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
@@ -32,7 +34,7 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 		if !isValid {
 			apiError = error
 		} else {
-			apiError = wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied)
+			apiError = wh.wdbClient.CreateRole(model.Identifier(r.Role), r.Allowed, r.Denied, r.Hidden)
 		}
 	}
 
@@ -49,6 +51,8 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
 	privilege := privileges.ListRole
 
+	forceListFlag := c.Query("force", "false")
+
 	var apiError *er.WdbError
 	var roleList roles.Roles
 
@@ -56,7 +60,8 @@ func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
 	if !isValid {
 		apiError = error
 	} else {
-		roleList = wh.wdbClient.ListRole()
+		actorUserId := authentication.GetActor(c.Get(Authorization))
+		roleList, apiError = wh.wdbClient.ListRole(actorUserId, forceListFlag)
 	}
 
 	resp := response.Format(privilege, apiError, roleList)

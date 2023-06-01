@@ -67,7 +67,6 @@ func (w WFileSystem) LoadUsers() (map[model.Identifier]*model.User, error) {
 }
 
 func (w WFileSystem) LoadRoles() (map[model.Identifier]*model.Role, error) {
-
 	roles := map[model.Identifier]*model.Role{}
 
 	if fs.CheckFileExists(w.rolesBasePath) {

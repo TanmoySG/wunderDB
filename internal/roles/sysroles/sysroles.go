@@ -6,6 +6,7 @@ import "github.com/TanmoySG/wunderDB/internal/privileges"
 type SystemDefaultRole struct {
 	RoleID     string
 	Privileges []string
+	Hidden     bool
 }
 
 // default database admin role
@@ -18,4 +19,5 @@ var DatabaseAdminRole = SystemDefaultRole{
 		privileges.UpdateDatabase,
 		privileges.CreateCollection,
 	},
+	Hidden: true,
 }
