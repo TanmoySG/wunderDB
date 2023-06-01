@@ -31,7 +31,7 @@ wdb-tools are commandline tools built to make life easy! To use wdb-tools,
     - All roles will be set to the value
   - Run the `sh ./scripts/start.sh` to run the tool and start the wdb-server
 
-### Option 3: Use wb-tools in Docker Containers
+### Option 3: Use wdb-tools in Docker Containers
 
 Simillar to Option-2, to use wdb-tools in wdb-container, you just need to export the `TOOL_INSTRUCTION` and `USE_TOOL` variables. The wdb-image comes pre-packed with the wdb-tools so you dont need to clone it. The tools are stored in the `/tools` directory in wdb-image/container.
 
