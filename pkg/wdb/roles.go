@@ -1,6 +1,9 @@
 package wdbClient
 
 import (
+	"fmt"
+	"strconv"
+
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/roles"
 	"github.com/TanmoySG/wunderDB/internal/users/admin"
@@ -25,8 +28,30 @@ func (wdb wdbClient) CreateRole(roleID model.Identifier, allowed []string, denie
 	return wdb.Roles.CreateRole(roleID, allowed, denied, hidden)
 }
 
-func (wdb wdbClient) ListRole() roles.Roles {
-	return wdb.Roles.ListRoles()
+func (wdb wdbClient) ListRole(requesterId, forceListFlag string) (roles.Roles, *er.WdbError) {
+	forceList, err := strconv.ParseBool(forceListFlag)
+	if err != nil {
+		return nil, &er.WdbError{
+			ErrCode:        "encodeDecodeError",
+			ErrMessage:     fmt.Sprintf("error parsing force flag: %s", err),
+			HttpStatusCode: 406,
+		}
+	}
+
+	if forceList {
+		if requesterId != wdb.Configurations.Admin.String() {
+			return nil, &er.WdbError{
+				// add to wdb errors pkg
+				ErrCode:        "forceActionUnautorized",
+				ErrMessage:     fmt.Sprintf("force list all roles not autorized for requester: %s", requesterId),
+				HttpStatusCode: 401,
+			}
+		}
+		return wdb.Roles.ListRoles(forceList), nil
+	}
+
+	// force list : false
+	return wdb.Roles.ListRoles(forceList), nil
 }
 
 func (wdb wdbClient) CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError) {

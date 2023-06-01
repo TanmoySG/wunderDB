@@ -48,13 +48,18 @@ func (r Roles) CreateRole(roleID model.Identifier, allowed []string, denied []st
 		Grants: *grants,
 		Hidden: hidden,
 	}
-	
+
 	return nil
 
 }
 
-func (r Roles) ListRoles() Roles {
+func (r Roles) ListRoles(forceListAllRoles bool) Roles {
 	var filteredRoles = make(Roles)
+
+	if forceListAllRoles {
+		return r
+	}
+
 	for roleId, role := range r {
 		if !role.Hidden {
 			filteredRoles[roleId] = role
