@@ -57,7 +57,10 @@ if [[ "$BRANCH" != "main" ]]; then
     exit 1
 fi
 
-go fmt ./...
+# go fmt the version.go file
+go fmt $VERSION_GO_PATH
+
+# git add and commit tagged and built files
 git add $VERSION_JSON_PATH $VERSION_GO_PATH
 git commit -m "$COMMIT_MESSAGE"
 git push
