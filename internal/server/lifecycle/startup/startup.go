@@ -8,6 +8,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/roles"
 	"github.com/TanmoySG/wunderDB/internal/users"
 	"github.com/TanmoySG/wunderDB/internal/users/authentication"
+	"github.com/TanmoySG/wunderDB/internal/version"
 	"github.com/TanmoySG/wunderDB/internal/wfs"
 	"github.com/TanmoySG/wunderDB/model"
 	wdbClient "github.com/TanmoySG/wunderDB/pkg/wdb"
@@ -52,9 +53,11 @@ func Start(w *model.WDB, c *config.Config) {
 		Admin: (*model.Identifier)(&c.AdminID),
 	}
 
+	notices := version.Notices
+
 	wdbc := wdbClient.NewWdbClient(wdbClientConfigurations, w.Databases, w.Roles, w.Users, authentication.MD5)
 	wdbc.InitializeAdmin(c)
 
-	server := wdbs.NewWdbServer(wdbc, c.RootDirectoryPath, c.Port)
+	server := wdbs.NewWdbServer(wdbc, c.RootDirectoryPath, c.Port, notices...)
 	server.Start()
 }

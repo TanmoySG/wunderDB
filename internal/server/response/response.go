@@ -6,10 +6,11 @@ import (
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
-func Format(action string, err *er.WdbError, data interface{}) ApiResponse {
-	var status string
-	var errorObject Error
-	var httpStatusCode int
+func Format(action string, err *er.WdbError, data interface{}, notices ...string) ApiResponse {
+	// default values
+	var status string = StatusSuccess
+	var errorObject Error = Error{}
+	var httpStatusCode int = 200
 
 	if err != nil {
 		status = StatusFailure
@@ -18,20 +19,17 @@ func Format(action string, err *er.WdbError, data interface{}) ApiResponse {
 			Stack: ErrorStack{err.ErrMessage},
 		}
 		httpStatusCode = err.HttpStatusCode
-	} else {
-		status = StatusSuccess
-		errorObject = Error{}
-		httpStatusCode = 200
-
 	}
 
 	return ApiResponse{
 		HttpStatusCode: httpStatusCode,
 		Response: Response{
-			Action: action,
-			Status: status,
-			Error:  &errorObject,
-			Data:   data,
+			Action:   action,
+			Status:   status,
+			Error:    &errorObject,
+			Data:     &data, // would be removed in future in favour of Response. See : https://github.com/TanmoySG/wunderDB/issues/121
+			Response: &data,
+			Notices:  notices,
 		},
 	}
 }
