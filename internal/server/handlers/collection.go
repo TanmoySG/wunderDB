@@ -41,7 +41,7 @@ func (wh wdbHandlers) CreateCollection(c *fiber.Ctx) error {
 		}
 	}
 
-	resp := response.Format(privilege, apiError, nil)
+	resp := response.Format(privilege, apiError, nil, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -72,7 +72,7 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 		fetchedDatabase, apiError = wh.wdbClient.GetCollection(model.Identifier(databaseName), model.Identifier(collectionName))
 	}
 
-	resp := response.Format(privilege, apiError, fetchedDatabase)
+	resp := response.Format(privilege, apiError, fetchedDatabase, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -102,7 +102,7 @@ func (wh wdbHandlers) DeleteCollection(c *fiber.Ctx) error {
 		apiError = wh.wdbClient.DeleteCollection(model.Identifier(databaseName), model.Identifier(collectionName))
 	}
 
-	resp := response.Format(privilege, apiError, nil)
+	resp := response.Format(privilege, apiError, nil, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
