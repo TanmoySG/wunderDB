@@ -26,6 +26,7 @@ const (
 )
 
 const (
+	Ping     = "ping"
 	Wildcard = "*"
 )
 

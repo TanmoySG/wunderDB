@@ -12,31 +12,31 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-var (
-	defaultPanicMessage = "wunderDB panicked on request"
-)
-
 type wdbServer struct {
 	port    string
 	handler handlers.Client
+	notices []string
 }
 
 type Client interface {
 	Start()
 }
 
-func NewWdbServer(wdbClient wdbClient.Client, wdbBasePath, port string) Client {
+func NewWdbServer(wdbClient wdbClient.Client, wdbBasePath, port string, notices ...string) Client {
 	return wdbServer{
 		port:    fmt.Sprintf(":%s", port),
-		handler: handlers.NewHandlers(wdbClient, wdbBasePath),
+		handler: handlers.NewHandlers(wdbClient, wdbBasePath, notices...),
+		notices: notices,
 	}
 }
 
 func (ws wdbServer) Start() {
 
 	app := fiber.New(fiber.Config{
-		DisableStartupMessage: true, // fiber box disable
+		DisableStartupMessage: true, // fiber startup-message disable
 	})
+
+	ws.startupMessage("", ws.port)
 
 	// recovery configuration
 	recoveryConf := recovery.DefaultConfig
@@ -47,7 +47,7 @@ func (ws wdbServer) Start() {
 
 	api := app.Group("/api")
 
-	// api home route
+	// API Home Route
 	api.Get("/", ws.handler.Hello)
 
 	// Database Routes
@@ -74,7 +74,6 @@ func (ws wdbServer) Start() {
 	api.Post(routes.CreateUser, ws.handler.CreateUser)
 	api.Post(routes.GrantRoles, ws.handler.GrantRoles)
 	api.Get(routes.LoginUser, ws.handler.LoginUser)
-	// app.Get("/api/users/permission", ws.handler.CheckPermissions)
 
 	err := app.Listen(ws.port)
 	if err != nil {
