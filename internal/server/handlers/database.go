@@ -37,7 +37,7 @@ func (wh wdbHandlers) CreateDatabase(c *fiber.Ctx) error {
 			apiError = wh.wdbClient.AddDatabase(model.Identifier(database.Name), model.Identifier(actorUserId))
 		}
 	}
-	resp := response.Format(privilege, apiError, nil)
+	resp := response.Format(privilege, apiError, nil, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -66,7 +66,7 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 		fetchedDatabase, apiError = wh.wdbClient.GetDatabase(model.Identifier(databaseName))
 	}
 
-	resp := response.Format(privilege, apiError, fetchedDatabase)
+	resp := response.Format(privilege, apiError, fetchedDatabase, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -94,7 +94,7 @@ func (wh wdbHandlers) DeleteDatabase(c *fiber.Ctx) error {
 		apiError = wh.wdbClient.DeleteDatabase(model.Identifier(databaseName))
 	}
 
-	resp := response.Format(privilege, apiError, nil)
+	resp := response.Format(privilege, apiError, nil, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err

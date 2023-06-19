@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/internal/version"
 	"github.com/gofiber/fiber/v2"
 )
 
 func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
+	privilege := privileges.Ping
 	ua := c.Get("User-Agent")
 
 	msg := map[string]interface{}{
@@ -22,7 +24,7 @@ func (wh wdbHandlers) Hello(c *fiber.Ctx) error {
 		"user-agent": ua,
 	}
 
-	resp := response.Format("ping", nil, msg)
+	resp := response.Format(privilege, nil, msg, *wh.notices...)
 	if err := sendResponse(c, resp); err != nil {
 		return err
 	}

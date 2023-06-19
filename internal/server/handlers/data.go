@@ -37,7 +37,7 @@ func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
 		apiError = wh.wdbClient.AddData(model.Identifier(databaseName), model.Identifier(collectionName), incomingData)
 	}
 
-	resp := response.Format(privilege, apiError, nil)
+	resp := response.Format(privilege, apiError, nil, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -79,7 +79,7 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 		fetchedData, apiError = wh.wdbClient.GetData(model.Identifier(databaseName), model.Identifier(collectionName), filter)
 	}
 
-	resp := response.Format(privilege, apiError, fetchedData)
+	resp := response.Format(privilege, apiError, fetchedData, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -122,7 +122,7 @@ func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
 		apiError = wh.wdbClient.DeleteData(model.Identifier(databaseName), model.Identifier(collectionName), filter)
 	}
 
-	resp := response.Format(privilege, apiError, fetchedData)
+	resp := response.Format(privilege, apiError, fetchedData, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -169,7 +169,7 @@ func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
 		apiError = wh.wdbClient.UpdateData(model.Identifier(databaseName), model.Identifier(collectionName), incomingUpdatedData, filter)
 	}
 
-	resp := response.Format(privilege, apiError, fetchedData)
+	resp := response.Format(privilege, apiError, fetchedData, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err

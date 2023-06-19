@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
@@ -31,7 +30,7 @@ func (wh wdbHandlers) LoginUser(c *fiber.Ctx) error {
 		data = fmt.Sprintf("%s logged-in", *username)
 	}
 
-	resp := response.Format(privilege, apiError, data)
+	resp := response.Format(privilege, apiError, data, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -57,7 +56,7 @@ func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 		apiError = wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
 	}
 
-	resp := response.Format(privilege, apiError, nil)
+	resp := response.Format(privilege, apiError, nil, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -98,32 +97,7 @@ func (wh wdbHandlers) GrantRoles(c *fiber.Ctx) error {
 		}
 	}
 
-	resp := response.Format(privilege, apiError, data)
-	if err := sendResponse(c, resp); err != nil {
-		return err
-	}
-
-	wh.handleTransactions(c, resp, noEntities)
-	return nil
-}
-
-func (wh wdbHandlers) CheckPermissions(c *fiber.Ctx) error {
-	privilege := c.Query("privilege")
-	database := c.Query("database")
-	collection := c.Query("collection")
-
-	entities := model.Entities{
-		Databases:   &database,
-		Collections: &collection,
-	}
-
-	authStatus, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
-	data := map[string]string{
-		"privilege": privilege,
-		"allowed":   strconv.FormatBool(authStatus),
-	}
-	resp := response.Format("", error, data)
-
+	resp := response.Format(privilege, apiError, data, *wh.notices...)
 	if err := sendResponse(c, resp); err != nil {
 		return err
 	}

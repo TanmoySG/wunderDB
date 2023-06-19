@@ -9,12 +9,14 @@ import (
 type wdbHandlers struct {
 	wdbClient w.Client
 	wdbTxLogs tx.DotTxLog
+	notices   *[]string
 }
 
-func NewHandlers(client w.Client, wdbBasePath string) Client {
+func NewHandlers(client w.Client, wdbBasePath string, notices ...string) Client {
 	return wdbHandlers{
 		wdbClient: client,
 		wdbTxLogs: tx.UseDotTxLog(wdbBasePath),
+		notices:   &notices,
 	}
 }
 

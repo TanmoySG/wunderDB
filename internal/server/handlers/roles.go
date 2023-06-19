@@ -38,7 +38,7 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 		}
 	}
 
-	resp := response.Format(privilege, apiError, nil)
+	resp := response.Format(privilege, apiError, nil, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
@@ -64,7 +64,7 @@ func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
 		roleList, apiError = wh.wdbClient.ListRole(actorUserId, forceListFlag)
 	}
 
-	resp := response.Format(privilege, apiError, roleList)
+	resp := response.Format(privilege, apiError, roleList, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
