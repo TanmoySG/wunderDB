@@ -424,11 +424,11 @@ The `data` field contains the data/response returned by the particular action. L
 
 Each action has its own format of returning data/messages in the `data` field. Read more about data returned in the API Documentation or Postman Collection examples.
 
-**Note**: The `data` field in response caused confusion as it can be anything, from database, collection, or actual data in collection. The field name `data` is inappropriate. To avoid this confusion we've intoduced the `response` field in the API response. This new field would contain the same entities as the current data field and would be used to return any entities from the API. 
+**Note**: The `data` field in response caused confusion as it can be anything, from database, collection, or actual data in collection. The field name `data` is inappropriate. To avoid this confusion we've intoduced the `response` field in the API response. This new field would contain the same entities as the current data field and would be used to return any entities from the API.
 
 #### Response
 
-**Note**: The `data` field is still kept for backward compatibility, and will be removed completely in favour of `response` field.
+**Note**: The `data` field is still kept for backward compatibility, and will be removed completely in favour of `response` field in future versions.
 
 The `response` field contains the data/response returned by the particular action. Like the `getData` action would return the list of records in the `response` field.
 
