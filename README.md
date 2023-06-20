@@ -49,24 +49,9 @@ Certain versions of wdb introduces model changes that need additional migrations
 
 <!-- Once wunderDb instance is running, use the [Admin]() credentials to perform any operations required. For additional security, we recommend creating delegate user(s) with coarse-grained access, to perform the actions. -->
 
-wunderDb APIs are completely RESTful and all actions can be performed using simple HTTP Requests. Feel free to browse the documentation for usage instructions and other important concepts used in wunderDb.
+wunderDb APIs are completely RESTful and all actions can be performed using simple HTTP Requests. Refer to the [documentation](./documentation/README.md) for usage instructions.
 
 <!-- Here's an outline of some of the topics in the documentations. -->
-
-- [Get Started](./documentation/README.md#getting-started)
-  - [Persistence of Data](./documentation/README.md#persisting-data)
-  - [Configurations](./documentation/README.md#configuration)
-- [Tools - `wdbctl`](./documentation/README.md#wdbctl)
-- Users, Roles and Access Control
-  - [Users](./documentation/README.md#users)
-  - [Roles and RBAC](./documentation/README.md#roles)
-  - [Privileges](./documentation/README.md#privileges)
-- Databases, Collections
-  - [Databases](./documentation/README.md#database)
-  - [Collections](./documentation/README.md#collections)
-- [Data](./documentation/README.md#data)
-  - [Filter](./documentation/README.md#filters)
-  - [Schema](./documentation/README.md#schema)
 
 ## Client Libraries
 

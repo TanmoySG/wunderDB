@@ -2,6 +2,23 @@
 
 wunderDb is a cross-platform JSON-based in-memory data store, inspired by mongoDb. wdb APIs are completely RESTful and easy to communicate to using HTTP requests.
 
+## Contents
+
+- [Get Started](#getting-started)
+  - [Persistence of Data](#persisting-data)
+  - [Configurations](#configuration)
+- [Tools - `wdbctl`](#wdbctl)
+- Users, Roles and Access Control
+  - [Users](#users)
+  - [Roles and RBAC](#roles)
+  - [Privileges](#privileges)
+- Databases, Collections
+  - [Databases](#database)
+  - [Collections](#collections)
+- [Data](#data)
+  - [Filter](#filters)
+  - [Schema](#schema)
+
 ## Getting Started
 
 Being build with Go, the wdb-server is cross-platform and can run on windows, linux and mac. To start the wdb-server, download the platform-specific binary/executable from the latest release. Then run the binary - this starts the wdb-server with default configurations.
@@ -375,10 +392,12 @@ All requests made to wunderDb returns a response that has the same structure and
 
 ```jsonl
 {
-    "action": "action-code",    // privilege performed, eg: addData, readCollection, etc.
+    "action": "action-id",      // privilege performed, eg: addData, readCollection, etc.
     "status": "request status", // success or failure
     "error": {},                // errors returned
-    "data": {}                  // data returned
+    "data": {}                  // data returned - DEPRECATED, use `response`
+    "response": {}              // data returned, use in-place of the data field
+    "notices": []               // notices for the version, eg: deprecation warning etc.
 }
 ```
 
@@ -399,11 +418,25 @@ If any error is raised by the wunderDb server as reponse, the error returned has
 
 The `code` field contains the error code. While the `stack` contains the stack of error(s), currently only the latest error is returned.
 
-#### Data
+#### Data [DEPRECATED, Soon to be removed]
 
 The `data` field contains the data/response returned by the particular action. Like the `getData` action would return the list of records in the `data` field.
 
 Each action has its own format of returning data/messages in the `data` field. Read more about data returned in the API Documentation or Postman Collection examples.
+
+**Note**: The `data` field in response caused confusion as it can be anything, from database, collection, or actual data in collection. The field name `data` is inappropriate. To avoid this confusion we've intoduced the `response` field in the API response. This new field would contain the same entities as the current data field and would be used to return any entities from the API.
+
+#### Response
+
+**Note**: The `data` field is still kept for backward compatibility, and will be removed completely in favour of `response` field in future versions.
+
+The `response` field contains the data/response returned by the particular action. Like the `getData` action would return the list of records in the `response` field.
+
+Each action has its own format of returning data/messages in the `response` field. Read more about data returned in the API Documentation or Postman Collection examples.
+
+### Notices
+
+The `notices` field contains all versioned notices that might be useful or required to notify users about some change or upgrade etc. Notices can be deprecation warning, upgrade requirements, etc.
 
 ## WunderDB Errors
 
