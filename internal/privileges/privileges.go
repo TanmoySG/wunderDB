@@ -13,6 +13,7 @@ var PrivilegeScope = map[string]string{
 	LoginUser:        GlobalPrivileges,
 	ListRole:         GlobalPrivileges,
 	GrantRole:        UserPrivileges,
+	RevokeRole:       UserPrivileges,
 	UpdateRole:       UserPrivileges,
 	ReadDatabase:     DatabasePrivileges,
 	UpdateDatabase:   DatabasePrivileges,
@@ -33,6 +34,7 @@ var PrivilegeType = map[string]PrivilegeActionType{
 	GrantRole:  WildcardPrivilege,
 	UpdateRole: WildcardPrivilege,
 	ListRole:   WildcardPrivilege,
+	RevokeRole: WildcardPrivilege,
 
 	ReadDatabase:   ReadPrivilege,
 	ReadCollection: ReadPrivilege,

@@ -14,6 +14,7 @@ var DatabaseAdminRole = SystemDefaultRole{
 	RoleID: "database_admin",
 	Privileges: []string{
 		privileges.GrantRole,
+		privileges.RevokeRole,
 		privileges.ReadDatabase,
 		privileges.DeleteDatabase,
 		privileges.UpdateDatabase,
