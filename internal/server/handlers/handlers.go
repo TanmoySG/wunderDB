@@ -40,13 +40,13 @@ type Client interface {
 	UpdateData(c *fiber.Ctx) error
 
 	// Role Handlers
-	CreateRole(c *fiber.Ctx) error
 	ListRoles(c *fiber.Ctx) error
+	CreateRole(c *fiber.Ctx) error
+	UpdateRole(c *fiber.Ctx) error
 
 	// User Handlers
 	CreateUser(c *fiber.Ctx) error
-	GrantRoles(c *fiber.Ctx) error
 	LoginUser(c *fiber.Ctx) error
-	// CheckPermissions(c *fiber.Ctx) error
-
+	GrantRole(c *fiber.Ctx) error
+	RevokeRole(c *fiber.Ctx) error
 }

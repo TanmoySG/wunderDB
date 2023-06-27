@@ -48,6 +48,37 @@ func (wh wdbHandlers) CreateRole(c *fiber.Ctx) error {
 	return nil
 }
 
+func (wh wdbHandlers) UpdateRole(c *fiber.Ctx) error {
+	privilege := privileges.UpdateRole
+
+	var apiError *er.WdbError
+
+	r := new(role)
+	if err := c.BodyParser(r); err != nil {
+		return err
+	}
+
+	if err := validateRequest(r); err != nil {
+		apiError = err
+	} else {
+		isValid, error := wh.handleAuthenticationAndAuthorization(c, noEntities, privilege)
+		if !isValid {
+			apiError = error
+		} else {
+			apiError = wh.wdbClient.UpdateRole(model.Identifier(r.Role), r.Allowed, r.Denied, r.Hidden)
+		}
+	}
+
+	resp := response.Format(privilege, apiError, nil, *wh.notices...)
+
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	wh.handleTransactions(c, resp, noEntities)
+	return nil
+}
+
 func (wh wdbHandlers) ListRoles(c *fiber.Ctx) error {
 	privilege := privileges.ListRole
 
