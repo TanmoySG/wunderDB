@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	passwordAuthentication = "password"
-	tokenAuthentication    = "token"
+	// passwordAuthentication = "password"
+	// tokenAuthentication    = "token"
 
 	userExists       = true
 	userDoesNotExist = false
@@ -54,6 +54,14 @@ func (u Users) GetUser(userID model.Identifier) *model.User {
 func (u Users) GrantRole(userID model.Identifier, permissions model.Permissions) {
 	// Permissions added latest have higher priority
 	u[userID].Permissions = append([]model.Permissions{permissions}, u[userID].Permissions...)
+}
+
+func (u Users) RevokeRole(userID model.Identifier, permissionToRevoke model.Permissions) {
+	for i, permission := range u[userID].Permissions {
+		if permission.Role == permissionToRevoke.Role && permission.On == permissionToRevoke.On {
+			u[userID].Permissions = append(u[userID].Permissions[:i], u[userID].Permissions[i+1:]...)
+		}
+	}
 }
 
 func (u Users) Permission(userID model.Identifier) []model.Permissions {
