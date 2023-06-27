@@ -25,7 +25,19 @@ func (wdb wdbClient) CreateRole(roleID model.Identifier, allowed []string, denie
 		return &er.RoleAlreadyExistsError
 	}
 
-	return wdb.Roles.CreateRole(roleID, allowed, denied, hidden)
+	return wdb.Roles.Create(roleID, allowed, denied, hidden)
+}
+
+func (wdb wdbClient) UpdateRole(roleID model.Identifier, allowed []string, denied []string, hidden bool) *er.WdbError {
+	if !wdb.safeName.Check(roleID.String()) {
+		return &er.EntityNameFormatError
+	}
+
+	if exists, _ := wdb.Roles.CheckIfExists(roleID); exists {
+		return &er.RoleAlreadyExistsError
+	}
+
+	return wdb.Roles.Update(roleID, allowed, denied, hidden)
 }
 
 func (wdb wdbClient) ListRole(requesterId, forceListFlag string) (roles.Roles, *er.WdbError) {
@@ -47,11 +59,11 @@ func (wdb wdbClient) ListRole(requesterId, forceListFlag string) (roles.Roles, *
 				HttpStatusCode: 401,
 			}
 		}
-		return wdb.Roles.ListRoles(forceList), nil
+		return wdb.Roles.List(forceList), nil
 	}
 
 	// force list : false
-	return wdb.Roles.ListRoles(forceList), nil
+	return wdb.Roles.List(forceList), nil
 }
 
 func (wdb wdbClient) CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError) {
