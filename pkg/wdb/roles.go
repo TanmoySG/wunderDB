@@ -33,8 +33,8 @@ func (wdb wdbClient) UpdateRole(roleID model.Identifier, allowed []string, denie
 		return &er.EntityNameFormatError
 	}
 
-	if exists, _ := wdb.Roles.CheckIfExists(roleID); exists {
-		return &er.RoleAlreadyExistsError
+	if exists, _ := wdb.Roles.CheckIfExists(roleID); !exists {
+		return &er.RoleDoesNotExistsError
 	}
 
 	return wdb.Roles.Update(roleID, allowed, denied, hidden)

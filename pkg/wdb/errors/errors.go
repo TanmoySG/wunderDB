@@ -59,6 +59,11 @@ var (
 		ErrMessage:     "role with name already exists",
 		HttpStatusCode: 409,
 	}
+	RoleDoesNotExistsError = WdbError{
+		ErrCode:        "roleDoesNotExist",
+		ErrMessage:     "role with name does not exist",
+		HttpStatusCode: 404,
+	}
 
 	// User Errors
 	UserAlreadyExistsError = WdbError{
