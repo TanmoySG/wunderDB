@@ -2,6 +2,7 @@ package maps
 
 import (
 	"encoding/json"
+	"reflect"
 )
 
 func Marshal(data interface{}) map[string]interface{} {
@@ -26,4 +27,9 @@ func Merge(mapA, mapB map[string]interface{}) (map[string]interface{}, error) {
 		mapB[k] = v
 	}
 	return mapB, nil
+}
+
+func Compare(a, b interface{}) bool {
+	aMap, bMap := Marshal(a), Marshal(b)
+	return reflect.DeepEqual(aMap, bMap)
 }
