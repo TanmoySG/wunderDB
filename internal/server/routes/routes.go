@@ -17,8 +17,8 @@ const (
 	UpdateData = "/databases/:database/collections/:collection/data"
 
 	// Role Routes
-	CreateRole  = "/roles"
-	ListRoles   = "/roles"
+	CreateRole = "/roles"
+	ListRoles  = "/roles"
 	UpdateRole = "/roles"
 
 	// User Routes
