@@ -47,8 +47,8 @@ type Client interface {
 	AuthenticateUser(userID model.Identifier, password string) (bool, *er.WdbError)
 	CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError)
 	GrantRole(userID model.Identifier, permissions model.Permissions) *er.WdbError
-	RevokeRole(userID model.Identifier, permission model.Permissions) *er.WdbError
-
+	RevokeRole(userID model.Identifier, permission model.Permissions) (map[string]int, *er.WdbError)
+	
 	// Roles Methods
 	ListRole(requesterId, forceListAllRoles string) (r.Roles, *er.WdbError)
 	CreateRole(roleID model.Identifier, allowed []string, denied []string, hidden bool) *er.WdbError

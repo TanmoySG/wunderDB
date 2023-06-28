@@ -50,23 +50,23 @@ func (wdb wdbClient) GrantRole(userID model.Identifier, permission model.Permiss
 
 	return nil
 }
-func (wdb wdbClient) RevokeRole(userID model.Identifier, permission model.Permissions) *er.WdbError {
+func (wdb wdbClient) RevokeRole(userID model.Identifier, permission model.Permissions) (map[string]int, *er.WdbError) {
 	if !wdb.safeName.Check(userID.String()) {
-		return &er.EntityNameFormatError
+		return nil, &er.EntityNameFormatError
 	}
 
 	if exists, _ := wdb.Users.CheckIfExists(userID); !exists {
-		return &er.UserDoesNotExistError
+		return nil, &er.UserDoesNotExistError
 	}
 
 	validRole, _ := wdb.Roles.CheckIfExists(permission.Role)
 	if !validRole {
-		return &er.InvalidRoleError
+		return nil, &er.InvalidRoleError
 	}
 
-	wdb.Users.RevokeRole(userID, permission)
-
-	return nil
+	return map[string]int{
+		"permissionsRevoked": wdb.Users.RevokeRole(userID, permission),
+	}, nil
 }
 
 func (wdb wdbClient) AuthenticateUser(userID model.Identifier, password string) (bool, *er.WdbError) {

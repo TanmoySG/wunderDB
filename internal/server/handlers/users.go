@@ -106,12 +106,11 @@ func (wh wdbHandlers) GrantRole(c *fiber.Ctx) error {
 	return nil
 }
 
-
 func (wh wdbHandlers) RevokeRole(c *fiber.Ctx) error {
 	privilege := privileges.RevokeRole
 
 	var entities model.Entities
-	var data map[string]interface{}
+	var data map[string]int
 	var apiError *er.WdbError
 
 	up := new(userPermissions)
@@ -134,7 +133,7 @@ func (wh wdbHandlers) RevokeRole(c *fiber.Ctx) error {
 		if !isValid {
 			apiError = error
 		} else {
-			apiError = wh.wdbClient.RevokeRole(model.Identifier(up.Username), up.Permission)
+			data, apiError = wh.wdbClient.RevokeRole(model.Identifier(up.Username), up.Permission)
 		}
 	}
 
