@@ -2,6 +2,7 @@ package users
 
 import (
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
 )
 
 const (
@@ -56,12 +57,21 @@ func (u Users) GrantRole(userID model.Identifier, permissions model.Permissions)
 	u[userID].Permissions = append([]model.Permissions{permissions}, u[userID].Permissions...)
 }
 
-func (u Users) RevokeRole(userID model.Identifier, permissionToRevoke model.Permissions) {
-	for i, permission := range u[userID].Permissions {
-		if permission.Role == permissionToRevoke.Role && permission.On == permissionToRevoke.On {
-			u[userID].Permissions = append(u[userID].Permissions[:i], u[userID].Permissions[i+1:]...)
+func (u Users) RevokeRole(userID model.Identifier, permissionToRevoke model.Permissions) int {
+	affectedCount, updatedPermissionsList := 0, []model.Permissions{}
+
+	for _, permission := range u[userID].Permissions {
+		// if permissionsToRevoke and permission in iteration
+		// doesn't match - add it to updated permissions list
+		if !maps.Compare(permission, permissionToRevoke) {
+			updatedPermissionsList = append(updatedPermissionsList, permission)
+			continue
 		}
+		affectedCount += 1
 	}
+
+	u[userID].Permissions = updatedPermissionsList
+	return affectedCount
 }
 
 func (u Users) Permission(userID model.Identifier) []model.Permissions {

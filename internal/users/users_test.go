@@ -127,9 +127,10 @@ func Test_RevokeRole(t *testing.T) {
 	u := initTestUserObject()
 	u[user1Name].Permissions = []model.Permissions{testPermission}
 
-	u.RevokeRole(user1Name, testPermission)
+	count := u.RevokeRole(user1Name, testPermission)
 	gotUserAfterGrant, isExists := u[user1Name]
 	assert.Equal(t, userExists, isExists)
+	assert.Equal(t, 1, count)
 	assert.Equal(t, []model.Permissions{}, gotUserAfterGrant.Permissions)
 }
 
