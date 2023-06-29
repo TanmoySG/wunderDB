@@ -103,6 +103,11 @@ Once configurations are set, using the configuration flags to pass custom values
 wdbctl start -o -p 8081
 ```
 
+## API Documentation
+
+Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s93mBxKBq) for more details on the wunderDb API, examples, known errors, and API responses. The Postman Collection JSON, can be downloaded from the API Doc page and can be loaded onto Postman for ease of use.
+
+
 ### Configuration
 
 Some of the configurations that wunderDb uses are listed below. These configs can be set up using environemt variable or wdbctl flags.
@@ -488,10 +493,6 @@ The `notices` field contains all versioned notices that might be useful or requi
 wunderDb has a defined set of errors in the [`wdbError`](../internal/errors/errors.go) package. These standard set of errors are used through-out the actions for raising and returning any errors, if there is any issue while processing a request.
 
 Read more about the error in the errors documentation.
-
-## API Documentation
-
-Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s93mBxKBq) for more details on the wunderDb API, examples, known errors, and API responses. The Postman Collection JSON, can be downloaded from the API Doc page and can be loaded onto Postman for ease of use.
 
 ## Privileges
 
