@@ -42,13 +42,17 @@ type Client interface {
 	UpdateData(databaseId model.Identifier, collectionId model.Identifier, updatedData interface{}, filters interface{}) *er.WdbError
 	DeleteData(databaseId model.Identifier, collectionId model.Identifier, filters interface{}) *er.WdbError
 
-	// Methods for Roles and Users
+	// Users Methods
 	CreateUser(userID model.Identifier, password string) *er.WdbError
 	AuthenticateUser(userID model.Identifier, password string) (bool, *er.WdbError)
-	CreateRole(roleID model.Identifier, allowed []string, denied []string, hidden bool) *er.WdbError
-	ListRole(requesterId, forceListAllRoles string) (r.Roles, *er.WdbError)
 	CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError)
-	GrantRoles(userID model.Identifier, permissions model.Permissions) *er.WdbError
+	GrantRole(userID model.Identifier, permissions model.Permissions) *er.WdbError
+	RevokeRole(userID model.Identifier, permission model.Permissions) (map[string]int, *er.WdbError)
+
+	// Roles Methods
+	ListRole(requesterId, forceListAllRoles string) (r.Roles, *er.WdbError)
+	CreateRole(roleID model.Identifier, allowed []string, denied []string, hidden bool) *er.WdbError
+	UpdateRole(roleID model.Identifier, allowed []string, denied []string, hidden bool) *er.WdbError
 
 	// Admin Method
 	InitializeAdmin(config *config.Config)

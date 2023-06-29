@@ -33,6 +33,7 @@ const (
 const (
 	CreateUser = "createUser"
 	GrantRole  = "grantRole"
+	RevokeRole = "revokeRole"
 	LoginUser  = "loginUser"
 
 	CreateRole = "createRole"

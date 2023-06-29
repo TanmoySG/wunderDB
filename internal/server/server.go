@@ -69,11 +69,13 @@ func (ws wdbServer) Start() {
 	// Role Routes
 	api.Post(routes.CreateRole, ws.handler.CreateRole)
 	api.Get(routes.ListRoles, ws.handler.ListRoles)
+	api.Patch(routes.UpdateRole, ws.handler.UpdateRole)
 
 	// User Routes
 	api.Post(routes.CreateUser, ws.handler.CreateUser)
-	api.Post(routes.GrantRoles, ws.handler.GrantRoles)
+	api.Post(routes.GrantRole, ws.handler.GrantRole)
 	api.Get(routes.LoginUser, ws.handler.LoginUser)
+	api.Delete(routes.RevokeRole, ws.handler.RevokeRole)
 
 	err := app.Listen(ws.port)
 	if err != nil {

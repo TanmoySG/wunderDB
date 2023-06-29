@@ -19,9 +19,11 @@ const (
 	// Role Routes
 	CreateRole = "/roles"
 	ListRoles  = "/roles"
+	UpdateRole = "/roles"
 
 	// User Routes
 	CreateUser = "/users"
 	LoginUser  = "/users/login"
-	GrantRoles = "/users/grant"
+	GrantRole  = "/users/grant"
+	RevokeRole = "/users/revoke"
 )

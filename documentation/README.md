@@ -7,7 +7,7 @@ wunderDb is a cross-platform JSON-based in-memory data store, inspired by mongoD
 - [Get Started](#getting-started)
   - [Persistence of Data](#persisting-data)
   - [Configurations](#configuration)
-- [Tools - `wdbctl`](#wdbctl)
+- [Tools - `wdbctl`](#wdbctl---cli-tool-for-wunderdb)
 - Users, Roles and Access Control
   - [Users](#users)
   - [Roles and RBAC](#roles)
@@ -103,6 +103,11 @@ Once configurations are set, using the configuration flags to pass custom values
 wdbctl start -o -p 8081
 ```
 
+## API Documentation
+
+Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s93mBxKBq) for more details on the wunderDb API, examples, known errors, and API responses. The Postman Collection JSON, can be downloaded from the API Doc page and can be loaded onto Postman for ease of use.
+
+
 ### Configuration
 
 Some of the configurations that wunderDb uses are listed below. These configs can be set up using environemt variable or wdbctl flags.
@@ -183,6 +188,28 @@ If you want to scope the permission to just users, i.e the permissions only appl
 
 This action requires authentication, as well as autorization - the user commiting this action must have the `grantRole` privilege.
 
+### Revoke Role from User
+
+To revoke a user's access to the role on a resource, query the following endpoint, passing the required details. To perform this action, the user must have the `revokeRole` privilege.
+
+```http
+DELETE /api/users/grant HTTP/1.1
+Authorization: Basic 
+Content-Type: application/json
+
+{
+    "username": "username",
+    "permissions": {
+        "role": "rolename",
+        "on": { }
+    }
+}
+```
+
+The role is revoked based on the username (from whom the role access is to be revoked) and the role name (to revoke) and the entities (`on`) on which the role is granted.
+
+It returns the number of roles affected.
+
 ## Roles
 
 A role grants [privileges](#privileges) to perform a specified actions on a [resource](#resources). To ensure security and fine-grained access control, wdb uses [RBAC or Role-based Access Control](https://en.wikipedia.org/wiki/Role-based_access_control). A user is granted one or more roles that controls the user's access to a resource.
@@ -211,6 +238,29 @@ Content-Type: application/json
 ```
 
 If the hidden parameter is not passed then it defaults to `false`. Roles with `hidden: true` are hidden roles and roles with `hidden: false` are global roles. Even if a role is hidden it doesn't affect the grantRole process and hidden roles can be granted too.
+
+### Updating a Role
+
+To update an exiting `role`, query the following endpoint passing the role name, allowed and denied actions, hidden values. To perform this action, the user must have the `updateRole` privilege. The hidden field if set to true would not show up in List Roles (if force is not used).
+
+```http
+PATCH /api/roles HTTP/1.1
+Authorization: Basic 
+Content-Type: application/json
+
+{
+    "role": "rolename",
+    "allowed": [
+        "createDatabase",
+        "grantRole",
+        "...",
+    ],
+    "denied": [
+        "addData"
+    ],
+    "hidden": true
+}
+```
 
 ### List Roles
 
@@ -444,10 +494,6 @@ wunderDb has a defined set of errors in the [`wdbError`](../internal/errors/erro
 
 Read more about the error in the errors documentation.
 
-## API Documentation
-
-Refer to [API Documentation](https://documenter.getpostman.com/view/15618820/2s93mBxKBq) for more details on the wunderDb API, examples, known errors, and API responses. The Postman Collection JSON, can be downloaded from the API Doc page and can be loaded onto Postman for ease of use.
-
 ## Privileges
 
 A privilege is the right to commit a particular action on a wunderDb resource. There are multiple privileges that wdb uses to control access to the actions that can be performed. Multiple privileges are grouped together in a role. Privileges can be allowed or denied while defining a role.
@@ -479,12 +525,13 @@ A resource is a database, collection, set of databases and collections, or more 
 Some of the Privileges available for use in wunderDb and associated actions.
 
 | Privilege        | Category              | Action                             |
-| ---------------- | --------------------- | ---------------------------------- |
+|------------------|-----------------------|------------------------------------|
 | createUser       | global privilege      | create user                        |
 | createRole       | global privilege      | create roles                       |
 | listRole         | global privilege      | list roles in wdb                  |
 | createDatabase   | user privilege        | create database                    |
 | grantRole        | user privileges       | grant role to user                 |
+| revokeRole       | user privileges       | revoke role from user              |
 | readDatabase     | database privileges   | read/fetch database                |
 | updateDatabase   | database privileges   | update database                    |
 | deleteDatabase   | database privileges   | delete existing database           |
