@@ -29,7 +29,7 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 		return &er.CollectionAlreadyExistsError
 	}
 
-	collections.CreateCollection(collectionId, schema, model.Access{})
+	collections.CreateCollection(collectionId, schema)
 
 	wdb.updateParentMetadata(&databaseId, nil)
 	return nil

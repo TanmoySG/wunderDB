@@ -63,7 +63,7 @@ func Test_CreateCollection(t *testing.T) {
 	database := model.Database{Collections: testCollection}
 
 	collections := UseDatabase(&database)
-	collections.CreateCollection(testCollection2Name, model.Schema{}, model.Access{})
+	collections.CreateCollection(testCollection2Name, model.Schema{})
 
 	expectedCollectionsMap := testCollection
 	expectedCollectionsMap[testCollection2Name] = testCollection2

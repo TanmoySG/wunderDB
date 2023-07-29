@@ -25,12 +25,11 @@ func (c Collections) CheckIfExists(collectionID model.Identifier) (bool, *model.
 	}
 }
 
-func (c Collections) CreateCollection(collectionID model.Identifier, schema model.Schema, access model.Access) {
+func (c Collections) CreateCollection(collectionID model.Identifier, schema model.Schema) {
 	c[collectionID] = &model.Collection{
 		Data:     map[model.Identifier]*model.Datum{},
 		Schema:   schema,
 		Metadata: metadata.New().BasicChangeMetadata(),
-		Access:   map[model.Identifier]*model.Access{},
 	}
 }
 
