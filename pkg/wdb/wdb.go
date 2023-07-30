@@ -32,7 +32,7 @@ type Client interface {
 	DeleteDatabase(databaseId model.Identifier) *er.WdbError
 
 	// Collection Methods
-	AddCollection(databaseId, collectionId model.Identifier, schema model.Schema) *er.WdbError
+	AddCollection(databaseId, collectionId model.Identifier, schema model.Schema, primaryKey *model.Identifier) *er.WdbError
 	GetCollection(databaseId, collectionId model.Identifier) (*model.Collection, *er.WdbError)
 	DeleteCollection(databaseId, collectionId model.Identifier) *er.WdbError
 

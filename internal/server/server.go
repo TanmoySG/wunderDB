@@ -43,7 +43,7 @@ func (ws wdbServer) Start() {
 	recoveryConf.Message = &defaultPanicMessage
 
 	app.Use(logger.New())
-	app.Use(recovery.New(recoveryConf))
+	// app.Use(recovery.New(recoveryConf))
 
 	api := app.Group("/api")
 

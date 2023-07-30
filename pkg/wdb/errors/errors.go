@@ -159,4 +159,10 @@ var (
 		ErrMessage:     "request validation failed",
 		HttpStatusCode: 400,
 	}
+
+	PrimaryKeyNotInSchemaError = WdbError{
+		ErrCode:        "primaryKeySchemaMismatch",
+		ErrMessage:     "Primary key for collection is not in Schema Properties/Required fields",
+		HttpStatusCode: 404,
+	}
 )

@@ -6,7 +6,7 @@ import (
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
-func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, schema model.Schema) *er.WdbError {
+func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, schema model.Schema, primaryKey *model.Identifier) *er.WdbError {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return &er.DatabaseNameFormatError
 	}
@@ -29,7 +29,10 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 		return &er.CollectionAlreadyExistsError
 	}
 
-	collections.CreateCollection(collectionId, schema)
+	err := collections.CreateCollection(collectionId, schema, primaryKey)
+	if err != nil {
+		return err
+	}
 
 	wdb.updateParentMetadata(&databaseId, nil)
 	return nil
