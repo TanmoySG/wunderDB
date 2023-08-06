@@ -14,7 +14,7 @@ const (
 )
 
 type Data struct {
-	Data       map[model.Identifier]*model.Datum
+	Data       map[model.Identifier]*model.Record
 	Schema     model.Schema
 	PrimaryKey *model.Identifier
 }
@@ -47,7 +47,7 @@ func (d Data) Add(recordId model.Identifier, data interface{}) *er.WdbError {
 		return &er.RecordWithPrimaryKeyValueAlreadyExists
 	}
 
-	d.Data[primaryKeyId] = &model.Datum{
+	d.Data[primaryKeyId] = &model.Record{
 		Identifier: model.Identifier(primaryKeyId),
 		RecordId:   model.Identifier(recordId),
 		Data:       data,
@@ -57,7 +57,7 @@ func (d Data) Add(recordId model.Identifier, data interface{}) *er.WdbError {
 	return nil
 }
 
-func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Datum, *er.WdbError) {
+func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Record, *er.WdbError) {
 	if filters != nil {
 		f, err := filter.UseFilter(filters)
 		if err != nil {
@@ -83,7 +83,7 @@ func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError 
 
 	var iterError *er.WdbError
 
-	f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Datum) {
+	f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Record) {
 
 		data, err := maps.Merge(maps.Marshal(updatedData), dataRow.DataMap())
 		if err != nil {
@@ -117,7 +117,7 @@ func (d Data) Delete(filters interface{}) *er.WdbError {
 			return err
 		}
 
-		f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Datum) {
+		f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Record) {
 			delete(d.Data, identifier)
 		})
 		return nil

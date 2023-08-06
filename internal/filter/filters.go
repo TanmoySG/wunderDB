@@ -44,7 +44,7 @@ func UseFilter(filter interface{}) (*Filter, *er.WdbError) {
 	return &dataFilter, nil
 }
 
-func filter(data map[model.Identifier]*model.Datum, filter Filter, iterator func(model.Identifier, model.Datum)) {
+func filter(data map[model.Identifier]*model.Record, filter Filter, iterator func(model.Identifier, model.Record)) {
 	if filter.Key == "id" {
 		// search with primaryKey/id
 		d, exists := data[model.Identifier(filter.Value.(string))]
@@ -72,18 +72,18 @@ func filter(data map[model.Identifier]*model.Datum, filter Filter, iterator func
 	}
 }
 
-func (f Filter) Filter(data map[model.Identifier]*model.Datum) map[model.Identifier]*model.Datum {
-	filteredData := make(map[model.Identifier]*model.Datum)
+func (f Filter) Filter(data map[model.Identifier]*model.Record) map[model.Identifier]*model.Record {
+	filteredData := make(map[model.Identifier]*model.Record)
 
-	filter(data, f, func(id model.Identifier, record model.Datum) {
+	filter(data, f, func(id model.Identifier, record model.Record) {
 		filteredData[id] = &record
 	})
 
 	return filteredData
 }
 
-func (f Filter) Iterate(data map[model.Identifier]*model.Datum, iterator func(model.Identifier, model.Datum)) {
-	filter(data, f, func(id model.Identifier, record model.Datum) {
+func (f Filter) Iterate(data map[model.Identifier]*model.Record, iterator func(model.Identifier, model.Record)) {
+	filter(data, f, func(id model.Identifier, record model.Record) {
 		iterator(id, record)
 	})
 }

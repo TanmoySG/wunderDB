@@ -51,7 +51,7 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 	privilege := privileges.ReadData
 
 	var apiError *er.WdbError
-	var fetchedData map[model.Identifier]*model.Datum
+	var fetchedData map[model.Identifier]*model.Record
 	var filter interface{}
 
 	databaseName := c.Params("database")
@@ -94,7 +94,7 @@ func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
 	privilege := privileges.DeleteData
 
 	var apiError *er.WdbError
-	var fetchedData map[model.Identifier]*model.Datum
+	var fetchedData map[model.Identifier]*model.Record
 	var filter interface{}
 
 	databaseName := c.Params("database")
@@ -136,7 +136,7 @@ func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
 	privilege := privileges.UpdateData
 
 	var apiError *er.WdbError
-	var fetchedData map[model.Identifier]*model.Datum
+	var fetchedData map[model.Identifier]*model.Record
 	var filter interface{}
 
 	databaseName := c.Params("database")

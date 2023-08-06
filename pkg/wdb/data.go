@@ -44,7 +44,7 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 	return nil
 }
 
-func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Datum, *er.WdbError) {
+func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Record, *er.WdbError) {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return nil, &er.DatabaseNameFormatError
 	}

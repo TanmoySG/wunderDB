@@ -20,7 +20,7 @@ func Test_Filter(t *testing.T) {
 		Value: "value",
 	}, f)
 
-	testData := map[model.Identifier]*model.Datum{
+	testData := map[model.Identifier]*model.Record{
 		"1": {
 			Identifier: "1",
 			Data: map[string]interface{}{
@@ -44,7 +44,7 @@ func Test_Filter(t *testing.T) {
 		},
 	}
 
-	expectedData := map[model.Identifier]*model.Datum{
+	expectedData := map[model.Identifier]*model.Record{
 		"2": {
 			Identifier: "1",
 			Data: map[string]interface{}{

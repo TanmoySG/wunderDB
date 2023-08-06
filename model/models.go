@@ -36,14 +36,14 @@ type Database struct {
 }
 
 type Collection struct {
-	Data       map[Identifier]*Datum `json:"data"`
-	Metadata   Metadata              `json:"metadata"`
-	Schema     Schema                `json:"schema"`
-	PrimaryKey *Identifier           `json:"primaryKey,omitempty"`
+	Data       map[Identifier]*Record `json:"data"`
+	Metadata   Metadata               `json:"metadata"`
+	Schema     Schema                 `json:"schema"`
+	PrimaryKey *Identifier            `json:"primaryKey,omitempty"`
 	sync.Mutex
 }
 
-type Datum struct {
+type Record struct {
 	Data       interface{} `json:"data"`
 	Metadata   Metadata    `json:"metadata"`
 	Identifier Identifier  `json:"id"`       // primary key of data/record
