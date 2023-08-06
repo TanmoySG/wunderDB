@@ -28,9 +28,11 @@ var (
 
 	testFilter = map[string]interface{}{"key": "name", "value": "john"}
 
-	collection = model.Collection{
-		Schema: testSchema,
-		Data:   map[model.Identifier]*model.Datum{},
+	primaryKey model.Identifier = "recordId"
+	collection                  = model.Collection{
+		Schema:     testSchema,
+		Data:       map[model.Identifier]*model.Datum{},
+		PrimaryKey: &primaryKey,
 	}
 )
 
@@ -61,11 +63,13 @@ func Test_HappyDataFlow(t *testing.T) {
 			Data:       datarow1,
 			Identifier: datarow1Id,
 			Metadata:   metadata1,
+			RecordId:   datarow1Id,
 		},
 		datarow2Id: {
 			Data:       datarow2,
 			Identifier: datarow2Id,
 			Metadata:   metadata1,
+			RecordId:   datarow2Id,
 		},
 	}
 
@@ -88,6 +92,7 @@ func Test_HappyDataFlow(t *testing.T) {
 			Data:       datarow1,
 			Identifier: datarow1Id,
 			Metadata:   metadata1,
+			RecordId:   datarow1Id,
 		},
 	}
 
@@ -113,6 +118,7 @@ func Test_HappyDataFlow(t *testing.T) {
 		Data:       &updatedDatarow1,
 		Identifier: datarow1Id,
 		Metadata:   updatedMetadata,
+		RecordId:   datarow1Id,
 	}
 
 	err = dc.Update(updateData, testFilter)
@@ -125,6 +131,7 @@ func Test_HappyDataFlow(t *testing.T) {
 			Data:       datarow2,
 			Identifier: datarow2Id,
 			Metadata:   metadata1,
+			RecordId:   datarow2Id,
 		},
 	}
 

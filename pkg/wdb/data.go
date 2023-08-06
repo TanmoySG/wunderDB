@@ -33,8 +33,9 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 	defer collection.Unlock()
 
 	data := d.UseCollection(collection)
-	dataId := identities.GenerateID()
-	err := data.Add(model.Identifier(dataId), inputData)
+
+	recordId := identities.GenerateID()
+	err := data.Add(model.Identifier(recordId), inputData)
 	if err != nil {
 		return err
 	}

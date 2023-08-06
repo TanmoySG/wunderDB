@@ -9,19 +9,25 @@ import (
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
+const (
+	defaultPrimaryKeyField = "recordId"
+)
+
 type Data struct {
-	Data   map[model.Identifier]*model.Datum
-	Schema model.Schema
+	Data       map[model.Identifier]*model.Datum
+	Schema     model.Schema
+	PrimaryKey *model.Identifier
 }
 
 func UseCollection(collection *model.Collection) Data {
 	return Data{
-		Data:   collection.Data,
-		Schema: collection.Schema,
+		Data:       collection.Data,
+		Schema:     collection.Schema,
+		PrimaryKey: collection.PrimaryKey,
 	}
 }
 
-func (d Data) Add(dataId model.Identifier, data interface{}) *er.WdbError {
+func (d Data) Add(recordId model.Identifier, data interface{}) *er.WdbError {
 	s, err := schema.UseSchema(d.Schema)
 	if err != nil {
 		return err
@@ -36,8 +42,14 @@ func (d Data) Add(dataId model.Identifier, data interface{}) *er.WdbError {
 		return &er.SchemaValidationFailed
 	}
 
-	d.Data[dataId] = &model.Datum{
-		Identifier: model.Identifier(dataId),
+	primaryKeyId := d.getPrimaryKey(recordId, &data)
+	if _, ok := d.Data[model.Identifier(primaryKeyId)]; ok {
+		return &er.RecordWithPrimaryKeyValueAlreadyExists
+	}
+
+	d.Data[primaryKeyId] = &model.Datum{
+		Identifier: model.Identifier(primaryKeyId),
+		RecordId:   model.Identifier(recordId),
 		Data:       data,
 		Metadata:   metadata.New().BasicChangeMetadata(),
 	}
@@ -111,4 +123,14 @@ func (d Data) Delete(filters interface{}) *er.WdbError {
 		return nil
 	}
 	return &er.FilterMissingError
+}
+
+func (d Data) getPrimaryKey(recordId model.Identifier, data interface{}) model.Identifier {
+	primaryKeyValue := recordId
+	if d.PrimaryKey.String() != defaultPrimaryKeyField {
+		dataMap := maps.Marshal(data)
+		primaryKeyValue = model.Identifier(dataMap[d.PrimaryKey.String()].(string))
+	}
+
+	return primaryKeyValue
 }
