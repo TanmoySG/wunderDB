@@ -1,4 +1,4 @@
-name: wDB Tag and Deploy
+name: TagDeploy
 
 on:
   push:
