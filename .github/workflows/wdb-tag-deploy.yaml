@@ -104,3 +104,9 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PUB_TOKEN }}
+
+  post-run:
+    needs: ["ghrc-publish"]
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Tag ${{ github.ref_name }} Published!"
