@@ -106,7 +106,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_PUB_TOKEN }}
 
   post-run:
-    needs: ["ghrc-publish"]
+    needs: ["gorelease"]
     runs-on: ubuntu-latest
     steps:
       - run: echo "Tag ${{ github.ref_name }} Published!"
