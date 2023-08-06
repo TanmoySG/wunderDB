@@ -3,11 +3,17 @@ package collections
 import (
 	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
+	wdbErrors "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
 const (
 	collectionExists       = true
 	collectionDoesNotExist = false
+
+	schemaFieldRequired   = "required"
+	schemaFieldProperties = "properties"
+
+	defaultPrimaryKeyField = "recordId"
 )
 
 type Collections map[model.Identifier]*model.Collection
@@ -25,13 +31,21 @@ func (c Collections) CheckIfExists(collectionID model.Identifier) (bool, *model.
 	}
 }
 
-func (c Collections) CreateCollection(collectionID model.Identifier, schema model.Schema, access model.Access) {
-	c[collectionID] = &model.Collection{
-		Data:     map[model.Identifier]*model.Datum{},
-		Schema:   schema,
-		Metadata: metadata.New().BasicChangeMetadata(),
-		Access:   map[model.Identifier]*model.Access{},
+func (c Collections) CreateCollection(collectionID model.Identifier, schema model.Schema, primaryKey *model.Identifier) *wdbErrors.WdbError {
+	// get primary key field value
+	primaryKeyField, err := c.getPrimaryKey(primaryKey, schema)
+	if err != nil {
+		return err
 	}
+
+	c[collectionID] = &model.Collection{
+		Data:       map[model.Identifier]*model.Record{},
+		Schema:     schema,
+		Metadata:   metadata.New().BasicChangeMetadata(),
+		PrimaryKey: &primaryKeyField,
+	}
+
+	return nil
 }
 
 func (c Collections) GetCollection(collectionID model.Identifier) *model.Collection {
@@ -44,4 +58,33 @@ func (c Collections) DeleteCollection(collectionID model.Identifier) {
 
 func (c Collections) UpdateMetadata(collectionID model.Identifier) {
 	c[collectionID].Metadata = metadata.Use(c[collectionID].Metadata).BasicChangeMetadata()
+}
+
+func (Collections) getPrimaryKey(primaryKey *model.Identifier, schema model.Schema) (model.Identifier, *wdbErrors.WdbError) {
+	// default primary key field is "recordId"
+	var primaryKeyField model.Identifier = model.Identifier(defaultPrimaryKeyField)
+
+	if primaryKey != nil && schema[schemaFieldProperties] != nil && schema[schemaFieldRequired] != nil {
+		// check if primary key is in "properties" field of JSON Schema
+		_, pkeyExistsInProperties := schema[schemaFieldProperties].(map[string]interface{})[primaryKey.String()]
+
+		// check if primary key is in "required" field of JSON Schema
+		pkeyIsRequired := false
+		for _, requiredField := range schema[schemaFieldRequired].([]interface{}) {
+			if primaryKey.String() == requiredField.(string) {
+				pkeyIsRequired = true
+			}
+		}
+
+		// if primary key not in "properties" or "required"
+		// then return primaryKey schema mismatch error
+		if !pkeyExistsInProperties || !pkeyIsRequired {
+			return "", &wdbErrors.PrimaryKeyNotInSchemaError
+		}
+
+		// set primaryKeyField as primary key mentioned
+		primaryKeyField = model.Identifier(primaryKey.String())
+	}
+
+	return primaryKeyField, nil
 }

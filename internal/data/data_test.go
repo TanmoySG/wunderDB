@@ -28,9 +28,11 @@ var (
 
 	testFilter = map[string]interface{}{"key": "name", "value": "john"}
 
-	collection = model.Collection{
-		Schema: testSchema,
-		Data:   map[model.Identifier]*model.Datum{},
+	primaryKey model.Identifier = "recordId"
+	collection                  = model.Collection{
+		Schema:     testSchema,
+		Data:       map[model.Identifier]*model.Record{},
+		PrimaryKey: &primaryKey,
 	}
 )
 
@@ -56,16 +58,18 @@ func Test_HappyDataFlow(t *testing.T) {
 		"updated_at": currentTimestamp,
 	}
 
-	want := map[model.Identifier]*model.Datum{
+	want := map[model.Identifier]*model.Record{
 		datarow1Id: {
 			Data:       datarow1,
 			Identifier: datarow1Id,
 			Metadata:   metadata1,
+			RecordId:   datarow1Id,
 		},
 		datarow2Id: {
 			Data:       datarow2,
 			Identifier: datarow2Id,
 			Metadata:   metadata1,
+			RecordId:   datarow2Id,
 		},
 	}
 
@@ -83,11 +87,12 @@ func Test_HappyDataFlow(t *testing.T) {
 	assert.Equal(t, want, fetchedData)
 
 	// Read Data - filtered
-	filteredData := map[model.Identifier]*model.Datum{
+	filteredData := map[model.Identifier]*model.Record{
 		datarow1Id: {
 			Data:       datarow1,
 			Identifier: datarow1Id,
 			Metadata:   metadata1,
+			RecordId:   datarow1Id,
 		},
 	}
 
@@ -109,10 +114,11 @@ func Test_HappyDataFlow(t *testing.T) {
 		"name": "john",
 		"age":  "30",
 	}
-	wantChange := &model.Datum{
+	wantChange := &model.Record{
 		Data:       &updatedDatarow1,
 		Identifier: datarow1Id,
 		Metadata:   updatedMetadata,
+		RecordId:   datarow1Id,
 	}
 
 	err = dc.Update(updateData, testFilter)
@@ -120,11 +126,12 @@ func Test_HappyDataFlow(t *testing.T) {
 	assert.Equal(t, wantChange, dc.Data[datarow1Id])
 
 	// delete
-	want = map[model.Identifier]*model.Datum{
+	want = map[model.Identifier]*model.Record{
 		datarow2Id: {
 			Data:       datarow2,
 			Identifier: datarow2Id,
 			Metadata:   metadata1,
+			RecordId:   datarow2Id,
 		},
 	}
 
@@ -182,4 +189,23 @@ func Test_filterDecodeError(t *testing.T) {
 	err = dc.Delete(invalidFilter)
 	assert.NotNil(t, err)
 	assert.Equal(t, &wdbErrors.FilterEncodeDecodeError, err)
+}
+
+func Test_getPrimaryKey(t *testing.T) {
+	testPkey := model.Identifier("pKey")
+	testRecordId := model.Identifier("1234")
+
+	data := Data{
+		Data:       map[model.Identifier]*model.Record{},
+		Schema:     model.Schema{},
+		PrimaryKey: &testPkey,
+	}
+
+	dataSample := map[string]interface{}{
+		"pKey": "3",
+	}
+
+	id := data.getPrimaryKey(testRecordId, dataSample)
+
+	assert.Equal(t, "3", id.String())
 }

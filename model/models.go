@@ -36,17 +36,18 @@ type Database struct {
 }
 
 type Collection struct {
-	Data     map[Identifier]*Datum  `json:"data"`
-	Metadata Metadata               `json:"metadata"`
-	Schema   Schema                 `json:"schema"`
-	Access   map[Identifier]*Access `json:"access,omitempty"`
+	Data       map[Identifier]*Record `json:"data"`
+	Metadata   Metadata               `json:"metadata"`
+	Schema     Schema                 `json:"schema"`
+	PrimaryKey *Identifier            `json:"primaryKey,omitempty"`
 	sync.Mutex
 }
 
-type Datum struct {
+type Record struct {
 	Data       interface{} `json:"data"`
 	Metadata   Metadata    `json:"metadata"`
-	Identifier Identifier  `json:"id"`
+	Identifier Identifier  `json:"id"`       // primary key of data/record
+	RecordId   Identifier  `json:"recordId"` // unique record id
 }
 
 type Access struct {

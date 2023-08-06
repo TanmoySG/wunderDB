@@ -344,9 +344,12 @@ Content-Type: application/json
         "type": "object",
         "properties": {...},
         "required": [...]
-    }
+    },
+    "primaryKey: "field-name"
 }
 ```
+
+Pass in the field name in `primaryKey` that has to be used as the primary key for each record. The field has to be a required field in the schema. If no field is passed then the `recordId`, randomly generated alpha-numeric ID, is used as the primary key.
 
 ### Read Collection
 

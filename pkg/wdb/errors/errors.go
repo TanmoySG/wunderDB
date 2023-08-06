@@ -159,4 +159,18 @@ var (
 		ErrMessage:     "request validation failed",
 		HttpStatusCode: 400,
 	}
+
+	// primary key field not part of schema
+	PrimaryKeyNotInSchemaError = WdbError{
+		ErrCode:        "primaryKeySchemaMismatch",
+		ErrMessage:     "Primary key for collection is not in Schema Properties/Required fields",
+		HttpStatusCode: 404,
+	}
+
+	// record with same primary key exists
+	RecordWithPrimaryKeyValueAlreadyExists = WdbError{
+		ErrCode:        "primaryKeyAlreadyExists",
+		ErrMessage:     "Record with Primary Key already exists",
+		HttpStatusCode: 409, //TODO: replace all hardcoded HttpStatusCode with http.Status<status-name>
+	}
 )
