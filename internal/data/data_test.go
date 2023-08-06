@@ -190,3 +190,22 @@ func Test_filterDecodeError(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Equal(t, &wdbErrors.FilterEncodeDecodeError, err)
 }
+
+func Test_getPrimaryKey(t *testing.T) {
+	testPkey := model.Identifier("pKey")
+	testRecordId := model.Identifier("1234")
+
+	data := Data{
+		Data:       map[model.Identifier]*model.Record{},
+		Schema:     model.Schema{},
+		PrimaryKey: &testPkey,
+	}
+
+	dataSample := map[string]interface{}{
+		"pKey": "3",
+	}
+
+	id := data.getPrimaryKey(testRecordId, dataSample)
+
+	assert.Equal(t, "3", id.String())
+}

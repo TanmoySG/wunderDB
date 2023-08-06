@@ -1,6 +1,8 @@
 package data
 
 import (
+	"fmt"
+
 	"github.com/TanmoySG/wunderDB/internal/filter"
 	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
@@ -64,7 +66,7 @@ func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Record, *er
 			return nil, err
 		}
 
-		filteredData := f.Filter(d.Data)
+		filteredData := f.Filter(*d.PrimaryKey, d.Data)
 		return filteredData, nil
 	}
 	return d.Data, nil
@@ -83,7 +85,7 @@ func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError 
 
 	var iterError *er.WdbError
 
-	f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Record) {
+	f.Iterate(*d.PrimaryKey, d.Data, func(identifier model.Identifier, dataRow model.Record) {
 
 		data, err := maps.Merge(maps.Marshal(updatedData), dataRow.DataMap())
 		if err != nil {
@@ -117,7 +119,7 @@ func (d Data) Delete(filters interface{}) *er.WdbError {
 			return err
 		}
 
-		f.Iterate(d.Data, func(identifier model.Identifier, dataRow model.Record) {
+		f.Iterate(*d.PrimaryKey, d.Data, func(identifier model.Identifier, dataRow model.Record) {
 			delete(d.Data, identifier)
 		})
 		return nil
@@ -126,11 +128,14 @@ func (d Data) Delete(filters interface{}) *er.WdbError {
 }
 
 func (d Data) getPrimaryKey(recordId model.Identifier, data interface{}) model.Identifier {
-	primaryKeyValue := recordId
+	primaryKeyValue := recordId.String()
+
 	if d.PrimaryKey.String() != defaultPrimaryKeyField {
 		dataMap := maps.Marshal(data)
-		primaryKeyValue = model.Identifier(dataMap[d.PrimaryKey.String()].(string))
+
+		// all primary key values are converted to string
+		primaryKeyValue = fmt.Sprint(dataMap[d.PrimaryKey.String()])
 	}
 
-	return primaryKeyValue
+	return model.Identifier(primaryKeyValue)
 }

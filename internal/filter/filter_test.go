@@ -61,6 +61,6 @@ func Test_Filter(t *testing.T) {
 		},
 	}
 
-	data := f.Filter(testData)
+	data := f.Filter("pkey", testData)
 	assert.Equal(t, &expectedData, &data)
 }
