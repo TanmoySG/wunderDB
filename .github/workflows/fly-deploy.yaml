@@ -1,8 +1,12 @@
 name: Fly Deploy
+
 on:
-  push:
-    tags:
-      - "*"
+  workflow_run:
+    workflows: ["wDB Tag and Deploy"]
+    branches: [main]
+    types: 
+      - completed
+
 jobs:
   deploy:
     name: Deploy app
