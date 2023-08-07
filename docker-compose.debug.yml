@@ -18,5 +18,6 @@ services:
       - USE_TOOL=false
       - TOOL_INSTRUCTION=/tools/roles_hidden_field_update -f /wfs/roles/roles_persisted.json true
     volumes:
-      - ./wdb/wfs:/wfs
-      - ./wdb/configs:/root/wdb/configs
+      - ./local_wdb/wfs:/wfs
+      - ./local_wdb/txlogs:/root/wdb/txlogs
+      - ./local_wdb/configs:/root/wdb/configs
