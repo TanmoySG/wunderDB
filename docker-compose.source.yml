@@ -16,8 +16,8 @@ services:
       - ADMIN_ID=${ADMIN_ID}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       # optional wdb-tools usage field - pass without quotes ("")
-      - USE_TOOL=false
-      - TOOL_INSTRUCTION=/tools/roles_hidden_field_update -f /wfs/roles/roles_persisted.json true
+      - USE_TOOL=true
+      - TOOL_INSTRUCTION=/tools/migrate_databases_primary_key
     volumes:
       - ./local_wdb/wfs:/wfs
       - ./local_wdb/txlogs:/root/wdb/txlogs
