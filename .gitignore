@@ -33,4 +33,5 @@ dist/
 
 tools
 wdb-sidekicks
-./wdb
+
+local_wdb
