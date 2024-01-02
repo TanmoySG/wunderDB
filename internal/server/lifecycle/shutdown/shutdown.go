@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/TanmoySG/wunderDB/internal/config"
 	fsLoader "github.com/TanmoySG/wunderDB/internal/wfs"
@@ -13,7 +14,7 @@ import (
 
 func Listen(w model.WDB, c config.Config) {
 	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, os.Interrupt)
+	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
 		_ = <-ch
 		log.Infof("Gracefully shutting down...")
