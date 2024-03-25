@@ -16,7 +16,7 @@ func Listen(w model.WDB, c config.Config) {
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
-		_ = <-ch
+		<-ch
 		log.Infof("Gracefully shutting down...")
 		err := cleanExit(c.PersistantStoragePath, w.Databases, w.Roles, w.Users)
 		if err != nil {
