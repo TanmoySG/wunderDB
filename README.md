@@ -3,6 +3,10 @@
 wunderDb is a JSON-based in-memory Data Store.
 <!--  For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown). -->
 
+### Notice
+
+We've fixed the issues with the docker image where graceful shut-down and data persistence were not working while deploying to kubernetes. Please use [wunderDb `v1.5.0`](https://github.com/TanmoySG/wunderDB/pkgs/container/wunderdb/195399419?tag=v1.5.0) and above for better kubernetes support. Thanks!
+
 ## Quickstart
 
 To run wunderDb, download the `wunderdb` binary of the [latest release](https://github.com/TanmoySG/wunderDB/releases) based on your OS and Architecture. Once downloaded, run the binary to start wunderdb.
@@ -53,9 +57,9 @@ wunderDb APIs are completely RESTful and all actions can be performed using simp
 
 - [`wdb-go`](https://github.com/TanmoySG/wdb-go) Go client library for wunderDb. [ [Documentation](https://github.com/TanmoySG/wdb-go#readme) ]
 
-## Migrations
+<!-- ## Migrations
 
-Certain versions of wdb introduces model changes that need additional migrations from the wdb instance admin. See the [`MIGRATION.md`](./documentation/MIGRATION.md) documentation.
+Certain versions of wdb introduces model changes that need additional migrations from the wdb instance admin. See the [`MIGRATION.md`](./documentation/MIGRATION.md) documentation. -->
 
 ## wunderDB-Retro
 

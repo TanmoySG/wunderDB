@@ -15,9 +15,6 @@ services:
       - PERSISTANT_STORAGE_PATH=/wfs
       - ADMIN_ID=${ADMIN_ID}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
-      # optional wdb-tools usage field - pass without quotes ("")
-      - USE_TOOL=true
-      - TOOL_INSTRUCTION=/tools/migrate_databases_primary_key
     volumes:
       - ./local_wdb/wfs:/wfs
       - ./local_wdb/txlogs:/root/wdb/txlogs

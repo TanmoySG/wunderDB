@@ -1,5 +1,7 @@
 # Migrations
 
+With recent changes in the docker image we've discontinued the use of `wdb-tools`. Migration documentation and mechanism witll be updated soon.
+<!-- 
 This document contains background details and instructions to migrate to new models and breaking changes.
 
 ## Migrating existing roles to add `hidden` field
@@ -36,4 +38,4 @@ wdb-tools are commandline tools built to make life easy! To use wdb-tools,
 Simillar to Option-2, to use wdb-tools in wdb-container, you just need to export the `TOOL_INSTRUCTION` and `USE_TOOL` variables. The wdb-image comes pre-packed with the wdb-tools so you dont need to clone it. The tools are stored in the `/tools` directory in wdb-image/container.
 
 - The docker-compose files have the required values set, to use the tool, you just need to change the value of `USE_TOOL` to true (set as false in the compose file)
-- This will run the tool inside the container and start the wdb-server
+- This will run the tool inside the container and start the wdb-server -->
