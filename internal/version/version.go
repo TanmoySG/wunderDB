@@ -1,7 +1,7 @@
 package version
 
 const (
-	WDB_VERSION = "v1.4.2"
+	WDB_VERSION = "v1.5.0"
 	CLI_VERSION = "v0.0.1"
-	BUILD_DATE  = "2024-01-03_01:29:54"
+	BUILD_DATE  = "2024-03-25_19:25:09"
 )
