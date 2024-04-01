@@ -3,9 +3,9 @@
 wunderDb is a JSON-based in-memory Data Store.
 <!--  For persistent data storage wunderDb loads data from and dumps to filesystem at the start and end of it's lifecycle (startup and shutdown). -->
 
-### Notice
+> [!NOTE]
 
-We've fixed the issues with the docker image where graceful shut-down and data persistence were not working while deploying to kubernetes. Please use [wunderDb `v1.5.0`](https://github.com/TanmoySG/wunderDB/pkgs/container/wunderdb/195399419?tag=v1.5.0) and above for better kubernetes support. Thanks!
+> We've fixed the issues with the docker image where graceful shut-down and data persistence were not working while deploying to kubernetes. Please use [wunderDb `v1.5.0`](https://github.com/TanmoySG/wunderDB/pkgs/container/wunderdb/195399419?tag=v1.5.0) and above for better kubernetes support. Thanks!
 
 ## Quickstart
 
