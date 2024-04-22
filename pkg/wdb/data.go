@@ -75,6 +75,32 @@ func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters 
 	return fetchedData, nil
 }
 
+func (wdb wdbClient) QueryData(databaseId, collectionId model.Identifier, query string, mode d.QueryType) (interface{}, *er.WdbError) {
+	if !wdb.safeName.Check(databaseId.String()) {
+		return nil, &er.DatabaseNameFormatError
+	}
+
+	dbExists, database := wdb.Databases.CheckIfExists(databaseId)
+	if !dbExists {
+		return nil, &er.DatabaseDoesNotExistsError
+	}
+
+	if !wdb.safeName.Check(collectionId.String()) {
+		return nil, &er.CollectionNameFormatError
+	}
+
+	collections := c.UseDatabase(database)
+
+	collectionExists, collection := collections.CheckIfExists(collectionId)
+	if !collectionExists {
+		return nil, &er.CollectionDoesNotExistsError
+	}
+
+	data := d.UseCollection(collection)
+
+	return data.Query(query, mode)
+}
+
 func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updatedData, filters interface{}) *er.WdbError {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return &er.DatabaseNameFormatError
