@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/TanmoySG/wunderDB/internal/data"
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/model"
@@ -11,6 +12,11 @@ import (
 const (
 	emptyFilter = ""
 )
+
+type queryRequest struct {
+	QueryMode   string `json:"mode" xml:"mode" form:"mode" validate:"required"`
+	QueryString string `json:"query" xml:"query" form:"query" validate:"required"`
+}
 
 func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
 	privilege := privileges.AddData
@@ -80,6 +86,51 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 	}
 
 	resp := response.Format(privilege, apiError, fetchedData, *wh.notices...)
+
+	if err := sendResponse(c, resp); err != nil {
+		return err
+	}
+
+	wh.handleTransactions(c, resp, entities)
+
+	return nil
+}
+
+func (wh wdbHandlers) QueryData(c *fiber.Ctx) error {
+	privilege := privileges.ReadData
+
+	var apiError *er.WdbError
+	var queriedData interface{}
+	databaseName := c.Params("database")
+	collectionName := c.Params("collection")
+
+	entities := model.Entities{
+		Databases:   &databaseName,
+		Collections: &collectionName,
+	}
+
+	query := new(queryRequest)
+	if err := c.BodyParser(query); err != nil {
+		return err
+	}
+
+	if err := validateRequest(query); err != nil {
+		apiError = err
+	} else {
+		isValid, error := wh.handleAuthenticationAndAuthorization(c, entities, privilege)
+		if !isValid {
+			apiError = error
+		} else {
+			queriedData, apiError = wh.wdbClient.QueryData(
+				model.Identifier(databaseName),
+				model.Identifier(collectionName),
+				query.QueryString,
+				data.QueryType(query.QueryMode),
+			)
+		}
+	}
+
+	resp := response.Format(privilege, apiError, queriedData, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
