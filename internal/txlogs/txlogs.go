@@ -33,7 +33,7 @@ func CreateTxLog(txnAction, txnActor string, txnRequestStatus string, txnEntitie
 	}
 }
 
-func GetTxnHttpDetails(c fiber.Ctx) txlModel.TxlogSchemaJsonTransactionDetails {
+func GetTxnHttpDetails(c *fiber.Ctx) txlModel.TxlogSchemaJsonTransactionDetails {
 	txnHttpUrl, txnUserAgent, txnRequestIP := c.Path(), c.Get("User-Agent"), c.IP()
 
 	txnRequestHttpMethod := txlModel.TxlogSchemaJsonTransactionDetailsMethod(c.Method())

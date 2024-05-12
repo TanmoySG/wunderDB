@@ -12,6 +12,14 @@ type Schema struct {
 	loadedSchema jsonschema.JSONLoader
 }
 
+var (
+	// update default values for required schema fields
+	// TODO: make this configurable at startup
+	requiredSchemaFields = map[string]interface{}{
+		"additionalProperties": false,
+	}
+)
+
 func UseSchema(schema model.Schema) (*Schema, *er.WdbError) {
 	marshaledSchemaJSON, err := json.Marshal(schema)
 	if err != nil {
@@ -29,6 +37,27 @@ func (s Schema) Validate(data interface{}) (bool, *er.WdbError) {
 	}
 	loadedData := jsonschema.NewStringLoader(string(marshaledDataJSON))
 
-	validity, _ := jsonschema.Validate(s.loadedSchema, loadedData)
+	validity, err := jsonschema.Validate(s.loadedSchema, loadedData)
+	if err != nil {
+		return false, er.SchemaValidationFailed.SetMessage(err.Error())
+	}
+
 	return validity.Valid(), nil
+}
+
+// adds default schema fields if not present, eg: additionalProperties [default: false]
+func StandardizeSchema(schema model.Schema) model.Schema {
+
+	// return schema if schema is empty
+	if len(schema) == 0 {
+		return schema
+	}
+
+	for field, fieldDefaultValue := range requiredSchemaFields {
+		if _, ok := schema[field]; !ok {
+			schema[field] = fieldDefaultValue
+		}
+	}
+
+	return schema
 }

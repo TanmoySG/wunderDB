@@ -3,6 +3,7 @@ package collections
 import (
 	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
+	s "github.com/TanmoySG/wunderDB/pkg/schema"
 	wdbErrors "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
@@ -37,6 +38,9 @@ func (c Collections) CreateCollection(collectionID model.Identifier, schema mode
 	if err != nil {
 		return err
 	}
+
+	// standardize schema: add schema fields if not present
+	schema = s.StandardizeSchema(schema)
 
 	c[collectionID] = &model.Collection{
 		Data:       map[model.Identifier]*model.Record{},

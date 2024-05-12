@@ -134,6 +134,19 @@ var (
 		HttpStatusCode: 406,
 	}
 
+	// JSONPath and Query Erros
+	QueryExecutionFailed = WdbError{
+		ErrCode:        "queryExecutionFailed",
+		ErrMessage:     "query execution failed",
+		HttpStatusCode: 400,
+	}
+
+	JSONPathQueryError = WdbError{
+		ErrCode:        "jsonPathQueryError",
+		ErrMessage:     "json path query failed",
+		HttpStatusCode: 400,
+	}
+
 	// Safe Name Error
 	CollectionNameFormatError = WdbError{
 		ErrCode:        "entityNameFormatError",

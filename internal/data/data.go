@@ -156,13 +156,13 @@ func (d Data) Query(query string, mode QueryType) (interface{}, *er.WdbError) {
 	case JsonPathQuery:
 		jpqResult, err := root.JSONPath(query)
 		if err != nil {
-			fmt.Println("ths", err)
+			return nil, er.JSONPathQueryError.SetMessage(err.Error())
 		}
 		queryResultNodes = jpqResult
 	case EvaluateQuery:
 		evqResult, err := ajson.Eval(root, query)
 		if err != nil {
-			fmt.Println("thsd", err)
+			return nil, er.QueryExecutionFailed.SetMessage(err.Error())
 		}
 
 		queryResultNodes = []*ajson.Node{evqResult}
