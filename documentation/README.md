@@ -388,6 +388,32 @@ To filter data while reading, updating or deleting, we need to pass the field na
 
 Example, `.../data?key:name&value:John`, will filter all records with `name=John`.
 
+### Querying/Evaluating Data
+
+To query or evaluating data, use the following call, passing the `mode` (either `jsonpath` or `evaluate`) and `query` as the jsonpath or evaluation queries.
+
+```http
+POST /api/databases/{database}/collections/{collection}/data/query HTTP/1.1
+Authorization: Basic 
+Content-Type: application/json
+
+{
+    "mode": "jsonpath",
+    "query": "$..data.age"
+}
+
+OR
+
+{
+    "mode": "evaluate",
+    "query" : "sum($..data.age)"
+}
+```
+
+- Use `jsonpath` mode to get a specific field value or subvalues from json data, eg: get the value of a sub-field.
+- Use `evaluate` mode to evaluate something based on the data, eg: sum of values of a specific field.
+
+
 ### Insert/Add Data
 
 User must have `addData` permission granted on the collection to add data to. Pass the data to add in the body as JSON object.
