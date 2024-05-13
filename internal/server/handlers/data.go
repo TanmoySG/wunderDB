@@ -97,7 +97,7 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 }
 
 func (wh wdbHandlers) QueryData(c *fiber.Ctx) error {
-	privilege := privileges.ReadData
+	privilege := privileges.QueryData
 
 	var apiError *er.WdbError
 	var queriedData interface{}

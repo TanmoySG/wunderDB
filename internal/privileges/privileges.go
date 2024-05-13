@@ -26,6 +26,7 @@ var PrivilegeScope = map[string]string{
 	ReadData:         CollectionPrivileges,
 	UpdateData:       CollectionPrivileges,
 	DeleteData:       CollectionPrivileges,
+	QueryData:        CollectionPrivileges,
 }
 
 var PrivilegeType = map[string]PrivilegeActionType{
@@ -39,6 +40,7 @@ var PrivilegeType = map[string]PrivilegeActionType{
 	ReadDatabase:   ReadPrivilege,
 	ReadCollection: ReadPrivilege,
 	ReadData:       ReadPrivilege,
+	QueryData:      ReadPrivilege,
 
 	CreateDatabase:   WritePrivilege,
 	UpdateDatabase:   WritePrivilege,
