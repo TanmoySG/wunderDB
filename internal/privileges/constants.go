@@ -54,6 +54,7 @@ const (
 
 	AddData    = "addData"
 	ReadData   = "readData"
+	QueryData  = "queryData"
 	UpdateData = "updateData"
 	DeleteData = "deleteData"
 )

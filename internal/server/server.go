@@ -63,6 +63,7 @@ func (ws wdbServer) Start() {
 	// Data Routes
 	api.Post(routes.AddData, ws.handler.AddData)
 	api.Get(routes.ReadData, ws.handler.ReadData)
+	api.Post(routes.QueryData, ws.handler.QueryData)
 	api.Delete(routes.DeleteData, ws.handler.DeleteData)
 	api.Patch(routes.UpdateData, ws.handler.UpdateData)
 

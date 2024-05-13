@@ -2,6 +2,7 @@ package wdbClient
 
 import (
 	"github.com/TanmoySG/wunderDB/internal/config"
+	"github.com/TanmoySG/wunderDB/internal/data"
 	d "github.com/TanmoySG/wunderDB/internal/databases"
 	r "github.com/TanmoySG/wunderDB/internal/roles"
 	u "github.com/TanmoySG/wunderDB/internal/users"
@@ -41,6 +42,7 @@ type Client interface {
 	GetData(databaseId model.Identifier, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Record, *er.WdbError)
 	UpdateData(databaseId model.Identifier, collectionId model.Identifier, updatedData interface{}, filters interface{}) *er.WdbError
 	DeleteData(databaseId model.Identifier, collectionId model.Identifier, filters interface{}) *er.WdbError
+	QueryData(databaseId, collectionId model.Identifier, query string, mode data.QueryType) (interface{}, *er.WdbError)
 
 	// Users Methods
 	CreateUser(userID model.Identifier, password string) *er.WdbError

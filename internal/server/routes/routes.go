@@ -13,6 +13,7 @@ const (
 	// Data Routes
 	AddData    = "/databases/:database/collections/:collection/data"
 	ReadData   = "/databases/:database/collections/:collection/data"
+	QueryData  = "/databases/:database/collections/:collection/data/query" // route for executing jsonpath queries
 	DeleteData = "/databases/:database/collections/:collection/data"
 	UpdateData = "/databases/:database/collections/:collection/data"
 

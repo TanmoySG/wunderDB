@@ -328,6 +328,11 @@ A collection is a group of records/data of same modality (schema). Collections a
 
 Each collection has a schema that defines its modality and how data in that collection should be structured. In wunderDb schema for a collection is defined using [JSON Schema](https://json-schema.org/) and at the time when collections are created. JSON Schema defines the structure, type and various other standards of the data. Read more on how to define schema using JSON Schema [here](https://json-schema.org/learn/getting-started-step-by-step.html).
 
+Please note
+
+- wunderDB expects that the schema definition contains the primary key as a part of the required array, else it will throw error.
+- wunderDB also expects the [`additionalFields`](https://json-schema.org/understanding-json-schema/reference/object#additionalproperties) schema properties to be set, so as to specify if any additional fields other than the ones in schema should be allowed. If this property is not set, then wunderDB adds it to the schema definition with the default value `false`, i.e no extra fields allowed.
+
 ### Create Collection
 
 To create a collection in a database, use the following endpoint, passing the schema of the data (in JSON Schema notations) in the body. User must have the `createCollection` access granted on the database where the collection is to be created.
@@ -382,6 +387,32 @@ Filters are used to (as the name suggests) filter or to create smaller buckets/v
 To filter data while reading, updating or deleting, we need to pass the field name to the `key` and the value (of the field) that needs to be matched to the `value`.
 
 Example, `.../data?key:name&value:John`, will filter all records with `name=John`.
+
+### Querying/Evaluating Data
+
+To query or evaluating data, use the following call, passing the `mode` (either `jsonpath` or `evaluate`) and `query` as the jsonpath or evaluation queries.
+
+```http
+POST /api/databases/{database}/collections/{collection}/data/query HTTP/1.1
+Authorization: Basic 
+Content-Type: application/json
+
+{
+    "mode": "jsonpath",
+    "query": "$..data.age"
+}
+
+OR
+
+{
+    "mode": "evaluate",
+    "query" : "sum($..data.age)"
+}
+```
+
+- Use `jsonpath` mode to get a specific field value or subvalues from json data, eg: get the value of a sub-field.
+- Use `evaluate` mode to evaluate something based on the data, eg: sum of values of a specific field.
+
 
 ### Insert/Add Data
 

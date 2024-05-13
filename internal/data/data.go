@@ -1,6 +1,7 @@
 package data
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/TanmoySG/wunderDB/internal/filter"
@@ -9,11 +10,19 @@ import (
 	"github.com/TanmoySG/wunderDB/pkg/schema"
 	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
+	"github.com/spyzhov/ajson"
 )
 
 const (
 	defaultPrimaryKeyField = "recordId"
 )
+
+var (
+	JsonPathQuery QueryType = "jsonpath"
+	EvaluateQuery QueryType = "evaluate"
+)
+
+type QueryType string
 
 type Data struct {
 	Data       map[model.Identifier]*model.Record
@@ -69,6 +78,7 @@ func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Record, *er
 		filteredData := f.Filter(*d.PrimaryKey, d.Data)
 		return filteredData, nil
 	}
+
 	return d.Data, nil
 }
 
@@ -125,6 +135,48 @@ func (d Data) Delete(filters interface{}) *er.WdbError {
 		return nil
 	}
 	return &er.FilterMissingError
+}
+
+func (d Data) Query(query string, mode QueryType) (interface{}, *er.WdbError) {
+
+	jsonData, err := json.Marshal(d.Data)
+	if err != nil {
+		return nil, nil
+	}
+
+	var queryResultNodes []*ajson.Node
+	var queryResults []interface{}
+
+	root, err := ajson.Unmarshal(jsonData)
+	if err != nil {
+		return nil, nil
+	}
+
+	switch mode {
+	case JsonPathQuery:
+		jpqResult, err := root.JSONPath(query)
+		if err != nil {
+			return nil, er.JSONPathQueryError.SetMessage(err.Error())
+		}
+		queryResultNodes = jpqResult
+	case EvaluateQuery:
+		evqResult, err := ajson.Eval(root, query)
+		if err != nil {
+			return nil, er.QueryExecutionFailed.SetMessage(err.Error())
+		}
+
+		queryResultNodes = []*ajson.Node{evqResult}
+	}
+
+	for _, node := range queryResultNodes {
+		marshaledNode, err := ajson.Marshal(node)
+		if err != nil {
+			return nil, nil
+		}
+		queryResults = append(queryResults, string(marshaledNode))
+	}
+
+	return queryResults, nil
 }
 
 func (d Data) getPrimaryKey(recordId model.Identifier, data interface{}) model.Identifier {

@@ -109,7 +109,7 @@ func (wh wdbHandlers) handleTransactions(c *fiber.Ctx, apiResponse response.ApiR
 			txnActor := txlogs.GetTxnActor(c.Get(AuthorizationHeader))
 			txnAction := apiResponse.Response.Action
 
-			txnHttpDetails := txlogs.GetTxnHttpDetails(*c)
+			txnHttpDetails := txlogs.GetTxnHttpDetails(c) // Pass the pointer to fiber.Ctx instead of dereferencing it
 			txnEntityPath := txlModel.TxlogSchemaJsonEntityPath{
 				Database:   databaseEntity,
 				Collection: entities.Collections,
