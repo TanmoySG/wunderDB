@@ -147,6 +147,12 @@ var (
 		HttpStatusCode: 400,
 	}
 
+	QueryResultProcessingError = WdbError{
+		ErrCode:        "queryResultProcessingError",
+		ErrMessage:     "json path result processing failed",
+		HttpStatusCode: 400,
+	}
+
 	// Safe Name Error
 	CollectionNameFormatError = WdbError{
 		ErrCode:        "entityNameFormatError",

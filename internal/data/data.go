@@ -10,6 +10,7 @@ import (
 	"github.com/TanmoySG/wunderDB/pkg/schema"
 	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
+	wdbErrors "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/spyzhov/ajson"
 )
 
@@ -171,9 +172,16 @@ func (d Data) Query(query string, mode QueryType) (interface{}, *er.WdbError) {
 	for _, node := range queryResultNodes {
 		marshaledNode, err := ajson.Marshal(node)
 		if err != nil {
-			return nil, nil
+			return nil, &wdbErrors.QueryResultProcessingError
 		}
-		queryResults = append(queryResults, string(marshaledNode))
+
+		var result interface{}
+		err = json.Unmarshal(marshaledNode, &result)
+		if err != nil {
+			return nil, &wdbErrors.QueryResultProcessingError
+		}
+
+		queryResults = append(queryResults, result)
 	}
 
 	return queryResults, nil
