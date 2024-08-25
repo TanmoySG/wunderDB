@@ -52,9 +52,9 @@ const (
 	UpdateCollection = "updateCollection"
 	DeleteCollection = "deleteCollection"
 
-	AddData    = "addData"
-	ReadData   = "readData"
-	QueryData  = "queryData"
-	UpdateData = "updateData"
-	DeleteData = "deleteData"
+	AddRecords    = "addRecords"
+	ReadRecords   = "readRecords"
+	QueryRecords  = "queryRecords"
+	UpdateRecords = "updateRecords"
+	DeleteRecords = "deleteRecords"
 )

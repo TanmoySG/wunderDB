@@ -61,11 +61,11 @@ func (ws wdbServer) Start() {
 	api.Delete(routes.DeleteCollection, ws.handler.DeleteCollection)
 
 	// Data Routes
-	api.Post(routes.AddData, ws.handler.AddData)
-	api.Get(routes.ReadData, ws.handler.ReadData)
-	api.Post(routes.QueryData, ws.handler.QueryData)
-	api.Delete(routes.DeleteData, ws.handler.DeleteData)
-	api.Patch(routes.UpdateData, ws.handler.UpdateData)
+	api.Post(routes.AddRecords, ws.handler.AddRecords)
+	api.Get(routes.ReadRecords, ws.handler.ReadRecords)
+	api.Post(routes.QueryRecords, ws.handler.QueryRecords)
+	api.Delete(routes.DeleteRecords, ws.handler.DeleteRecords)
+	api.Patch(routes.UpdateRecords, ws.handler.UpdateRecords)
 
 	// Role Routes
 	api.Post(routes.CreateRole, ws.handler.CreateRole)

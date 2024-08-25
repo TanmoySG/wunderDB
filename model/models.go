@@ -36,7 +36,7 @@ type Database struct {
 }
 
 type Collection struct {
-	Data       map[Identifier]*Record `json:"data"`
+	Records    map[Identifier]*Record `json:"records"`
 	Metadata   Metadata               `json:"metadata"`
 	Schema     Schema                 `json:"schema"`
 	PrimaryKey *Identifier            `json:"primaryKey,omitempty"`

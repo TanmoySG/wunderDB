@@ -1,4 +1,4 @@
-package data
+package records
 
 import (
 	"encoding/json"
@@ -10,7 +10,6 @@ import (
 	"github.com/TanmoySG/wunderDB/pkg/schema"
 	"github.com/TanmoySG/wunderDB/pkg/utils/maps"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
-	wdbErrors "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/spyzhov/ajson"
 )
 
@@ -25,22 +24,22 @@ var (
 
 type QueryType string
 
-type Data struct {
+type Records struct {
 	Data       map[model.Identifier]*model.Record
 	Schema     model.Schema
 	PrimaryKey *model.Identifier
 }
 
-func UseCollection(collection *model.Collection) Data {
-	return Data{
-		Data:       collection.Data,
+func UseCollection(collection *model.Collection) Records {
+	return Records{
+		Data:       collection.Records,
 		Schema:     collection.Schema,
 		PrimaryKey: collection.PrimaryKey,
 	}
 }
 
-func (d Data) Add(recordId model.Identifier, data interface{}) *er.WdbError {
-	s, err := schema.UseSchema(d.Schema)
+func (r Records) Add(recordId model.Identifier, data interface{}) *er.WdbError {
+	s, err := schema.UseSchema(r.Schema)
 	if err != nil {
 		return err
 	}
@@ -54,12 +53,12 @@ func (d Data) Add(recordId model.Identifier, data interface{}) *er.WdbError {
 		return &er.SchemaValidationFailed
 	}
 
-	primaryKeyId := d.getPrimaryKey(recordId, &data)
-	if _, ok := d.Data[model.Identifier(primaryKeyId)]; ok {
+	primaryKeyId := r.getPrimaryKey(recordId, &data)
+	if _, ok := r.Data[model.Identifier(primaryKeyId)]; ok {
 		return &er.RecordWithPrimaryKeyValueAlreadyExists
 	}
 
-	d.Data[primaryKeyId] = &model.Record{
+	r.Data[primaryKeyId] = &model.Record{
 		Identifier: model.Identifier(primaryKeyId),
 		RecordId:   model.Identifier(recordId),
 		Data:       data,
@@ -69,21 +68,21 @@ func (d Data) Add(recordId model.Identifier, data interface{}) *er.WdbError {
 	return nil
 }
 
-func (d Data) Read(filters interface{}) (map[model.Identifier]*model.Record, *er.WdbError) {
+func (r Records) Read(filters interface{}) (map[model.Identifier]*model.Record, *er.WdbError) {
 	if filters != nil {
 		f, err := filter.UseFilter(filters)
 		if err != nil {
 			return nil, err
 		}
 
-		filteredData := f.Filter(*d.PrimaryKey, d.Data)
+		filteredData := f.Filter(*r.PrimaryKey, r.Data)
 		return filteredData, nil
 	}
 
-	return d.Data, nil
+	return r.Data, nil
 }
 
-func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError {
+func (r Records) Update(updatedData interface{}, filters interface{}) *er.WdbError {
 	if filters == nil {
 		return &er.FilterMissingError
 
@@ -96,21 +95,21 @@ func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError 
 
 	var iterError *er.WdbError
 
-	f.Iterate(*d.PrimaryKey, d.Data, func(identifier model.Identifier, dataRow model.Record) {
+	f.Iterate(*r.PrimaryKey, r.Data, func(identifier model.Identifier, dataRow model.Record) {
 
 		data, err := maps.Merge(maps.Marshal(updatedData), dataRow.DataMap())
 		if err != nil {
 			iterError = &er.DataEncodeDecodeError
 		} else {
-			schema, err := schema.UseSchema(d.Schema)
+			schema, err := schema.UseSchema(r.Schema)
 
 			if err != nil {
 				iterError = err
 			} else {
 				isValid, err := schema.Validate(data)
 				if err == nil && isValid {
-					d.Data[identifier].Data = &data
-					d.Data[identifier].Metadata = metadata.Use(d.Data[identifier].Metadata).BasicChangeMetadata()
+					r.Data[identifier].Data = &data
+					r.Data[identifier].Metadata = metadata.Use(r.Data[identifier].Metadata).BasicChangeMetadata()
 				}
 				iterError = err
 			}
@@ -123,24 +122,24 @@ func (d Data) Update(updatedData interface{}, filters interface{}) *er.WdbError 
 	return nil
 }
 
-func (d Data) Delete(filters interface{}) *er.WdbError {
+func (r Records) Delete(filters interface{}) *er.WdbError {
 	if filters != nil {
 		f, err := filter.UseFilter(filters)
 		if err != nil {
 			return err
 		}
 
-		f.Iterate(*d.PrimaryKey, d.Data, func(identifier model.Identifier, dataRow model.Record) {
-			delete(d.Data, identifier)
+		f.Iterate(*r.PrimaryKey, r.Data, func(identifier model.Identifier, dataRow model.Record) {
+			delete(r.Data, identifier)
 		})
 		return nil
 	}
 	return &er.FilterMissingError
 }
 
-func (d Data) Query(query string, mode QueryType) (interface{}, *er.WdbError) {
+func (r Records) Query(query string, mode QueryType) (interface{}, *er.WdbError) {
 
-	jsonData, err := json.Marshal(d.Data)
+	jsonData, err := json.Marshal(r.Data)
 	if err != nil {
 		return nil, nil
 	}
@@ -172,13 +171,13 @@ func (d Data) Query(query string, mode QueryType) (interface{}, *er.WdbError) {
 	for _, node := range queryResultNodes {
 		marshaledNode, err := ajson.Marshal(node)
 		if err != nil {
-			return nil, &wdbErrors.QueryResultProcessingError
+			return nil, &er.QueryResultProcessingError
 		}
 
 		var result interface{}
 		err = json.Unmarshal(marshaledNode, &result)
 		if err != nil {
-			return nil, &wdbErrors.QueryResultProcessingError
+			return nil, &er.QueryResultProcessingError
 		}
 
 		queryResults = append(queryResults, result)
@@ -187,14 +186,14 @@ func (d Data) Query(query string, mode QueryType) (interface{}, *er.WdbError) {
 	return queryResults, nil
 }
 
-func (d Data) getPrimaryKey(recordId model.Identifier, data interface{}) model.Identifier {
+func (r Records) getPrimaryKey(recordId model.Identifier, data interface{}) model.Identifier {
 	primaryKeyValue := recordId.String()
 
-	if d.PrimaryKey.String() != defaultPrimaryKeyField {
+	if r.PrimaryKey.String() != defaultPrimaryKeyField {
 		dataMap := maps.Marshal(data)
 
 		// all primary key values are converted to string
-		primaryKeyValue = fmt.Sprint(dataMap[d.PrimaryKey.String()])
+		primaryKeyValue = fmt.Sprint(dataMap[r.PrimaryKey.String()])
 	}
 
 	return model.Identifier(primaryKeyValue)

@@ -2,14 +2,14 @@ package wdbClient
 
 import (
 	c "github.com/TanmoySG/wunderDB/internal/collections"
-	d "github.com/TanmoySG/wunderDB/internal/data"
 	"github.com/TanmoySG/wunderDB/internal/identities"
+	r "github.com/TanmoySG/wunderDB/internal/records"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 
 	"github.com/TanmoySG/wunderDB/model"
 )
 
-func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputData interface{}) *er.WdbError {
+func (wdb wdbClient) AddRecords(databaseId, collectionId model.Identifier, inputData interface{}) *er.WdbError {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return &er.DatabaseNameFormatError
 	}
@@ -32,7 +32,7 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 	collection.Lock()
 	defer collection.Unlock()
 
-	data := d.UseCollection(collection)
+	data := r.UseCollection(collection)
 
 	recordId := identities.GenerateID()
 	err := data.Add(model.Identifier(recordId), inputData)
@@ -44,7 +44,7 @@ func (wdb wdbClient) AddData(databaseId, collectionId model.Identifier, inputDat
 	return nil
 }
 
-func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Record, *er.WdbError) {
+func (wdb wdbClient) GetRecords(databaseId, collectionId model.Identifier, filters interface{}) (map[model.Identifier]*model.Record, *er.WdbError) {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return nil, &er.DatabaseNameFormatError
 	}
@@ -65,7 +65,7 @@ func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters 
 		return nil, &er.CollectionDoesNotExistsError
 	}
 
-	data := d.UseCollection(collection)
+	data := r.UseCollection(collection)
 
 	fetchedData, err := data.Read(filters)
 	if err != nil {
@@ -75,7 +75,7 @@ func (wdb wdbClient) GetData(databaseId, collectionId model.Identifier, filters 
 	return fetchedData, nil
 }
 
-func (wdb wdbClient) QueryData(databaseId, collectionId model.Identifier, query string, mode d.QueryType) (interface{}, *er.WdbError) {
+func (wdb wdbClient) QueryRecords(databaseId, collectionId model.Identifier, query string, mode r.QueryType) (interface{}, *er.WdbError) {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return nil, &er.DatabaseNameFormatError
 	}
@@ -96,12 +96,12 @@ func (wdb wdbClient) QueryData(databaseId, collectionId model.Identifier, query 
 		return nil, &er.CollectionDoesNotExistsError
 	}
 
-	data := d.UseCollection(collection)
+	records := r.UseCollection(collection)
 
-	return data.Query(query, mode)
+	return records.Query(query, mode)
 }
 
-func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updatedData, filters interface{}) *er.WdbError {
+func (wdb wdbClient) UpdateRecords(databaseId, collectionId model.Identifier, updatedData, filters interface{}) *er.WdbError {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return &er.DatabaseNameFormatError
 	}
@@ -125,7 +125,7 @@ func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updat
 	collection.Lock()
 	defer collection.Unlock()
 
-	data := d.UseCollection(collection)
+	data := r.UseCollection(collection)
 	err := data.Update(updatedData, filters)
 	if err != nil {
 		return err
@@ -135,7 +135,7 @@ func (wdb wdbClient) UpdateData(databaseId, collectionId model.Identifier, updat
 	return nil
 }
 
-func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filters interface{}) *er.WdbError {
+func (wdb wdbClient) DeleteRecords(databaseId, collectionId model.Identifier, filters interface{}) *er.WdbError {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return &er.DatabaseNameFormatError
 	}
@@ -159,7 +159,7 @@ func (wdb wdbClient) DeleteData(databaseId, collectionId model.Identifier, filte
 	collection.Lock()
 	defer collection.Unlock()
 
-	data := d.UseCollection(collection)
+	data := r.UseCollection(collection)
 
 	err := data.Delete(filters)
 	if err != nil {
