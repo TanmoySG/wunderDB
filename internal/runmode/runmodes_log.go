@@ -18,13 +18,10 @@ var (
 			Width(50).
 			BorderForeground(subtle)
 	descStyle = lipgloss.NewStyle().MarginTop(1)
-	divider   = lipgloss.NewStyle().
-			SetString("•").
-			Padding(0, 1).
-			Foreground(subtle).
-			String()
-	special = lipgloss.AdaptiveColor{Light: "#43BF6D", Dark: "#73F59F"}
-	url     = lipgloss.NewStyle().Foreground(special).Render
+	special1 = lipgloss.AdaptiveColor{Light: "#43BF6D", Dark: "#73F59F"}
+	mode     = lipgloss.NewStyle().Foreground(special1).Render
+	special2 = lipgloss.AdaptiveColor{Light: "#6979e3", Dark: "#2940d7"}
+	portStyle = lipgloss.NewStyle().Foreground(special2).Render
 )
 
 func runModeStartupMessage(message, port string) {
@@ -32,8 +29,8 @@ func runModeStartupMessage(message, port string) {
 	doc := strings.Builder{}
 
 	desc := lipgloss.JoinVertical(lipgloss.Left,
-		descStyle.Render("wunderDB is running in MAINTENANCE_MODE"),
-		infoStyle.Render("Running on Port "+url(port)),
+		descStyle.Render("wunderDB is running in "+mode("MAINTENANCE_MODE")),
+		infoStyle.Render("Running on Port "+portStyle(port)),
 	)
 
 	row := lipgloss.JoinHorizontal(lipgloss.Top, title.String(), desc)

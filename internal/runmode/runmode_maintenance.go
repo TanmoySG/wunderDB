@@ -251,7 +251,7 @@ func (mmo *MaintenanceModeOpts) sendResponse(c *fiber.Ctx, apiResponse PatchApiR
 	// Shutdown the app after the response is sent
 	if shutdown {
 		go func() {
-			log.Println("shutting down maintenance mode")
+			fmt.Println("shutting down maintenance mode")
 			time.Sleep(1 * time.Second) // Give some time for the response to be sent
 			mmo.app.Shutdown()
 		}()
