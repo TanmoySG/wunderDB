@@ -31,6 +31,7 @@ type Config struct {
 	AdminPassword         string `json:"-"`
 	Port                  string `json:"PORT"`
 	PersistantStoragePath string `json:"PERSISTANT_STORAGE_PATH"`
+	RunMode               string `json:"RUN_MODE"`
 }
 
 type ConfigMap map[string]string
@@ -75,6 +76,7 @@ func Load() (*Config, error) {
 		AdminPassword:         configMap.getValue(ADMIN_PASSWORD, override),
 		Port:                  configMap.getValue(PORT, override),
 		PersistantStoragePath: configMap.getValue(PERSISTANT_STORAGE_PATH, override),
+		RunMode:               configMap.getValue(RUN_MODE, override),
 	}
 
 	if c.PersistantStoragePath == "" {
