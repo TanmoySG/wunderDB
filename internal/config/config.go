@@ -153,3 +153,23 @@ func getConfigurationValue(key string) string {
 	}
 	return envVal
 }
+
+// function to unload the config on demand
+func Unload(c *Config) error {
+	hostOS, err := system.GetHostOS()
+	if err != nil {
+		return fmt.Errorf("error unloading config: %s", err)
+	}
+
+	homeDir := system.GetUserHome(hostOS)
+
+	wdbRootDirectory := fmt.Sprintf(WDB_ROOT_PATH_FORMAT, homeDir)
+	wdbConfigDirectory := fmt.Sprintf(WDB_CONFIG_DIR_PATH_FORMAT, wdbRootDirectory)
+	wdbConfigFilePath := fmt.Sprintf(WDB_CONFIG_FILE_PATH_FORMAT, wdbConfigDirectory)
+	err = handleFile(wdbConfigFilePath)
+	if err != nil {
+		return fmt.Errorf("error unloading config: %s", err)
+	}
+
+	return writeConfigFile(wdbConfigFilePath, *c)
+}

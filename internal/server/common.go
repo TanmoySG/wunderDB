@@ -25,7 +25,7 @@ var (
 	docStyle = lipgloss.NewStyle().Padding(1, 0, 1, 0)
 )
 
-func (ws wdbServer) startupMessage(address, port string) {
+func (ws wdbServer) startupMessage(port string) {
 	dialogBuilder := strings.Builder{}
 	port = strings.Trim(port, ":")
 

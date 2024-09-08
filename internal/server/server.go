@@ -36,7 +36,7 @@ func (ws wdbServer) Start() {
 		DisableStartupMessage: true, // fiber startup-message disable
 	})
 
-	ws.startupMessage("", ws.port)
+	ws.startupMessage(ws.port)
 
 	// recovery configuration
 	recoveryConf := recovery.DefaultConfig
