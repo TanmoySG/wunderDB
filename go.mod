@@ -7,6 +7,7 @@ require (
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/google/uuid v1.5.0
+	github.com/hashicorp/go-version v1.7.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spyzhov/ajson v0.9.1
 	github.com/stretchr/testify v1.8.1

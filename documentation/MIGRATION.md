@@ -1,6 +1,8 @@
-# Migrations
+# Migrations/Upgrades
 
-With recent changes in the docker image we've discontinued the use of `wdb-tools`. Migration documentation and mechanism witll be updated soon.
+Model changes internally would now be managed using the `RUN_MODE_UPGARDE` value for the `RUN_MODE` environment variable. For any changes that require migration, we recommend setting RUN_MODE as RUN_MODE_UPGARDE, that wll run the migration steps while starting wunderDb.
+
+<!-- With recent changes in the docker image we've discontinued the use of `wdb-tools`. Migration documentation and mechanism witll be updated soon. -->
 <!-- 
 This document contains background details and instructions to migrate to new models and breaking changes.
 
