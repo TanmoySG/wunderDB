@@ -11,12 +11,12 @@ type ApiResponse struct {
 }
 
 type Response struct {
-	Action string `json:"action"`
-	Status string `json:"status"`
-	Error  *Error `json:"error,omitempty"`
-	// Data     *interface{} `json:"data,omitempty"` // would be removed in future in favour of Response. See : https://github.com/TanmoySG/wunderDB/issues/121
+	Action   string       `json:"action"`
+	Status   string       `json:"status"`
+	Error    *Error       `json:"error,omitempty"`
 	Response *interface{} `json:"response,omitempty"`
 	Notices  []string     `json:"notices,omitempty"`
+	// Data     *interface{} `json:"data,omitempty"` // would be removed in future in favour of Response. See : https://github.com/TanmoySG/wunderDB/issues/121
 }
 
 type Error struct {

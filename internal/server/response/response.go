@@ -24,12 +24,12 @@ func Format(action string, err *er.WdbError, data interface{}, notices ...string
 	return ApiResponse{
 		HttpStatusCode: httpStatusCode,
 		Response: Response{
-			Action: action,
-			Status: status,
-			Error:  &errorObject,
-			// Data:     &data, // would be removed in future in favour of Response. See : https://github.com/TanmoySG/wunderDB/issues/121
+			Action:   action,
+			Status:   status,
+			Error:    &errorObject,
 			Response: &data,
 			Notices:  notices,
+			// Data:     &data, // would be removed in future in favour of Response. See : https://github.com/TanmoySG/wunderDB/issues/121
 		},
 	}
 }
