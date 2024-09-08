@@ -49,7 +49,7 @@ brews:
     ids:
       - "wdbctl"
     homepage: "https://github.com/TanmoySG/wunderDB"
-    tap:
+    repository:
       owner: TanmoySG
       name: homebrew-TanmoySG
     commit_author:
