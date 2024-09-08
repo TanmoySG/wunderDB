@@ -34,11 +34,11 @@ type Client interface {
 	DeleteCollection(c *fiber.Ctx) error
 
 	// Data Handlers
-	AddData(c *fiber.Ctx) error
-	ReadData(c *fiber.Ctx) error
-	QueryData(c *fiber.Ctx) error
-	DeleteData(c *fiber.Ctx) error
-	UpdateData(c *fiber.Ctx) error
+	AddRecords(c *fiber.Ctx) error
+	ReadRecords(c *fiber.Ctx) error
+	QueryRecords(c *fiber.Ctx) error
+	DeleteRecords(c *fiber.Ctx) error
+	UpdateRecords(c *fiber.Ctx) error
 
 	// Role Handlers
 	ListRoles(c *fiber.Ctx) error

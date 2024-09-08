@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/TanmoySG/wunderDB/internal/data"
 	"github.com/TanmoySG/wunderDB/internal/privileges"
+	"github.com/TanmoySG/wunderDB/internal/records"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/model"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
@@ -18,8 +18,8 @@ type queryRequest struct {
 	QueryString string `json:"query" xml:"query" form:"query" validate:"required"`
 }
 
-func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
-	privilege := privileges.AddData
+func (wh wdbHandlers) AddRecords(c *fiber.Ctx) error {
+	privilege := privileges.AddRecords
 
 	var apiError *er.WdbError
 
@@ -40,7 +40,7 @@ func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
 			return err
 		}
 
-		apiError = wh.wdbClient.AddData(model.Identifier(databaseName), model.Identifier(collectionName), incomingData)
+		apiError = wh.wdbClient.AddRecords(model.Identifier(databaseName), model.Identifier(collectionName), incomingData)
 	}
 
 	resp := response.Format(privilege, apiError, nil, *wh.notices...)
@@ -53,8 +53,8 @@ func (wh wdbHandlers) AddData(c *fiber.Ctx) error {
 	return nil
 }
 
-func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
-	privilege := privileges.ReadData
+func (wh wdbHandlers) ReadRecords(c *fiber.Ctx) error {
+	privilege := privileges.ReadRecords
 
 	var apiError *er.WdbError
 	var fetchedData map[model.Identifier]*model.Record
@@ -82,7 +82,7 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 			}
 		}
 
-		fetchedData, apiError = wh.wdbClient.GetData(model.Identifier(databaseName), model.Identifier(collectionName), filter)
+		fetchedData, apiError = wh.wdbClient.GetRecords(model.Identifier(databaseName), model.Identifier(collectionName), filter)
 	}
 
 	resp := response.Format(privilege, apiError, fetchedData, *wh.notices...)
@@ -96,8 +96,8 @@ func (wh wdbHandlers) ReadData(c *fiber.Ctx) error {
 	return nil
 }
 
-func (wh wdbHandlers) QueryData(c *fiber.Ctx) error {
-	privilege := privileges.QueryData
+func (wh wdbHandlers) QueryRecords(c *fiber.Ctx) error {
+	privilege := privileges.QueryRecords
 
 	var apiError *er.WdbError
 	var queriedData interface{}
@@ -121,11 +121,11 @@ func (wh wdbHandlers) QueryData(c *fiber.Ctx) error {
 		if !isValid {
 			apiError = error
 		} else {
-			queriedData, apiError = wh.wdbClient.QueryData(
+			queriedData, apiError = wh.wdbClient.QueryRecords(
 				model.Identifier(databaseName),
 				model.Identifier(collectionName),
 				query.QueryString,
-				data.QueryType(query.QueryMode),
+				records.QueryType(query.QueryMode),
 			)
 		}
 	}
@@ -141,8 +141,8 @@ func (wh wdbHandlers) QueryData(c *fiber.Ctx) error {
 	return nil
 }
 
-func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
-	privilege := privileges.DeleteData
+func (wh wdbHandlers) DeleteRecords(c *fiber.Ctx) error {
+	privilege := privileges.DeleteRecords
 
 	var apiError *er.WdbError
 	var fetchedData map[model.Identifier]*model.Record
@@ -170,7 +170,7 @@ func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
 			}
 		}
 
-		apiError = wh.wdbClient.DeleteData(model.Identifier(databaseName), model.Identifier(collectionName), filter)
+		apiError = wh.wdbClient.DeleteRecords(model.Identifier(databaseName), model.Identifier(collectionName), filter)
 	}
 
 	resp := response.Format(privilege, apiError, fetchedData, *wh.notices...)
@@ -183,8 +183,8 @@ func (wh wdbHandlers) DeleteData(c *fiber.Ctx) error {
 	return nil
 }
 
-func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
-	privilege := privileges.UpdateData
+func (wh wdbHandlers) UpdateRecords(c *fiber.Ctx) error {
+	privilege := privileges.UpdateRecords
 
 	var apiError *er.WdbError
 	var fetchedData map[model.Identifier]*model.Record
@@ -217,7 +217,7 @@ func (wh wdbHandlers) UpdateData(c *fiber.Ctx) error {
 			}
 		}
 
-		apiError = wh.wdbClient.UpdateData(model.Identifier(databaseName), model.Identifier(collectionName), incomingUpdatedData, filter)
+		apiError = wh.wdbClient.UpdateRecords(model.Identifier(databaseName), model.Identifier(collectionName), incomingUpdatedData, filter)
 	}
 
 	resp := response.Format(privilege, apiError, fetchedData, *wh.notices...)

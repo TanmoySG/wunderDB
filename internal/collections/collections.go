@@ -43,7 +43,7 @@ func (c Collections) CreateCollection(collectionID model.Identifier, schema mode
 	schema = s.StandardizeSchema(schema)
 
 	c[collectionID] = &model.Collection{
-		Data:       map[model.Identifier]*model.Record{},
+		Records:    map[model.Identifier]*model.Record{},
 		Schema:     schema,
 		Metadata:   metadata.New().BasicChangeMetadata(),
 		PrimaryKey: &primaryKeyField,

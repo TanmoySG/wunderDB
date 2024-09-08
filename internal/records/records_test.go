@@ -1,4 +1,4 @@
-package data
+package records
 
 import (
 	"testing"
@@ -31,7 +31,7 @@ var (
 	primaryKey model.Identifier = "recordId"
 	collection                  = model.Collection{
 		Schema:     testSchema,
-		Data:       map[model.Identifier]*model.Record{},
+		Records:    map[model.Identifier]*model.Record{},
 		PrimaryKey: &primaryKey,
 	}
 )
@@ -81,12 +81,12 @@ func Test_HappyDataFlow(t *testing.T) {
 
 	assert.Equal(t, want, dc.Data)
 
-	// Read Data
+	// Read Records
 	fetchedData, err := dc.Read(nil)
 	assert.Nil(t, err)
 	assert.Equal(t, want, fetchedData)
 
-	// Read Data - filtered
+	// Read Records - filtered
 	filteredData := map[model.Identifier]*model.Record{
 		datarow1Id: {
 			Data:       datarow1,
@@ -100,7 +100,7 @@ func Test_HappyDataFlow(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, filteredData, fetchedData)
 
-	// Update Data
+	// Update Records
 	updateData := map[string]interface{}{
 		"age": "30",
 	}
@@ -195,7 +195,7 @@ func Test_getPrimaryKey(t *testing.T) {
 	testPkey := model.Identifier("pKey")
 	testRecordId := model.Identifier("1234")
 
-	data := Data{
+	data := Records{
 		Data:       map[model.Identifier]*model.Record{},
 		Schema:     model.Schema{},
 		PrimaryKey: &testPkey,

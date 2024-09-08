@@ -19,14 +19,14 @@ var (
 			metadata.CreatedAt: fixedTimestamp,
 			metadata.UpdatedAt: fixedTimestamp,
 		},
-		Data: map[model.Identifier]*model.Record{},
+		Records: map[model.Identifier]*model.Record{},
 	}
 
 	testCollection2Name model.Identifier  = "testCollection2"
 	testCollection2     *model.Collection = &model.Collection{
 		Schema:   model.Schema{},
 		Metadata: model.Metadata{},
-		Data:     map[model.Identifier]*model.Record{},
+		Records:  map[model.Identifier]*model.Record{},
 	}
 )
 
@@ -112,7 +112,7 @@ func Test_DeleteDatabase(t *testing.T) {
 func Test_UpdateMetadata(t *testing.T) {
 	expectedCollectionsChange := Collections{
 		testCollection1Name: &model.Collection{
-			Data: map[model.Identifier]*model.Record{},
+			Records: map[model.Identifier]*model.Record{},
 			Metadata: model.Metadata{
 				metadata.CreatedAt: fixedTimestamp,
 				metadata.UpdatedAt: time.Now().UTC().Unix(),

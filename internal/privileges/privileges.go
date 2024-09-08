@@ -22,11 +22,11 @@ var PrivilegeScope = map[string]string{
 	ReadCollection:   CollectionPrivileges,
 	UpdateCollection: CollectionPrivileges,
 	DeleteCollection: CollectionPrivileges,
-	AddData:          CollectionPrivileges,
-	ReadData:         CollectionPrivileges,
-	UpdateData:       CollectionPrivileges,
-	DeleteData:       CollectionPrivileges,
-	QueryData:        CollectionPrivileges,
+	AddRecords:       CollectionPrivileges,
+	ReadRecords:      CollectionPrivileges,
+	UpdateRecords:    CollectionPrivileges,
+	DeleteRecords:    CollectionPrivileges,
+	QueryRecords:     CollectionPrivileges,
 }
 
 var PrivilegeType = map[string]PrivilegeActionType{
@@ -39,8 +39,8 @@ var PrivilegeType = map[string]PrivilegeActionType{
 
 	ReadDatabase:   ReadPrivilege,
 	ReadCollection: ReadPrivilege,
-	ReadData:       ReadPrivilege,
-	QueryData:      ReadPrivilege,
+	ReadRecords:    ReadPrivilege,
+	QueryRecords:   ReadPrivilege,
 
 	CreateDatabase:   WritePrivilege,
 	UpdateDatabase:   WritePrivilege,
@@ -48,9 +48,9 @@ var PrivilegeType = map[string]PrivilegeActionType{
 	CreateCollection: WritePrivilege,
 	UpdateCollection: WritePrivilege,
 	DeleteCollection: WritePrivilege,
-	AddData:          WritePrivilege,
-	UpdateData:       WritePrivilege,
-	DeleteData:       WritePrivilege,
+	AddRecords:       WritePrivilege,
+	UpdateRecords:    WritePrivilege,
+	DeleteRecords:    WritePrivilege,
 }
 
 func IsAvailable(privilege string) bool {

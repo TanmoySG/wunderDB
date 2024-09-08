@@ -322,7 +322,7 @@ Authorization: Basic
 
 ## Collections
 
-A collection is a group of records/data of same modality (schema). Collections are the primary containers of data.
+A collection is a group of records of same modality (schema). Collections are the primary containers of data.
 
 ### Schema
 
@@ -386,14 +386,14 @@ Filters are used to (as the name suggests) filter or to create smaller buckets/v
 
 To filter data while reading, updating or deleting, we need to pass the field name to the `key` and the value (of the field) that needs to be matched to the `value`.
 
-Example, `.../data?key:name&value:John`, will filter all records with `name=John`.
+Example, `.../records?key:name&value:John`, will filter all records with `name=John`.
 
 ### Querying/Evaluating Data
 
 To query or evaluating data, use the following call, passing the `mode` (either `jsonpath` or `evaluate`) and `query` as the jsonpath or evaluation queries.
 
 ```http
-POST /api/databases/{database}/collections/{collection}/data/query HTTP/1.1
+POST /api/databases/{database}/collections/{collection}/records/query HTTP/1.1
 Authorization: Basic 
 Content-Type: application/json
 
@@ -419,7 +419,7 @@ OR
 User must have `addData` permission granted on the collection to add data to. Pass the data to add in the body as JSON object.
 
 ```http
-POST /api/databases/{database}/collections/{collection}/data HTTP/1.1
+POST /api/databases/{database}/collections/{collection}/records HTTP/1.1
 Authorization: Basic 
 Content-Type: application/json
 
@@ -435,7 +435,7 @@ If the data passes schema validation it is added otherwise returns error.
 To fetch/read data user must have `readData` permission granted on the collection.
 
 ```http
-GET /api/databases/{database}/collections/{collection}/data HTTP/1.1
+GET /api/databases/{database}/collections/{collection}/records HTTP/1.1
 Accept: application/json
 Authorization: Basic 
 ```
@@ -443,7 +443,7 @@ Authorization: Basic
 Use filters to fetch specific records based on some condition.
 
 ```http
-GET /api/databases/{database}/collections/{collection}/data?key={field-name}&value={field-value} HTTP/1.1
+GET /api/databases/{database}/collections/{collection}/records?key={field-name}&value={field-value} HTTP/1.1
 ```
 
 ### Delete Data
@@ -451,7 +451,7 @@ GET /api/databases/{database}/collections/{collection}/data?key={field-name}&val
 Use filters to specify/select the data to be deleted based on the key-value condition. User must have `deleteData` permission granted on the collection to delete data from.
 
 ```http
-DELETE /api/databases/{database}/collections/{collection}/data?key={field-name}&value={field-value} HTTP/1.1
+DELETE /api/databases/{database}/collections/{collection}/records?key={field-name}&value={field-value} HTTP/1.1
 Accept: application/json
 Authorization: Basic 
 ```
@@ -461,7 +461,7 @@ Authorization: Basic
 Updating data requires the user to pass the `filters` to specify the data to update as well as the updated values of the fields to change in the body of the request. The user required `updateData` permission granted on the collection.
 
 ```http
-PATCH /api/databases/{database}/collections/{collection}/data?key={field-name}&value={field-value} HTTP/1.1
+PATCH /api/databases/{database}/collections/{collection}/records?key={field-name}&value={field-value} HTTP/1.1
 Authorization: Basic 
 Content-Type: application/json
 
