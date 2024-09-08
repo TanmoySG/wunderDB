@@ -7,6 +7,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/runmode"
 	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/shutdown"
 	"github.com/TanmoySG/wunderDB/internal/server/lifecycle/startup"
+	"github.com/TanmoySG/wunderDB/internal/upgrades"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -23,17 +24,28 @@ func EntryPoint() error {
 	}
 
 	if runmode.ShouldEnterRunMode(runmode.RUN_MODE_TYPE(c.RunMode)) {
-		// add logic to enter run mode
-		// runmode.IsValidUpgradeInstruction()
+		if c.RunMode == string(runmode.RUN_MODE_MAINTENANCE) {
+			mm, err := runmode.NewMaintenanceMode(*c)
+			if err != nil {
+				return fmt.Errorf("error initializing Maintenance Mode: %s", err)
+			}
 
-		mm, err := runmode.NewMaintenanceMode(*c)
-		if err != nil {
-			return fmt.Errorf("error initializing Maintenance Mode: %s", err)
-		}
+			err = mm.EnterMaintenanceMode()
+			if err != nil {
+				return fmt.Errorf("error entering Maintenance Mode: %s", err)
+			}
+		} else if c.RunMode == string(runmode.RUN_MODE_UPGRADE) {
+			err := upgrades.Upgrade(*c)
+			if err != nil {
+				fmt.Printf("error initializing Upgrade Mode: %s", err)
+			}
 
-		err = mm.EnterMaintenanceMode()
-		if err != nil {
-			return fmt.Errorf("error entering Maintenance Mode: %s", err)
+			c.RunMode = string(runmode.RUN_MODE_NORMAL)
+
+			err = config.Unload(c)
+			if err != nil {
+				fmt.Printf("error unloading configurations: %s", err)
+			}
 		}
 	}
 
