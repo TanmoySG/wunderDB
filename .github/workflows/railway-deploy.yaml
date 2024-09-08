@@ -1,6 +1,7 @@
 name: Railway Deploy
 
 on:
+  workflow_dispatch:
   workflow_run:
     workflows:
       - TagDeploy
