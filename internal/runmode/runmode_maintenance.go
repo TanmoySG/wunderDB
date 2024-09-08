@@ -1,18 +1,12 @@
 package runmode
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"os/exec"
-	"time"
 
 	"github.com/TanmoySG/wunderDB/internal/config"
 	"github.com/TanmoySG/wunderDB/internal/server/middlewares/recovery"
-	"github.com/TanmoySG/wunderDB/internal/users/authentication"
-	"github.com/TanmoySG/wunderDB/internal/wfs"
-	"github.com/TanmoySG/wunderDB/model"
-	wdbErrors "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
@@ -50,14 +44,12 @@ type PatchApiResponse struct {
 
 var (
 	defaultPanicMessage       = "wunderDB panicked in MAINTENANCE_MODE"
-	defaultMaintenanceMessage = "wunderDB is running in MAINTENANCE_MODE"
-	defaultMaintenancePort    = ":8081"
+	defaultMaintenanceMessage = "wunderDB is running in "
+	defaultMaintenancePort    = ":8086"
 )
 
 type MaintenanceModeOpts struct {
-	Users  map[model.Identifier]*model.User
-	Config config.Config
-	app    *fiber.App
+	RunModeOpts RunModeOpts
 }
 
 func NewMaintenanceMode(c config.Config) (*MaintenanceModeOpts, error) {
@@ -71,29 +63,34 @@ func NewMaintenanceMode(c config.Config) (*MaintenanceModeOpts, error) {
 	})
 
 	return &MaintenanceModeOpts{
-		Users:  users,
-		Config: c,
-		app:    app,
+		RunModeOpts{
+			Users:  users,
+			Config: c,
+			app:    app,
+		},
 	}, nil
 }
 
 func (mmo *MaintenanceModeOpts) EnterMaintenanceMode() error {
 
-	runModeStartupMessage(defaultMaintenanceMessage, defaultMaintenancePort)
+	runModeStartupMessage(
+		string(RUN_MODE_MAINTENANCE),
+		defaultMaintenancePort,
+	)
 
 	recoveryConf := recovery.DefaultConfig
 	recoveryConf.Message = &defaultPanicMessage
 
-	mmo.app.Use(logger.New())
-	mmo.app.Use(recovery.New(recoveryConf))
+	mmo.RunModeOpts.app.Use(logger.New())
+	mmo.RunModeOpts.app.Use(recovery.New(recoveryConf))
 
-	api := mmo.app.Group("/maintenance")
+	api := mmo.RunModeOpts.app.Group("/maintenance")
 
 	// Maintenance Routes
 	api.Post("/patch", mmo.Patch)
 	api.Post("/close", mmo.Close)
 
-	err := mmo.app.Listen(defaultMaintenancePort)
+	err := mmo.RunModeOpts.app.Listen(defaultMaintenancePort)
 	if err != nil {
 		log.Fatalf("exiting wdb: %s", err)
 	}
@@ -101,19 +98,12 @@ func (mmo *MaintenanceModeOpts) EnterMaintenanceMode() error {
 	return nil
 }
 
-func getErrorString(err error) string {
-	if err != nil {
-		return err.Error()
-	}
-	return ""
-}
-
 func (mmo *MaintenanceModeOpts) Close(c *fiber.Ctx) error {
-	if apiResponse, hasError := mmo.handleAuth(c); hasError {
-		return mmo.sendResponse(c, *apiResponse, !shutdown)
+	if apiResponse, hasError := mmo.RunModeOpts.handleAuth(c); hasError {
+		return mmo.RunModeOpts.sendResponse(c, *apiResponse, !shutdown)
 	}
 
-	return mmo.sendResponse(c, PatchApiResponse{
+	return mmo.RunModeOpts.sendResponse(c, PatchApiResponse{
 		Status:         "success",
 		Message:        "maintenance mode shutting down",
 		CommandOutputs: []InstructionOutput{},
@@ -121,43 +111,11 @@ func (mmo *MaintenanceModeOpts) Close(c *fiber.Ctx) error {
 	}, shutdown)
 }
 
-func (mmo *MaintenanceModeOpts) handleAuth(c *fiber.Ctx) (*PatchApiResponse, bool) {
-	patchApiResponse := PatchApiResponse{}
-
-	username, password, err := authentication.HandleUserCredentials(c.Get(Authorization))
-	if err != nil {
-		patchApiResponse.Status = "unauthorized"
-		patchApiResponse.Message = "error parsing credentials"
-		patchApiResponse.Error = &err.ErrMessage
-		patchApiResponse.CommandOutputs = []InstructionOutput{}
-		return &patchApiResponse, true
-	}
-
-	isAuthorized, err := mmo.AuthenticateUser(model.Identifier(*username), *password)
-	if err != nil {
-		patchApiResponse.Status = "unauthorized"
-		patchApiResponse.Message = "error checking credentials"
-		patchApiResponse.Error = &err.ErrMessage
-		patchApiResponse.CommandOutputs = []InstructionOutput{}
-		return &patchApiResponse, true
-	}
-
-	if !isAuthorized {
-		patchApiResponse.Status = "unauthorized"
-		patchApiResponse.Message = unauthorizedMessage
-		patchApiResponse.Error = &unauthorizedMessage
-		patchApiResponse.CommandOutputs = []InstructionOutput{}
-		return &patchApiResponse, true
-	}
-
-	return nil, false
-}
-
 func (mmo *MaintenanceModeOpts) Patch(c *fiber.Ctx) error {
 	patchApiResponse := PatchApiResponse{}
 
-	if apiResponse, hasError := mmo.handleAuth(c); hasError {
-		return mmo.sendResponse(c, *apiResponse, !shutdown)
+	if apiResponse, hasError := mmo.RunModeOpts.handleAuth(c); hasError {
+		return mmo.RunModeOpts.sendResponse(c, *apiResponse, !shutdown)
 	}
 
 	instructions := new(Instruction)
@@ -184,78 +142,5 @@ func (mmo *MaintenanceModeOpts) Patch(c *fiber.Ctx) error {
 	patchApiResponse.Message = "commands executed successfully"
 	patchApiResponse.Error = nil
 
-	return mmo.sendResponse(c, patchApiResponse, false)
-}
-
-func LoadUsers(c config.Config) (map[model.Identifier]*model.User, error) {
-	fs := wfs.NewWFileSystem(c.PersistantStoragePath)
-
-	loadedUsers, err := fs.LoadUsers()
-	if err != nil {
-		return nil, fmt.Errorf("error loading wfs: %s", err)
-	}
-
-	return loadedUsers, nil
-}
-
-func (mmo *MaintenanceModeOpts) AuthenticateUser(requesterId model.Identifier, password string) (bool, *wdbErrors.WdbError) {
-	if requesterId != model.Identifier(mmo.Config.AdminID) {
-		return false, &wdbErrors.WdbError{
-			ErrCode:        "unauthorizedInMaintenanceMode",
-			ErrMessage:     "only admin can authenticate in maintenance mode",
-			HttpStatusCode: fiber.StatusUnauthorized,
-		}
-	}
-
-	user, exists := mmo.Users[requesterId]
-	if !exists {
-		return authentication.InvalidUser, &wdbErrors.AuthenticatingUserDoesNotExist
-	}
-
-	hashedPassword := authentication.Hash(password, user.Authentication.HashingAlgorithm)
-	if user.Authentication.HashedSecret == hashedPassword {
-		return authentication.ValidUser, nil
-	}
-
-	return authentication.InvalidUser, &wdbErrors.InvalidCredentialsError
-}
-
-func (mmo *MaintenanceModeOpts) sendResponse(c *fiber.Ctx, apiResponse PatchApiResponse, shutdown bool) error {
-	c.Set(ContentType, ApplicationJson)
-
-	bytesApiResponse, err := json.Marshal(apiResponse)
-	if err != nil {
-		return err
-	}
-
-	err = c.Send(bytesApiResponse)
-	if err != nil {
-		return err
-	}
-
-	status := fiber.StatusOK
-	switch apiResponse.Status {
-	case "unauthorized":
-		status = fiber.StatusUnauthorized
-	case "success":
-		status = fiber.StatusOK
-	default:
-		status = fiber.StatusInternalServerError
-	}
-
-	err = c.SendStatus(status)
-	if err != nil {
-		return err
-	}
-
-	// Shutdown the app after the response is sent
-	if shutdown {
-		go func() {
-			fmt.Println("shutting down maintenance mode")
-			time.Sleep(1 * time.Second) // Give some time for the response to be sent
-			mmo.app.Shutdown()
-		}()
-	}
-
-	return nil
+	return mmo.RunModeOpts.sendResponse(c, patchApiResponse, false)
 }
