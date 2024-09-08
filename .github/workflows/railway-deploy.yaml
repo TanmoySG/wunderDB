@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install Railway
-        uses: brew install railway
+        run: brew install railway
 
       # - name: Use Node 12
       #   uses: actions/setup-node@v1
