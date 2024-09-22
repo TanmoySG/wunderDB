@@ -10,12 +10,17 @@ const (
 	FetchCollection  = "/databases/:database/collections/:collection"
 	DeleteCollection = "/databases/:database/collections/:collection"
 
-	// Data Routes
+	// Records Routes
 	AddRecords    = "/databases/:database/collections/:collection/records"
 	ReadRecords   = "/databases/:database/collections/:collection/records"
 	QueryRecords  = "/databases/:database/collections/:collection/records/query" // route for executing jsonpath queries
 	DeleteRecords = "/databases/:database/collections/:collection/records"
 	UpdateRecords = "/databases/:database/collections/:collection/records"
+
+	// Record Routes
+	ReadRecord   = "/databases/:database/collections/:collection/records/:id"
+	DeleteRecord = "/databases/:database/collections/:collection/records/:id"
+	UpdateRecord = "/databases/:database/collections/:collection/records/:id"
 
 	// Role Routes
 	CreateRole = "/roles"

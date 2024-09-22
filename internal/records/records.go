@@ -102,7 +102,6 @@ func (r Records) Update(updatedData interface{}, filters interface{}) *er.WdbErr
 			iterError = &er.DataEncodeDecodeError
 		} else {
 			schema, err := schema.UseSchema(r.Schema)
-
 			if err != nil {
 				iterError = err
 			} else {

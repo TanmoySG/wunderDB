@@ -42,6 +42,8 @@ func (s Schema) Validate(data interface{}) (bool, *er.WdbError) {
 		return false, er.SchemaValidationFailed.SetMessage(err.Error())
 	}
 
+	// TODO: return schema validation errors in response
+	// &er.SchemaValidationFailed.SetMessage(validity.Errors())
 	return validity.Valid(), nil
 }
 
