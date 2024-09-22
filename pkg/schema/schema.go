@@ -2,6 +2,7 @@ package schema
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/TanmoySG/wunderDB/model"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
@@ -42,9 +43,17 @@ func (s Schema) Validate(data interface{}) (bool, *er.WdbError) {
 		return false, er.SchemaValidationFailed.SetMessage(err.Error())
 	}
 
-	// TODO: return schema validation errors in response
-	// &er.SchemaValidationFailed.SetMessage(validity.Errors())
-	return validity.Valid(), nil
+	validationErrors := []string{}
+	for _, err := range validity.Errors() {
+		validationErrors = append(validationErrors, err.String())
+	}
+
+	var validationErr *er.WdbError = nil
+	if !validity.Valid() {
+		validationErr = er.SchemaValidationFailed.SetMessage(strings.Join(validationErrors, " | "))
+	}
+
+	return validity.Valid(), validationErr
 }
 
 // adds default schema fields if not present, eg: additionalProperties [default: false]
