@@ -76,6 +76,10 @@ func (r Records) Read(filters interface{}) (map[model.Identifier]*model.Record, 
 		}
 
 		filteredData := f.Filter(*r.PrimaryKey, r.Data)
+		if len(filteredData) == 0 {
+			return nil, &er.RecordDoesNotExistsError
+		}
+
 		return filteredData, nil
 	}
 
@@ -83,56 +87,74 @@ func (r Records) Read(filters interface{}) (map[model.Identifier]*model.Record, 
 }
 
 func (r Records) Update(updatedData interface{}, filters interface{}) *er.WdbError {
+	var recordsCount int = 0
+	var f *filter.Filter
+	var err *er.WdbError
+
 	if filters == nil {
 		return &er.FilterMissingError
 
 	}
 
-	f, err := filter.UseFilter(filters)
+	f, err = filter.UseFilter(filters)
 	if err != nil {
 		return err
 	}
 
-	var iterError *er.WdbError
-
-	f.Iterate(*r.PrimaryKey, r.Data, func(identifier model.Identifier, dataRow model.Record) {
-
-		data, err := maps.Merge(maps.Marshal(updatedData), dataRow.DataMap())
-		if err != nil {
-			iterError = &er.DataEncodeDecodeError
-		} else {
-			schema, err := schema.UseSchema(r.Schema)
-			if err != nil {
-				iterError = err
+	f.Iterate(*r.PrimaryKey, r.Data, func(identifier *model.Identifier, dataRow *model.Record) {
+		if identifier != nil && dataRow != nil {
+			data, mergeErr := maps.Merge(maps.Marshal(updatedData), dataRow.DataMap())
+			if mergeErr != nil {
+				err = &er.DataEncodeDecodeError
 			} else {
-				isValid, err := schema.Validate(data)
-				if err == nil && isValid {
-					r.Data[identifier].Data = &data
-					r.Data[identifier].Metadata = metadata.Use(r.Data[identifier].Metadata).BasicChangeMetadata()
+				schema, schemaErr := schema.UseSchema(r.Schema)
+				if schemaErr != nil {
+					err = schemaErr
+				} else {
+					isValid, schemaErr := schema.Validate(data)
+					if schemaErr == nil && isValid {
+						r.Data[*identifier].Data = &data
+						r.Data[*identifier].Metadata = metadata.Use(r.Data[*identifier].Metadata).BasicChangeMetadata()
+					}
+					err = schemaErr
 				}
-				iterError = err
 			}
+			recordsCount++
 		}
 	})
 
-	if iterError != nil {
-		return iterError
+	if recordsCount == 0 && err == nil {
+		return &er.RecordDoesNotExistsError
 	}
-	return nil
+
+	return err
 }
 
 func (r Records) Delete(filters interface{}) *er.WdbError {
+	var recordsCount int = 0
+	var f *filter.Filter
+	var err *er.WdbError
+
 	if filters != nil {
-		f, err := filter.UseFilter(filters)
+		f, err = filter.UseFilter(filters)
 		if err != nil {
 			return err
 		}
 
-		f.Iterate(*r.PrimaryKey, r.Data, func(identifier model.Identifier, dataRow model.Record) {
-			delete(r.Data, identifier)
+		f.Iterate(*r.PrimaryKey, r.Data, func(identifier *model.Identifier, dataRow *model.Record) {
+			if identifier != nil {
+				delete(r.Data, *identifier)
+				recordsCount++
+			}
 		})
+
+		if recordsCount == 0 {
+			return &er.RecordDoesNotExistsError
+		}
+
 		return nil
 	}
+
 	return &er.FilterMissingError
 }
 

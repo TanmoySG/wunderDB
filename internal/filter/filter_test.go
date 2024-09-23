@@ -24,19 +24,19 @@ func Test_Filter(t *testing.T) {
 		"1": {
 			Identifier: "1",
 			Data: map[string]interface{}{
-				"filed": "val",
+				"field": "val",
 				"num":   "1",
 			},
 		},
 		"2": {
-			Identifier: "1",
+			Identifier: "2",
 			Data: map[string]interface{}{
 				"field": "value",
 				"num":   "2",
 			},
 		},
 		"3": {
-			Identifier: "1",
+			Identifier: "3",
 			Data: map[string]interface{}{
 				"field": "value",
 				"num":   "3",
@@ -46,14 +46,14 @@ func Test_Filter(t *testing.T) {
 
 	expectedData := map[model.Identifier]*model.Record{
 		"2": {
-			Identifier: "1",
+			Identifier: "2",
 			Data: map[string]interface{}{
 				"field": "value",
 				"num":   "2",
 			},
 		},
 		"3": {
-			Identifier: "1",
+			Identifier: "3",
 			Data: map[string]interface{}{
 				"field": "value",
 				"num":   "3",
@@ -61,6 +61,6 @@ func Test_Filter(t *testing.T) {
 		},
 	}
 
-	data := f.Filter("pkey", testData)
+	data := f.Filter("num", testData)
 	assert.Equal(t, &expectedData, &data)
 }

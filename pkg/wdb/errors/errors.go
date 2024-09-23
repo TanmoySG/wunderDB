@@ -46,6 +46,13 @@ var (
 		HttpStatusCode: 404,
 	}
 
+	// Record Errors
+	RecordDoesNotExistsError = WdbError{
+		ErrCode:        "recordMissing",
+		ErrMessage:     "records with ID doesn't exist",
+		HttpStatusCode: 404,
+	}
+
 	// Missing Error
 	FilterMissingError = WdbError{
 		ErrCode:        "filterMissing",
