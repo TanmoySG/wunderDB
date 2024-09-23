@@ -49,7 +49,7 @@ var (
 	// Record Errors
 	RecordDoesNotExistsError = WdbError{
 		ErrCode:        "recordMissing",
-		ErrMessage:     "records with ID doesn't exist",
+		ErrMessage:     "records do not exist",
 		HttpStatusCode: 404,
 	}
 
