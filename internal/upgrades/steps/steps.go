@@ -20,6 +20,7 @@ func Run(c config.Config) error {
 	}
 
 	if constraints.Check(currentVersion) {
+		fmt.Println("Running Upgrades...")
 		return MigrateDataToRecords(c)
 	} else {
 		fmt.Println("No upgrades to run...")

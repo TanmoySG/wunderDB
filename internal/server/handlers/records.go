@@ -11,6 +11,7 @@ import (
 
 const (
 	emptyFilter = ""
+	idKey       = "id"
 )
 
 type queryRequest struct {
@@ -63,6 +64,8 @@ func (wh wdbHandlers) ReadRecords(c *fiber.Ctx) error {
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
 
+	id := c.Params("id")
+
 	entities := model.Entities{
 		Databases:   &databaseName,
 		Collections: &collectionName,
@@ -73,13 +76,18 @@ func (wh wdbHandlers) ReadRecords(c *fiber.Ctx) error {
 		apiError = error
 	} else {
 		filterKey, filterValue := c.Query("key"), c.Query("value")
-		if filterKey == emptyFilter || filterValue == emptyFilter {
-			filter = nil
-		} else {
+		if id != emptyFilter {
+			filter = map[string]interface{}{
+				"key":   idKey,
+				"value": id,
+			}
+		} else if filterKey != emptyFilter || filterValue != emptyFilter {
 			filter = map[string]interface{}{
 				"key":   filterKey,
 				"value": filterValue,
 			}
+		} else {
+			filter = nil
 		}
 
 		fetchedData, apiError = wh.wdbClient.GetRecords(model.Identifier(databaseName), model.Identifier(collectionName), filter)
@@ -151,6 +159,8 @@ func (wh wdbHandlers) DeleteRecords(c *fiber.Ctx) error {
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
 
+	id := c.Params("id")
+
 	entities := model.Entities{
 		Databases:   &databaseName,
 		Collections: &collectionName,
@@ -161,13 +171,18 @@ func (wh wdbHandlers) DeleteRecords(c *fiber.Ctx) error {
 		apiError = error
 	} else {
 		filterKey, filterValue := c.Query("key"), c.Query("value")
-		if filterKey == emptyFilter || filterValue == emptyFilter {
-			filter = nil
-		} else {
+		if id != emptyFilter {
+			filter = map[string]interface{}{
+				"key":   idKey,
+				"value": id,
+			}
+		} else if filterKey != emptyFilter || filterValue != emptyFilter {
 			filter = map[string]interface{}{
 				"key":   filterKey,
 				"value": filterValue,
 			}
+		} else {
+			filter = nil
 		}
 
 		apiError = wh.wdbClient.DeleteRecords(model.Identifier(databaseName), model.Identifier(collectionName), filter)
@@ -193,6 +208,8 @@ func (wh wdbHandlers) UpdateRecords(c *fiber.Ctx) error {
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
 
+	id := c.Params("id")
+
 	entities := model.Entities{
 		Databases:   &databaseName,
 		Collections: &collectionName,
@@ -208,13 +225,18 @@ func (wh wdbHandlers) UpdateRecords(c *fiber.Ctx) error {
 		}
 
 		filterKey, filterValue := c.Query("key"), c.Query("value")
-		if filterKey == emptyFilter || filterValue == emptyFilter {
-			filter = nil
-		} else {
+		if id != emptyFilter {
+			filter = map[string]interface{}{
+				"key":   idKey,
+				"value": id,
+			}
+		} else if filterKey != emptyFilter || filterValue != emptyFilter {
 			filter = map[string]interface{}{
 				"key":   filterKey,
 				"value": filterValue,
 			}
+		} else {
+			filter = nil
 		}
 
 		apiError = wh.wdbClient.UpdateRecords(model.Identifier(databaseName), model.Identifier(collectionName), incomingUpdatedData, filter)

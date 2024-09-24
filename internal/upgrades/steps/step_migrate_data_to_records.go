@@ -20,12 +20,12 @@ func MigrateDataToRecords(c config.Config) error {
 
 	for dbKey, db := range dbs {
 		if _, ok := db["collections"]; !ok {
-			return fmt.Errorf("no collections")
+			return fmt.Errorf("no collections found for database: %s", dbKey)
 		}
 
 		for cKey, collection := range db["collections"] {
 			if _, ok := collection.(map[string]interface{})["data"]; !ok {
-				fmt.Println("no data found")
+				fmt.Println("no data field found for collection: ", cKey)
 				continue
 			}
 
