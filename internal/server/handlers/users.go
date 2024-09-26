@@ -5,6 +5,7 @@ import (
 
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
+	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/gofiber/fiber/v2"
@@ -13,11 +14,6 @@ import (
 type userPermissions struct {
 	Username   string            `json:"username" xml:"username" form:"username" validate:"required"`
 	Permission model.Permissions `json:"permissions" xml:"permissions" form:"permissions" validate:"required,dive"`
-}
-
-type newUser struct {
-	Username string `json:"username" xml:"username" form:"username" validate:"required"`
-	Password string `json:"password" xml:"password" form:"password" validate:"required"`
 }
 
 func (wh wdbHandlers) LoginUser(c *fiber.Ctx) error {
@@ -45,15 +41,16 @@ func (wh wdbHandlers) CreateUser(c *fiber.Ctx) error {
 	privilege := privileges.CreateUser
 	var apiError *er.WdbError
 
-	u := new(newUser)
-	if err := c.BodyParser(u); err != nil {
+	metadata := new(model.Metadata)
+	if err := c.BodyParser(metadata); err != nil {
 		return err
 	}
 
-	if err := validateRequest(u); err != nil {
+	username, password, err := authentication.HandleUserCredentials(c.Get(Authorization))
+	if err != nil {
 		apiError = err
 	} else {
-		apiError = wh.wdbClient.CreateUser(model.Identifier(u.Username), u.Password)
+		apiError = wh.wdbClient.CreateUser(model.Identifier(*username), *password, *metadata)
 	}
 
 	resp := response.Format(privilege, apiError, nil, *wh.notices...)

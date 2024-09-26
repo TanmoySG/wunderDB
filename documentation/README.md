@@ -137,15 +137,16 @@ While starting a wdb instance an `admin` user profile can be created by setting 
 
 ### Create User
 
-Make POST request to the `/api/users` endpoint, passing username and password to create user.
+Make POST request to the `/api/users` endpoint, passing username and password in autorization and metadata (if any) as JSON body, to create user.
 
 ```http
 POST /api/users HTTP/1.1
 Content-Type: application/json
+Authorization: Basic 
 
 {
-    "username": "username",
-    "password": "password"
+    "metadata1": "value",
+    "metadata2": "value"
 }
 ```
 
@@ -573,7 +574,7 @@ Some of the Privileges available for use in wunderDb and associated actions.
 | readCollection   | collection privileges | read/fetch collections in database |
 | updateCollection | collection privileges | update collections in database     |
 | deleteCollection | collection privileges | delete collection from database    |
-| addData          | collection privileges | add/insert data in collection      |
-| readData         | collection privileges | read/fetch data from collection    |
-| updateData       | collection privileges | update data in collection          |
-| deleteData       | collection privileges | delete data from collection        |
+| addRecords       | collection privileges | add/insert data in collection      |
+| readRecords      | collection privileges | read/fetch data from collection    |
+| updateRecords    | collection privileges | update data in collection          |
+| deleteRecords    | collection privileges | delete data from collection        |

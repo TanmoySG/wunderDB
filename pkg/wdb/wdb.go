@@ -45,7 +45,7 @@ type Client interface {
 	QueryRecords(databaseId, collectionId model.Identifier, query string, mode records.QueryType) (interface{}, *er.WdbError)
 
 	// Users Methods
-	CreateUser(userID model.Identifier, password string) *er.WdbError
+	CreateUser(userID model.Identifier, password string, metadata model.Metadata) *er.WdbError
 	AuthenticateUser(userID model.Identifier, password string) (bool, *er.WdbError)
 	CheckUserPermissions(userID model.Identifier, privilege string, entities model.Entities) (bool, *er.WdbError)
 	GrantRole(userID model.Identifier, permissions model.Permissions) *er.WdbError
