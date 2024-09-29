@@ -72,7 +72,7 @@ func filter(primaryKey model.Identifier, data map[model.Identifier]*model.Record
 	}
 }
 
-func (f Filter) Filter(primaryKey model.Identifier, data map[model.Identifier]*model.Record) (map[model.Identifier]*model.Record) {
+func (f Filter) Filter(primaryKey model.Identifier, data map[model.Identifier]*model.Record) map[model.Identifier]*model.Record {
 	filteredData := make(map[model.Identifier]*model.Record)
 
 	filter(primaryKey, data, f, func(id *model.Identifier, record *model.Record) {

@@ -9,7 +9,7 @@ import (
 
 var wildcard = privileges.Wildcard
 
-func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.WdbError {
+func (wdb wdbClient) CreateUser(userID model.Identifier, password string, metadata model.Metadata) *er.WdbError {
 	if !wdb.safeName.Check(userID.String()) {
 		return &er.EntityNameFormatError
 	}
@@ -18,7 +18,7 @@ func (wdb wdbClient) CreateUser(userID model.Identifier, password string) *er.Wd
 		return &er.UserAlreadyExistsError
 	}
 	hashedPassword := authentication.Hash(password, wdb.HashingAlgorithm)
-	wdb.Users.CreateUser(userID, hashedPassword, wdb.HashingAlgorithm, model.Metadata{})
+	wdb.Users.CreateUser(userID, hashedPassword, wdb.HashingAlgorithm, metadata)
 	return nil
 }
 
