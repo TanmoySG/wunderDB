@@ -6,6 +6,7 @@ import (
 
 	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,6 +16,14 @@ var (
 	testDatabase1Name model.Identifier = "testDatabase1"
 	testDatabase1     *model.Database  = &model.Database{
 		Collections: map[model.Identifier]*model.Collection{},
+		Metadata: model.Metadata{
+			metadata.CreatedAt: fixedTimestamp,
+			metadata.UpdatedAt: fixedTimestamp,
+		},
+	}
+
+	redactedTestDatabase1 *redacted.RedactedD = &redacted.RedactedD{
+		Collections: []model.Identifier{},
 		Metadata: model.Metadata{
 			metadata.CreatedAt: fixedTimestamp,
 			metadata.UpdatedAt: fixedTimestamp,
@@ -77,11 +86,11 @@ func Test_CreateDatabase(t *testing.T) {
 func Test_GetDatabase(t *testing.T) {
 	testCases := []struct {
 		databaseName     string
-		expectedDatabase *model.Database
+		expectedDatabase *redacted.RedactedD
 	}{
 		{
 			databaseName:     string(testDatabase1Name),
-			expectedDatabase: testDatabase1,
+			expectedDatabase: redactedTestDatabase1,
 		},
 		{
 			databaseName:     string(testDatabase2Name),
