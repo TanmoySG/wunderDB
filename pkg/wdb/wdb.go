@@ -6,6 +6,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/records"
 	r "github.com/TanmoySG/wunderDB/internal/roles"
 	u "github.com/TanmoySG/wunderDB/internal/users"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 
 	"github.com/TanmoySG/wunderDB/model"
 	"github.com/TanmoySG/wunderDB/pkg/utils/safename"
@@ -29,12 +30,12 @@ type wdbClient struct {
 type Client interface {
 	// Database Methods
 	AddDatabase(databaseId model.Identifier, userId model.Identifier) *er.WdbError
-	GetDatabase(databaseId model.Identifier) (*model.Database, *er.WdbError)
+	GetDatabase(databaseId model.Identifier) (*redacted.RedactedD, *er.WdbError)
 	DeleteDatabase(databaseId model.Identifier) *er.WdbError
 
 	// Collection Methods
 	AddCollection(databaseId, collectionId model.Identifier, schema model.Schema, primaryKey *model.Identifier) *er.WdbError
-	GetCollection(databaseId, collectionId model.Identifier) (*model.Collection, *er.WdbError)
+	GetCollection(databaseId, collectionId model.Identifier) (*redacted.RedactedC, *er.WdbError)
 	DeleteCollection(databaseId, collectionId model.Identifier) *er.WdbError
 
 	// Data Methods

@@ -52,7 +52,7 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 	privilege := privileges.ReadDatabase
 
 	var apiError *er.WdbError
-	var fetchedDatabase *model.Database
+	var fetchedDatabase interface{}
 
 	databaseName := c.Params("database")
 	entities := model.Entities{

@@ -15,7 +15,7 @@ fi
 
 # skip build
 if [[ ! $1 == "skip-build" ]]; then
-    go build -o bin/wdb_server cmd/wunderdb/wdb.go
+    go build -o bin/wdb_server cmd/wunderdb/main.go
 fi 
 
 # reuse start script in docker directory

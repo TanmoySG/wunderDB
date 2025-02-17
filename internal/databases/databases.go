@@ -3,6 +3,7 @@ package databases
 import (
 	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 )
 
 const (
@@ -33,8 +34,19 @@ func (d Databases) CreateDatabase(databaseID model.Identifier, access model.Acce
 	}
 }
 
-func (d Databases) GetDatabase(databaseID model.Identifier) *model.Database {
-	return d[databaseID]
+func (d Databases) GetDatabase(databaseID model.Identifier) *redacted.RedactedD {
+	db := d[databaseID]
+	if db == nil {
+		return nil
+	}
+
+	redactedDb := redacted.RedactedD{Collections: []model.Identifier{}, Metadata: db.Metadata, Access: db.Access}
+
+	for collectionID := range db.Collections {
+		redactedDb.Collections = append(redactedDb.Collections, collectionID)
+	}
+
+	return &redactedDb
 }
 
 func (d Databases) DeleteDatabase(databaseID model.Identifier) {
