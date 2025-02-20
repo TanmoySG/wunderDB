@@ -2,8 +2,6 @@ module github.com/TanmoySG/wunderDB
 
 go 1.21
 
-toolchain go1.23.0
-
 require (
 	github.com/charmbracelet/lipgloss v1.0.0
 	github.com/go-playground/validator/v10 v10.25.0
@@ -32,7 +30,6 @@ require (
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
-	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
