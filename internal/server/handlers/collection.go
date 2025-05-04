@@ -56,7 +56,7 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 	privilege := privileges.ReadCollection
 
 	var apiError *er.WdbError
-	var fetchedCollection interface{}
+	var fetchedCollection *model.Collection
 
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
