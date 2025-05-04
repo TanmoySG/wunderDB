@@ -40,7 +40,7 @@ func (d Databases) GetDatabase(databaseID model.Identifier) *redacted.RedactedD 
 		return nil
 	}
 
-	redactedDb := redacted.RedactedD{Collections: []model.Identifier{}, Metadata: db.Metadata, Access: db.Access}
+	redactedDb := redacted.RedactedD{Collections: make([]model.Identifier, 0, len(db.Collections)), Metadata: db.Metadata, Access: db.Access}
 
 	for collectionID := range db.Collections {
 		redactedDb.Collections = append(redactedDb.Collections, collectionID)
