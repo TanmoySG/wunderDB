@@ -4,6 +4,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/gofiber/fiber/v2"
 )
@@ -56,7 +57,7 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 	privilege := privileges.ReadCollection
 
 	var apiError *er.WdbError
-	var fetchedCollection *model.Collection
+	var fetchedCollection *redacted.RedactedC
 
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
