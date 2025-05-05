@@ -16,12 +16,7 @@ builds:
     main: cmd/wunderdb/main.go
     binary: wunderdb
     goos: [windows, darwin, linux]
-    goarch: [amd64, arm, arm64, armv6, armv7]
-    # ignore:
-    #   - goos: windows
-    #     goarch: arm
-    #   - goos: darwin
-    #     goarch: arm
+    goarch: [amd64, arm, arm64, arm/v6, arm/v7]
     env:
       - CGO_ENABLED=1
 
@@ -32,7 +27,6 @@ archives:
     format: tar.gz
     files:
       - README.md
-      # - CHANGELOG.md
       - LICENSE
   - id: wunderdb
     name_template: "{{.Binary}}_{{.Version}}_{{.Os}}_{{.Arch}}"
@@ -40,7 +34,6 @@ archives:
     format: tar.gz
     files:
       - README.md
-      # - CHANGELOG.md
       - LICENSE
 
 dist: target/dist
@@ -55,14 +48,6 @@ brews:
     commit_author:
       name: TanmoySG
       email: tanmoysps@gmail.com
-  # - name: wunderdb
-  #   homepage: "https://github.com/TanmoySG/wunderDB"
-  #   tap:
-  #     owner: TanmoySG
-  #     name: homebrew-TanmoySG
-  #   commit_author:
-  #     name: TanmoySG
-  #     email: tanmoysps@gmail.com
 release:
   github:
     owner: TanmoySG
