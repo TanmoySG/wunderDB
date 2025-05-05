@@ -16,7 +16,7 @@ builds:
     main: cmd/wunderdb/main.go
     binary: wunderdb
     goos: [windows, darwin, linux]
-    goarch: [amd64, arm, arm64, arm/v6, arm/v7]
+    goarch: [amd64, arm, arm64, armv6, arm/v7]
     env:
       - CGO_ENABLED=1
 
