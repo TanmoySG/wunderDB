@@ -1,24 +1,18 @@
 version: 2
 builds:
   - id: wdbctl
-    main: cmd/wdbctl/cli.go
+    main: cmd/wdbctl/main.go
     binary: wdbctl
     goos: [windows, darwin, linux]
     goarch: [amd64, arm, arm64]
-    ignore:
-      - goos: windows
-        goarch: arm
-      - goos: darwin
-        goarch: arm
-    env:
-      - CGO_ENABLED=0
+    goarm: ["6", "7"]
   - id: wunderdb
     main: cmd/wunderdb/main.go
     binary: wunderdb
     goos: [windows, darwin, linux]
-    goarch: [amd64, arm, arm64, armv6, arm/v7]
-    env:
-      - CGO_ENABLED=1
+    goarch: [amd64, arm, arm64]
+    goarm: ["6", "7"]
+
 
 archives:
   - id: wdbctl
