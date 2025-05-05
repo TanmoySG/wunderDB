@@ -1,5 +1,5 @@
 # Build wdb binary, wdb-sidekicks based on OS and Arch
-FROM --platform=$BUILDPLATFORM golang:1.24-alpine3.16 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.23-alpine3.21 AS builder
 WORKDIR /app
 ARG TARGETOS TARGETARCH
 COPY . /app/
