@@ -5,6 +5,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/internal/users/authentication"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/gofiber/fiber/v2"
 )
@@ -52,7 +53,7 @@ func (wh wdbHandlers) FetchDatabase(c *fiber.Ctx) error {
 	privilege := privileges.ReadDatabase
 
 	var apiError *er.WdbError
-	var fetchedDatabase *model.Database
+	var fetchedDatabase *redacted.RedactedD
 
 	databaseName := c.Params("database")
 	entities := model.Entities{

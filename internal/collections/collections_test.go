@@ -6,6 +6,7 @@ import (
 
 	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,6 +21,15 @@ var (
 			metadata.UpdatedAt: fixedTimestamp,
 		},
 		Records: map[model.Identifier]*model.Record{},
+	}
+
+	redactedTestCollection1 *redacted.RedactedC = &redacted.RedactedC{
+		Schema: model.Schema{},
+		Metadata: model.Metadata{
+			metadata.CreatedAt: fixedTimestamp,
+			metadata.UpdatedAt: fixedTimestamp,
+		},
+		PrimaryKey: nil,
 	}
 
 	testCollection2Name model.Identifier  = "testCollection2"
@@ -80,11 +90,11 @@ func Test_CreateCollection(t *testing.T) {
 func Test_GetCollection(t *testing.T) {
 	testCases := []struct {
 		collectionName     string
-		expectedCollection *model.Collection
+		expectedCollection *redacted.RedactedC
 	}{
 		{
 			collectionName:     string(testCollection1Name),
-			expectedCollection: testCollection1,
+			expectedCollection: redactedTestCollection1,
 		},
 		{
 			collectionName:     string(testCollection2Name),

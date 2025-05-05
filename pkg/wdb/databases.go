@@ -3,6 +3,7 @@ package wdbClient
 import (
 	"github.com/TanmoySG/wunderDB/internal/roles/sysroles"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
@@ -20,7 +21,7 @@ func (wdb wdbClient) AddDatabase(databaseId model.Identifier, userId model.Ident
 	return wdb.grantSystemDefaultRole(userId, sysroles.DatabaseAdminRole, databaseId.String())
 }
 
-func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*model.Database, *er.WdbError) {
+func (wdb wdbClient) GetDatabase(databaseId model.Identifier) (*redacted.RedactedD, *er.WdbError) {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return nil, &er.DatabaseNameFormatError
 	}

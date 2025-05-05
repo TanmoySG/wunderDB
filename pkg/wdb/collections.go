@@ -3,6 +3,7 @@ package wdbClient
 import (
 	c "github.com/TanmoySG/wunderDB/internal/collections"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
 
@@ -38,7 +39,7 @@ func (wdb wdbClient) AddCollection(databaseId, collectionId model.Identifier, sc
 	return nil
 }
 
-func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*model.Collection, *er.WdbError) {
+func (wdb wdbClient) GetCollection(databaseId, collectionId model.Identifier) (*redacted.RedactedC, *er.WdbError) {
 	if !wdb.safeName.Check(databaseId.String()) {
 		return nil, &er.DatabaseNameFormatError
 	}

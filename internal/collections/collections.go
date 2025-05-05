@@ -3,6 +3,7 @@ package collections
 import (
 	"github.com/TanmoySG/wunderDB/internal/metadata"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 	s "github.com/TanmoySG/wunderDB/pkg/schema"
 	wdbErrors "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 )
@@ -52,8 +53,20 @@ func (c Collections) CreateCollection(collectionID model.Identifier, schema mode
 	return nil
 }
 
-func (c Collections) GetCollection(collectionID model.Identifier) *model.Collection {
-	return c[collectionID]
+func (c Collections) GetCollection(collectionID model.Identifier) *redacted.RedactedC {
+	collection := c[collectionID]
+
+	if collection == nil {
+		return nil
+	}
+
+	redactedCollection := redacted.RedactedC{
+		PrimaryKey: collection.PrimaryKey,
+		Metadata:   collection.Metadata,
+		Schema:     collection.Schema,
+	}
+
+	return &redactedCollection
 }
 
 func (c Collections) DeleteCollection(collectionID model.Identifier) {

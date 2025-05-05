@@ -4,6 +4,7 @@ import (
 	"github.com/TanmoySG/wunderDB/internal/privileges"
 	"github.com/TanmoySG/wunderDB/internal/server/response"
 	"github.com/TanmoySG/wunderDB/model"
+	"github.com/TanmoySG/wunderDB/model/redacted"
 	er "github.com/TanmoySG/wunderDB/pkg/wdb/errors"
 	"github.com/gofiber/fiber/v2"
 )
@@ -56,7 +57,7 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 	privilege := privileges.ReadCollection
 
 	var apiError *er.WdbError
-	var fetchedDatabase *model.Collection
+	var fetchedCollection *redacted.RedactedC
 
 	databaseName := c.Params("database")
 	collectionName := c.Params("collection")
@@ -70,10 +71,10 @@ func (wh wdbHandlers) FetchCollection(c *fiber.Ctx) error {
 	if !isValid {
 		apiError = error
 	} else {
-		fetchedDatabase, apiError = wh.wdbClient.GetCollection(model.Identifier(databaseName), model.Identifier(collectionName))
+		fetchedCollection, apiError = wh.wdbClient.GetCollection(model.Identifier(databaseName), model.Identifier(collectionName))
 	}
 
-	resp := response.Format(privilege, apiError, fetchedDatabase, *wh.notices...)
+	resp := response.Format(privilege, apiError, fetchedCollection, *wh.notices...)
 
 	if err := sendResponse(c, resp); err != nil {
 		return err
