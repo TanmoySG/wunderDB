@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wunderdb
+  annotations:
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    # Uncomment and set if using cert-manager
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ""  # optional: leave empty for wildcard / external LB IP access; set to api.yourdomain.com when DNS ready
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: wunderdb
+                port:
+                  number: 80
+  # Uncomment for TLS once domain + certificate are configured
+  # tls:
+  #   - hosts:
+  #       - api.yourdomain.com
+  #     secretName: wunderdb-tls

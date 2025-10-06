@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wunderdb-wfs-pvc
+spec:
+  accessModes:
+    - ReadWrite
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: standard

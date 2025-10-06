@@ -1,0 +1,119 @@
+name: AKS Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Full image reference (e.g. ghcr.io/tanmoysg/wunderdb:sha-abcdef or ghcr.io/tanmoysg/wunderdb:v1.2.3)"
+        required: true
+      namespace:
+        description: "Kubernetes namespace to deploy into"
+        required: false
+        default: "wunderdb"
+      apply_ingress:
+        description: "Apply ingress manifest (true/false)"
+        required: false
+        default: "true"
+
+env:
+  AKS_RESOURCE_GROUP: ${{ secrets.AKS_RESOURCE_GROUP }}
+  AKS_CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
+
+jobs:
+  deploy:
+    name: Deploy to AKS
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate image tag input
+        run: |
+          if [[ -z "${{ github.event.inputs.image_tag }}" ]]; then
+            echo "image_tag input is required" >&2
+            exit 1
+          fi
+          echo "Using image: ${{ github.event.inputs.image_tag }}"
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Set AKS Context
+        uses: azure/aks-set-context@v4
+        with:
+          resource-group: ${{ env.AKS_RESOURCE_GROUP }}
+          cluster-name: ${{ env.AKS_CLUSTER_NAME }}
+
+      - name: Create namespace if not exists
+        run: |
+          NS="${{ github.event.inputs.namespace }}"
+          kubectl get namespace "$NS" || kubectl create namespace "$NS"
+
+      - name: Set NAMESPACE env
+        run: echo "NAMESPACE=${{ github.event.inputs.namespace }}" >> $GITHUB_ENV
+
+      - name: Create/Update Admin Secret
+        run: |
+          # Create/Update secret from GitHub Secrets (must define WUNDERDB_ADMIN_ID & WUNDERDB_ADMIN_PASSWORD repo/org secrets)
+          if [ -z "${{ secrets.WUNDERDB_ADMIN_ID }}" ] || [ -z "${{ secrets.WUNDERDB_ADMIN_PASSWORD }}" ]; then
+            echo "Required secrets WUNDERDB_ADMIN_ID / WUNDERDB_ADMIN_PASSWORD are not set" >&2
+            exit 1
+          fi
+          kubectl -n "$NAMESPACE" create secret generic wunderdb-admin \
+            --from-literal=admin-id='${{ secrets.WUNDERDB_ADMIN_ID }}' \
+            --from-literal=admin-password='${{ secrets.WUNDERDB_ADMIN_PASSWORD }}' \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: Apply PVC (if present)
+        run: |
+          if [ -f deploy/k8s/pvc.yaml ]; then
+            kubectl -n "$NAMESPACE" apply -f deploy/k8s/pvc.yaml
+          fi
+
+      - name: Substitute image in deployment manifest
+        run: |
+          IMG="${{ github.event.inputs.image_tag }}"
+          echo "Patching deployment with image $IMG"
+          # Patch image (assumes single container named wunderdb)
+          kubectl -n "$NAMESPACE" set image deployment/wunderdb wunderdb="$IMG" --record || {
+            echo "Deployment not created yet; applying manifest then setting image";
+          }
+
+      - name: Apply Deployment & Service
+        run: |
+          kubectl -n "$NAMESPACE" apply -f deploy/k8s/deployment.yaml
+          if [ -f deploy/k8s/service.yaml ]; then
+            kubectl -n "$NAMESPACE" apply -f deploy/k8s/service.yaml
+          fi
+          if [ "${{ github.event.inputs.apply_ingress }}" == "true" ] && [ -f deploy/k8s/ingress.yaml ]; then
+            kubectl -n "$NAMESPACE" apply -f deploy/k8s/ingress.yaml
+          else
+            echo "Skipping ingress apply"
+          fi
+          # Ensure image matches desired tag after apply
+          kubectl -n "$NAMESPACE" set image deployment/wunderdb wunderdb="${{ github.event.inputs.image_tag }}" --record
+
+      - name: Wait for rollout
+        run: |
+          kubectl -n "$NAMESPACE" rollout status deployment/wunderdb --timeout=180s
+
+      - name: Smoke Test
+        run: |
+          echo "Running post-deploy smoke test against service wunderdb:8086 /api/"
+          kubectl -n "$NAMESPACE" delete job smoke-test --ignore-not-found
+          kubectl -n "$NAMESPACE" create job smoke-test --image=curlimages/curl:8.10.1 -- \
+            sh -c 'set -e; curl -sSf http://wunderdb:8086/api/ > /dev/null; echo "Smoke test OK"'
+          kubectl -n "$NAMESPACE" wait --for=condition=complete job/smoke-test --timeout=90s
+          kubectl -n "$NAMESPACE" logs job/smoke-test || true
+          # Clean up (optional comment out if you want to keep the job for inspection)
+          kubectl -n "$NAMESPACE" delete job smoke-test --ignore-not-found
+
+      - name: Show Services
+        run: kubectl -n "$NAMESPACE" get svc

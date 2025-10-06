@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wunderdb
+  labels:
+    app: wunderdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wunderdb
+  template:
+    metadata:
+      labels:
+        app: wunderdb
+    spec:
+      containers:
+        - name: wunderdb
+          image: ghcr.io/tanmoysg/wunderdb:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8086
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          env:
+            - name: PORT
+              value: "8086"
+            - name: ADMIN_ID
+              valueFrom:
+                secretKeyRef:
+                  name: wunderdb-admin
+                  key: admin-id
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wunderdb-admin
+                  key: admin-password
+            - name: PERSISTANT_STORAGE_PATH
+              value: /wfs
+            - name: RUN_MODE
+              value: RUN_MODE_NORMAL
+          volumeMounts:
+            - name: wfs-storage
+              mountPath: /wfs
+            - name: txlogs-storage
+              mountPath: /root/wdb/txlogs
+            - name: configs-storage
+              mountPath: /root/wdb/configs
+          readinessProbe:
+            httpGet:
+              path: /api/
+              port: 8086
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/
+              port: 8086
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      volumes:
+        - name: wfs-storage
+          persistentVolumeClaim:
+            claimName: wunderdb-wfs-pvc
+        - name: txlogs-storage
+          emptyDir: {}
+        - name: configs-storage
+          emptyDir: {}
