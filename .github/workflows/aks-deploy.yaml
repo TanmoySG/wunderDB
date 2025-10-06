@@ -14,10 +14,15 @@ on:
         description: "Apply ingress manifest (true/false)"
         required: false
         default: "true"
+      use_kubeconfig:
+        description: "Set to true to use KUBE_CONFIG_B64 secret instead of Azure login"
+        required: false
+        default: "false"
 
 env:
   AKS_RESOURCE_GROUP: ${{ secrets.AKS_RESOURCE_GROUP }}
   AKS_CLUSTER_NAME: ${{ secrets.AKS_CLUSTER_NAME }}
+  KUBE_CONFIG_B64: ${{ secrets.KUBE_CONFIG_B64 }}
 
 jobs:
   deploy:
@@ -38,7 +43,22 @@ jobs:
           fi
           echo "Using image: ${{ github.event.inputs.image_tag }}"
 
+      - name: Set up kubeconfig (optional path)
+        if: ${{ github.event.inputs.use_kubeconfig == 'true' }}
+        run: |
+          if [ -z "${KUBE_CONFIG_B64}" ]; then
+            echo "KUBE_CONFIG_B64 secret not set but use_kubeconfig=true" >&2
+            exit 1
+          fi
+          echo "Decoding kubeconfig from secret"
+          echo "$KUBE_CONFIG_B64" | base64 -d > kubeconfig
+          chmod 600 kubeconfig
+          echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
+          kubectl version --client
+          echo "Kubeconfig setup complete"
+
       - name: Azure Login (OIDC)
+        if: ${{ github.event.inputs.use_kubeconfig != 'true' }}
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -46,6 +66,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Set AKS Context
+        if: ${{ github.event.inputs.use_kubeconfig != 'true' }}
         uses: azure/aks-set-context@v4
         with:
           resource-group: ${{ env.AKS_RESOURCE_GROUP }}
